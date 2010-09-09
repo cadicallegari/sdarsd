@@ -1,65 +1,46 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
-public class Principal {
+import org.gnome.gtk.*;
+import org.gnome.glade.Glade;
+import org.gnome.glade.XML;
 
-	private Window janelaPrincipal;
-	private Label etiqueta;
-	private ComboBox combo;
+public final class Principal {
 	
-	public Principal() throws FileNotFoundException, GladeXMLException, IOException
+	 final XML glade;
+	 final Window top;
+	 final Button confirm;
+	 
+
+	 
+	public Principal() throws FileNotFoundException
 	{
-		//Carrega a interface a partir do arquivo glade
-		LibGlade arvoreDeWidgets = new LibGlade("simple.glade", this);
+		 glade = Glade.parse("sobre.glade", "janela_sobre");
 		 
-		//Carrega os Widgets em variaveis
-		janelaPrincipal = (Window) arvoreDeWidgets.getWidget("janelaPrincipal");
-		etiqueta = (Label) arvoreDeWidgets.getWidget("etiqueta");
-		combo = (ComboBox) arvoreDeWidgets.getWidget("combo");
-		//Define o valor padrao dentre os itens da lista combo box
-		combo.setActive(0);
+		 top = (Window) glade.getWidget("janela_sobre");
+		 confirm = (Button) glade.getWidget("button4");
 		 
-		//Exibe toda interface
-		janelaPrincipal.showAll();
-		 
-		//Inicia o loop principal de eventos
-		Gtk.main();
+		 top.showAll();
 	}
 	 
-	//Callbacks
 	 
-	public void mudaTamanho()
-	{
-		String text = combo.getActiveText();
-		 
-		if (text.equals("Pequeno")) {
-			etiqueta.setMarkup("<small>Texto de exemplo</small>");
-		} else if (text.equals("Normal")) {
-			etiqueta.setMarkup("Texto de exemplo.");
-		} else if (text.equals("Grande")) {
-			etiqueta.setMarkup("<big>Texto de exemplo.</big>");
-		}
-	}
-	 
-	public void sair()
-	{
-		//Sai do loop principal de eventos
-		Gtk.mainQuit();
-		//Finaliza o programa
-		System.exit(0);
-	}
-	 
-	//Inicia a aplicacao
 	public static void main(String[] args)
 	{
 		try {
 			Gtk.init(args);
 			new Principal();
 			Gtk.main();
-		} catch(Exception e) {
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+//		try {
+//			Gtk.init(args);
+//			new Principal();
+//			Gtk.main();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 }
