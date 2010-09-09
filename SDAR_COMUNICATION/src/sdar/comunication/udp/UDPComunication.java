@@ -7,6 +7,9 @@ import java.net.InetAddress;
 
 public class UDPComunication {
 
+	private int BUFFER_SIZE;
+	
+	
 	
 	/**
 	 * 
@@ -34,18 +37,38 @@ public class UDPComunication {
 	 * @throws IOException
 	 */
 	public byte[] read(int port) throws IOException {
+		
 		DatagramSocket serverSocket = new DatagramSocket(port);
-		byte[] receiveData = new byte[1024];
+		byte[] receiveData = new byte[this.BUFFER_SIZE];
+		
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
         System.out.println("aguardando conexao");
         serverSocket.receive(receivePacket);
         System.out.println("conexao estabelecida");
         receiveData = receivePacket.getData();
+        
         return receiveData;
+	
 	}
 	
 	
 	
+	/**
+	 * @return the bUFFER_SIZE
+	 */
+	public int getBufferSize() {
+		return BUFFER_SIZE;
+	}
+
+
+	/**
+	 * @param bUFFER_SIZE the bUFFER_SIZE to set
+	 */
+	public void setBufferSize(int bUFFER_SIZE) {
+		BUFFER_SIZE = bUFFER_SIZE;
+	}
+
+
 	public static void main(String args[]) {
 		UDPComunication udpComunication = new UDPComunication();
 		
