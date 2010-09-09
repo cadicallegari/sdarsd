@@ -3,8 +3,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="/usr/share/java/gtk.jar"/>
-	<classpathentry kind="lib" path="/usr/share/java/gnome2.12.jar"/>
-	<classpathentry kind="lib" path="/usr/share/java/glib0.4.jar"/>
-	<classpathentry kind="lib" path="/usr/share/java/glade2.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -68,7 +68,7 @@ Efetue seu login para ter acesso ao sistema</property>
                 <property name="orientation">vertical</property>
                 <property name="layout_style">center</property>
                 <child>
-                  <widget class="GtkEntry" id="entry1">
+                  <widget class="GtkEntry" id="txt_login_usuario">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">&#x25CF;</property>
@@ -80,7 +80,7 @@ Efetue seu login para ter acesso ao sistema</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry2">
+                  <widget class="GtkEntry" id="txt_login_senha">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="visibility">False</property>
@@ -108,11 +108,14 @@ Efetue seu login para ter acesso ao sistema</property>
             <property name="spacing">3</property>
             <property name="layout_style">center</property>
             <child>
-              <widget class="GtkButton" id="login_entrar">
+              <widget class="GtkButton" id="bt_login_entrar">
                 <property name="label" translatable="yes">Entrar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="pressed" handler="imprimir"/>
+                <signal name="clicked" handler="imprimir"/>
+                <signal name="activate" handler="imprimir"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -121,7 +124,7 @@ Efetue seu login para ter acesso ao sistema</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="login_voltar">
+              <widget class="GtkButton" id="bt_login_voltar">
                 <property name="label" translatable="yes">Voltar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

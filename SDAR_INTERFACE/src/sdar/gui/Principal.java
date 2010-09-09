@@ -6,41 +6,38 @@ import org.gnome.gtk.*;
 import org.gnome.glade.Glade;
 import org.gnome.glade.XML;
 
-public final class Principal {
-	
-	 final XML glade;
-	 final Window top;
-	 final Button confirm;
-	 
+public class Principal {
 
-	 
-	public Principal() throws FileNotFoundException
-	{
-		 glade = Glade.parse("sobre.glade", "janela_sobre");
-		 
-		 top = (Window) glade.getWidget("janela_sobre");
-		 confirm = (Button) glade.getWidget("button4");
-		 
-		 top.showAll();
+	private XML gladeFile;
+	private Window mainWindow;
+	private Entry usuario;
+	private Entry senha;
+	private Button entrar;
+	private Button voltar;
+
+	public Principal() throws FileNotFoundException {
+		gladeFile = Glade.parse("login.glade", "janela_sobre");
+		mainWindow = (Window) gladeFile.getWidget("janela_sobre");
+		
+		usuario = (Entry) gladeFile.getWidget("txt_login_usuario");
+		senha = (Entry) gladeFile.getWidget("txt_login_senha");
+		entrar = (Button) gladeFile.getWidget("bt_login_entrar");
+		voltar = (Button) gladeFile.getWidget("bt_login_voltar");
+		
+		mainWindow.showAll();
 	}
-	 
-	 
-	public static void main(String[] args)
-	{
+	
+	public void imprimir() {
+		System.out.println("BINGOOO");
+	}
+
+	public static void main(String[] args) {
 		try {
 			Gtk.init(args);
 			new Principal();
 			Gtk.main();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		try {
-//			Gtk.init(args);
-//			new Principal();
-//			Gtk.main();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
 	}
 }
