@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<!-- Generated with glade3
+Version: 3.0.0
+Date: Tue Aug 29 00:19:15 2006
+User: setanta
+Host: poe
+-->
+<glade-interface>
+<widget class="GtkWindow" id="janelaPrincipal">
+<property name="width_request">300</property>
+<property name="height_request">120</property>
+<property name="title">Exemplo</property>
+<signal name="delete_event" handler="sair"/>
+<child>
+<widget class="GtkVBox" id="vbox1">
+<property name="visible">True</property>
+<child>
+<widget class="GtkComboBox" id="combo">
+<property name="visible">True</property>
+<property name="items" translatable="yes">Pequeno
+Normal
+Grande</property>
+<signal name="changed" handler="mudaTamanho"/>
+</widget>
+<packing>
+<property name="expand">False</property>
+</packing>
+</child>
+<child>
+<widget class="GtkLabel" id="etiqueta">
+<property name="visible">True</property>
+<property name="label" translatable="yes">&lt;small&gt;Texto de exemplo.&lt;/small&gt;</property>
+<property name="use_markup">True</property>
+</widget>
+<packing>
+<property name="position">1</property>
+</packing>
+</child>
+</widget>
+</child>
+</widget>
+</glade-interface>
