@@ -24,11 +24,25 @@ public class Principal {
 		entrar = (Button) gladeFile.getWidget("bt_login_entrar");
 		voltar = (Button) gladeFile.getWidget("bt_login_voltar");
 		
+		entrar.connect(new Button.Clicked() {
+			@Override
+			public void onClicked(Button arg0) {
+				System.out.println(usuario.getText());
+				System.out.println(senha.getText());
+			}
+		});
+		
+		voltar.connect(new Button.Clicked() {
+			@Override
+			public void onClicked(Button arg0) {
+				Gtk.mainQuit();
+				System.exit(0);
+			}
+		});
+		
 		mainWindow.showAll();
-	}
-	
-	public void imprimir() {
-		System.out.println("BINGOOO");
+		
+		Gtk.main();
 	}
 
 	public static void main(String[] args) {
