@@ -17,11 +17,8 @@ public class ClientManager implements Runnable {
 		this.socketCommunication = socketCommunication;
 	}
 
-	/**
-	 * Lê String contendo o XML do socket
-	 * 
-	 * @see java.lang.Runnable#run()
-	 */
+
+	
 	@Override
 	public void run() {
 		//TODO tratamento do cliente por enquanto desde o login até tudo
