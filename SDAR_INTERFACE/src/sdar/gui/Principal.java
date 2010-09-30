@@ -10,39 +10,70 @@ public class Principal {
 
 	private XML gladeFile;
 	private Window mainWindow;
-	private Entry usuario;
-	private Entry senha;
-	private Button entrar;
-	private Button voltar;
+	private ImageMenuItem menuConectar;
+	private ImageMenuItem menuSair;
+	private ImageMenuItem menuSobre;
 
+	/**
+	 * Construtor da Classe
+	 * @throws FileNotFoundException
+	 */
 	public Principal() throws FileNotFoundException {
-		gladeFile = Glade.parse("login.glade", "janela_sobre");
-		mainWindow = (Window) gladeFile.getWidget("janela_sobre");
+		gladeFile = Glade.parse("principal.glade", "janela");
+		mainWindow = (Window) gladeFile.getWidget("janela");
 		
-		usuario = (Entry) gladeFile.getWidget("txt_login_usuario");
-		senha = (Entry) gladeFile.getWidget("txt_login_senha");
-		entrar = (Button) gladeFile.getWidget("bt_login_entrar");
-		voltar = (Button) gladeFile.getWidget("bt_login_voltar");
+		this.gerenciaControles();
+		this.gerenciaEventos();
 		
-		entrar.connect(new Button.Clicked() {
+		mainWindow.showAll();
+		Gtk.main();
+	}
+	
+	/**
+	 * Metodo que gerencia os controles da janela principal
+	 */
+	public void gerenciaControles() {
+		menuConectar = (ImageMenuItem) gladeFile.getWidget("menu_conectar");
+		menuSair = (ImageMenuItem) gladeFile.getWidget("menu_sair");
+		menuSobre = (ImageMenuItem) gladeFile.getWidget("menu_sobre");
+	}
+	
+	/**
+	 * Metodo que gerencia os eventos da janela principal
+	 */
+	public void gerenciaEventos() {
+		//Evento do menu Conectar
+		menuConectar.connect(new MenuItem.Activate() {
 			@Override
-			public void onClicked(Button arg0) {
-				System.out.println(usuario.getText());
-				System.out.println(senha.getText());
+			public void onActivate(MenuItem arg0) {
+				try {
+					new Login();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		
-		voltar.connect(new Button.Clicked() {
+		//Evento do menu Sair
+		menuSair.connect(new MenuItem.Activate() {
 			@Override
-			public void onClicked(Button arg0) {
+			public void onActivate(MenuItem arg0) {
 				Gtk.mainQuit();
 				System.exit(0);
 			}
 		});
 		
-		mainWindow.showAll();
-		
-		Gtk.main();
+		//Evento do menu Sobre
+		menuSobre.connect(new MenuItem.Activate() {
+			@Override
+			public void onActivate(MenuItem arg0) {
+				try {
+					new Sobre();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	public static void main(String[] args) {
