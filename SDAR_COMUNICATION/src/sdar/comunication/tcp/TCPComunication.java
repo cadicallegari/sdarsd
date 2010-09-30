@@ -7,12 +7,15 @@
 package sdar.comunication.tcp;
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
+
+import sdar.comunication.common.Packt;
+import sdar.comunication.common.Solicitation;
+import sdar.comunication.def.CommunicationEspecification;
 
 /**
  * @author cadi
@@ -20,71 +23,112 @@ import java.net.Socket;
  */
 public class TCPComunication {
 
-	private Socket socket;
-	private OutputStream out;
-	private InputStream in;
+	private ObjectOutputStream out;
+	private ObjectInputStream in;
 	
-	public TCPComunication(Socket sock) throws IOException {
-		this.socket = sock;
-		this.in = this.socket.getInputStream();
-		this.out = this.socket.getOutputStream();
+	
+	public TCPComunication(Socket socket) throws IOException {
+		this.out = new ObjectOutputStream(socket.getOutputStream());
+		this.out.flush(); // Descarrega o buffer
+		this.in = new ObjectInputStream(socket.getInputStream());	
+	}
+
+
+	
+	/**
+	 * 
+	 * @param obj
+	 * @throws IOException
+	 */
+	public void sendObject(Object obj) throws IOException {
+        this.out.writeObject(obj);
+        this.out.flush();
 	}
 	
-	
-	public String readStringToSocket() {
 
-		StringBuffer buf = new StringBuffer();
-		String line = null;
-		boolean fim = false;
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public Object readObject() throws IOException, ClassNotFoundException {
+		Object obj = this.in.readObject();
+		return obj;
+	}
+	
+
+	
+	public static void main(String args[]) {
 		
 		try {
+
+			//envia obj
+			Socket sock = new Socket("localhost", CommunicationEspecification.TCP_PORT);
+			System.out.println(sock.getLocalAddress());
+			TCPComunication c = new TCPComunication(sock);
+			Packt p = new Packt();
+			Solicitation s = new Solicitation();
+			p.setFileName("muitoloconeh");
+			s.setMethodName("metodo muito loco");
+			System.out.println("enviando");
+//			c.sendObject(p);
+			c.sendObject(s);
+			System.out.println("enviado");
+			sock.close();
+			System.out.println("fechado");
 			
-			BufferedReader bufIn = new BufferedReader(new InputStreamReader(this.in));
 			
-			while (!fim) {
-				Thread.sleep(20);
-				
-				if (!fim) {
-					line = bufIn.readLine();
-				}
-				if (line != null) {
-					buf.append(line);
-				} else {
-					fim = true;
-				}
-				if (line.equals("</locadora>")) {
-					fim = true;
-				}
-			}			
-		} catch (IOException e) {
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InterruptedException e) {
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		String ret = buf.toString();
 		
-		System.out.println("RECEBIDO:\n" + ret);
-		
-		return ret;
-		//return buf.toString();
 	}
 	
 	
-	/**
-	 * @param str
-	 * @throws IOException 
-	 */
-	public void sendString(String str) throws IOException {
-        this.out.write( str.getBytes() );
-        this.out.flush();
-        System.out.println("ENVIADO: \n" +  str);
-	}
 	
-	
-	public void close() throws IOException {
-		this.socket.close();
-	}
-	
+//	public String readStringToSocket() {
+//
+//		StringBuffer buf = new StringBuffer();
+//		String line = null;
+//		boolean fim = false;
+//		
+//		try {
+//			
+//			BufferedReader bufIn = new BufferedReader(new InputStreamReader(this.in));
+//			
+//			while (!fim) {
+//				Thread.sleep(20);
+//				
+//				if (!fim) {
+//					line = bufIn.readLine();
+//				}
+//				if (line != null) {
+//					buf.append(line);
+//				} else {
+//					fim = true;
+//				}
+//				if (line.equals("</locadora>")) {
+//					fim = true;
+//				}
+//			}			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		String ret = buf.toString();
+//		
+//		System.out.println("RECEBIDO:\n" + ret);
+//		
+//		return ret;
+//		//return buf.toString();
+//	}
 	
 }

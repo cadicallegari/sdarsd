@@ -1,6 +1,10 @@
 package sdar.comunication.udp;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -11,19 +15,19 @@ import sdar.comunication.def.CommunicationEspecification;
 public class UDPComunication {
 
 	
-	/**
-	 * 
-	 * @param address
-	 * @param port
-	 * @param msg
-	 * @throws IOException
-	 */
-	public void send(String address, int port, byte[] msg) throws IOException {
-		//TODO msg pode mudar de tipo desde que implemente serializable
+	
+	public void sendObject(String address, int port, Object obj) throws IOException {
+
 		DatagramSocket clientSocket = new DatagramSocket();
 		InetAddress IPAddress = InetAddress.getByName(address);
 		
-		System.out.println(msg.length);
+		ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
+        ObjectOutputStream out = new ObjectOutputStream(bos);
+	    out.writeObject(obj);
+        out.close();
+    
+        // Obtém os bytes do objeto serializado
+        byte[] msg = bos.toByteArray();
 		
 		DatagramPacket sendPacket = new DatagramPacket(msg, msg.length, IPAddress, port);
 		clientSocket.send(sendPacket);
@@ -33,29 +37,52 @@ public class UDPComunication {
 	
 	
 	
-//	/**
-//	 * 
-//	 * @param group
-//	 * @param port
-//	 * @param msg
-//	 * @throws IOException
-//	 */
-//	public void sendGroup(String group, int port, byte[] msg) throws IOException {
-//		//TODO msg pode mudar de tipo desde que implemente serializable
-//
-//		InetAddress groupAddress = InetAddress.getByName(group);
-//	
-//		MulticastSocket multicastSocket = new MulticastSocket(port);
-//		multicastSocket.joinGroup(groupAddress);
-//		
-//		System.out.println(msg.length);
-//		
-//		DatagramPacket message = new DatagramPacket(msg, msg.length, groupAddress, port);
-//
-//		multicastSocket.send(message);
-//
-//		multicastSocket.leaveGroup(groupAddress);
-//	}
+	
+	
+	
+	public Object readGroupObject(String group, int port) throws IOException, ClassNotFoundException {
+		
+		InetAddress groupAddress = InetAddress.getByName(group);
+		
+		MulticastSocket multicastSocket = new MulticastSocket(port);
+		multicastSocket.joinGroup(groupAddress);
+		
+		byte[] receiveData = new byte[CommunicationEspecification.BUFFER_SIZE];
+		
+        DatagramPacket receivedMessage= new DatagramPacket(receiveData, receiveData.length);
+
+        multicastSocket.receive(receivedMessage);
+
+        receiveData = receivedMessage.getData();
+        
+        //converte byte[] para Object
+        ByteArrayInputStream bas = new ByteArrayInputStream(receiveData);
+        ObjectInputStream in = new ObjectInputStream(bas);
+        
+        multicastSocket.leaveGroup(groupAddress);
+        
+        return in.readObject();
+	
+	}	
+	
+	
+	/**
+	 * 
+	 * @param address
+	 * @param port
+	 * @param msg
+	 * @throws IOException
+	 */
+	public void send(String address, int port, byte[] msg) throws IOException {
+		DatagramSocket clientSocket = new DatagramSocket();
+		InetAddress IPAddress = InetAddress.getByName(address);
+		
+		DatagramPacket sendPacket = new DatagramPacket(msg, msg.length, IPAddress, port);
+		clientSocket.send(sendPacket);
+
+		clientSocket.close();
+	}
+	
 	
 	
 	
@@ -73,8 +100,6 @@ public class UDPComunication {
         multicastSocket.receive(receivedMessage);
 
         receiveData = receivedMessage.getData();
-        
-		System.out.println(receiveData.length);
         
         multicastSocket.leaveGroup(groupAddress);
         
@@ -99,11 +124,36 @@ public class UDPComunication {
         serverSocket.receive(receivePacket);
         receiveData = receivePacket.getData();
         
-		System.out.println(receiveData.length);
-        
         return receiveData;
 	
 	}
+	
+	
+
+	
+//	/**
+//	 * 
+//	 * @param group
+//	 * @param port
+//	 * @param msg
+//	 * @throws IOException
+//	 */
+//	public void sendGroup(String group, int port, byte[] msg) throws IOException {
+//		//TODO msg pode mudar de tipo desde que implemente serializable
+//
+//		InetAddress groupAddress = InetAddress.getByName(group);
+//	
+//		MulticastSocket multicastSocket = new MulticastSocket(port);
+//		multicastSocket.joinGroup(groupAddress);
+//		
+//		System.out.println(msg.length);
+//		
+//		DatagramPacket message = new DatagramPacket(msg, msg.length, groupAddress, port);
+//
+//		multicastSocket.send(message);
+//
+//		multicastSocket.leaveGroup(groupAddress);
+//	}
 	
 	
 	
