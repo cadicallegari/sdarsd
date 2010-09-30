@@ -10,7 +10,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
-import sdar.comunication.def.CommunicationEspecification;
+import sdar.comunication.def.ComEspecification;
 
 public class UDPComunication {
 
@@ -47,7 +47,7 @@ public class UDPComunication {
 		MulticastSocket multicastSocket = new MulticastSocket(port);
 		multicastSocket.joinGroup(groupAddress);
 		
-		byte[] receiveData = new byte[CommunicationEspecification.BUFFER_SIZE];
+		byte[] receiveData = new byte[ComEspecification.BUFFER_SIZE];
 		
         DatagramPacket receivedMessage= new DatagramPacket(receiveData, receiveData.length);
 
@@ -93,7 +93,7 @@ public class UDPComunication {
 		MulticastSocket multicastSocket = new MulticastSocket(port);
 		multicastSocket.joinGroup(groupAddress);
 		
-		byte[] receiveData = new byte[CommunicationEspecification.BUFFER_SIZE];
+		byte[] receiveData = new byte[ComEspecification.BUFFER_SIZE];
 		
         DatagramPacket receivedMessage= new DatagramPacket(receiveData, receiveData.length);
 
@@ -118,7 +118,7 @@ public class UDPComunication {
 	public byte[] read(int port) throws IOException {
 		
 		DatagramSocket serverSocket = new DatagramSocket(port);
-		byte[] receiveData = new byte[CommunicationEspecification.BUFFER_SIZE];
+		byte[] receiveData = new byte[ComEspecification.BUFFER_SIZE];
 		
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
         serverSocket.receive(receivePacket);

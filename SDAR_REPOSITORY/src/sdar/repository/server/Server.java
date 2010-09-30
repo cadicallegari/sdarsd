@@ -2,7 +2,9 @@ package sdar.repository.server;
 
 import java.io.IOException;
 
+import sdar.comunication.def.ComEspecification;
 import sdar.comunication.udp.UDPComunication;
+import sdar.repository.manager.MessageReceivedHandler;
 
 
 
@@ -20,12 +22,45 @@ public class Server implements Runnable {
 	}
 
 
+	
+	public void run() {
+		
+		UDPComunication udp = new UDPComunication();
+		Object obj;
+		
+		while (!finish) {
+			
+			try {
+				
+				obj = udp.readGroupObject(ComEspecification.GROUP, ComEspecification.UDP_PORT);
+				
+				new Thread(new MessageReceivedHandler(obj), "RECEPTOR").start();
+				
+				System.out.println("RECEBIDO :" + obj.getClass().getSimpleName());
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		}
 
-	/** 
-	 * Método que ouve a porta esperando conexoes
-	 * @see java.lang.Runnable#run()
+	}
+	
+	
+	/**
+	 * Método que finaliza o processo servidor
 	 */
-	@Override
+	public void finish() {
+		this.finish = true;
+	}
+	
+
+	
+	
 //	public void run() {
 //		
 //		try {
@@ -52,38 +87,6 @@ public class Server implements Runnable {
 //	}
 
 	
-	public void run() {
-		
-		UDPComunication udp = new UDPComunication();
-		udp.setBufferSize(8000);
-		byte[] buffer = null;
-		
-		while (!finish) {
-			
-			try {
-				
-				buffer = udp.read(2000);
-				//TODO Tratar buffer lido
-				String str = new String(buffer);
-				
-				System.out.println(str);
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		}
-
-	}
-	
-	
-	/**
-	 * Método que finaliza o processo servidor
-	 */
-	public void finish() {
-		this.finish = true;
-	}
 	
 	
 	

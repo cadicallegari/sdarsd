@@ -15,7 +15,7 @@ import java.net.UnknownHostException;
 
 import sdar.comunication.common.Packt;
 import sdar.comunication.common.Solicitation;
-import sdar.comunication.def.CommunicationEspecification;
+import sdar.comunication.def.ComEspecification;
 
 /**
  * @author cadi
@@ -64,7 +64,7 @@ public class TCPComunication {
 		try {
 
 			//envia obj
-			Socket sock = new Socket("localhost", CommunicationEspecification.TCP_PORT);
+			Socket sock = new Socket("localhost", ComEspecification.TCP_PORT);
 			System.out.println(sock.getLocalAddress());
 			TCPComunication c = new TCPComunication(sock);
 			Packt p = new Packt();
