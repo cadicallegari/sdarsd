@@ -10,12 +10,19 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
+import sdar.comunication.common.Packt;
 import sdar.comunication.def.ComEspecification;
 
 public class UDPComunication {
 
 	
-	
+	/**
+	 * 
+	 * @param address
+	 * @param port
+	 * @param obj
+	 * @throws IOException
+	 */
 	public void sendObject(String address, int port, Object obj) throws IOException {
 
 		DatagramSocket clientSocket = new DatagramSocket();
@@ -54,14 +61,24 @@ public class UDPComunication {
         multicastSocket.receive(receivedMessage);
 
         receiveData = receivedMessage.getData();
+
+        System.out.println(new String(receiveData));
         
         //converte byte[] para Object
         ByteArrayInputStream bas = new ByteArrayInputStream(receiveData);
         ObjectInputStream in = new ObjectInputStream(bas);
         
+        System.out.println(receiveData.length);
+        System.out.println(bas.available());
+        System.out.println(in.available());
+        
+        Object obj = (Object) in.readObject();
+
+        in.close();
+        bas.close();
         multicastSocket.leaveGroup(groupAddress);
         
-        return in.readObject();
+        return obj;
 	
 	}	
 	
@@ -158,33 +175,54 @@ public class UDPComunication {
 	
 	
 
-	public static void main(String args[]) {
+//	public static void main(String args[]) {
+//		UDPComunication udpComunication = new UDPComunication();
+//		
+//		try {
+//
+//			
+////			//server
+//
+////			System.out.println("aguardando");
+////			byte[] data = udpComunication.readGroup("234.234.234.234", 4000);
+////			String str = new String(data);
+////			System.out.println("recebido " + str);
+//			
+//			
+//			//cliente
+//			String str = new String("louis gay");
+//			byte[] data = str.getBytes();
+////			udpComunication.sendGroup("228.5.6.7", 4000, data);
+//			udpComunication.send("228.5.6.7", 4000, data);
+//			System.out.println("enviado " + str);
+//			
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+	
+	public static void main(String[] args) {
+	
 		UDPComunication udpComunication = new UDPComunication();
 		
 		try {
+			
+			Object obj = udpComunication.readGroupObject(ComEspecification.GROUP, ComEspecification.UDP_PORT);
 
+			Packt p = (Packt) obj;
 			
-//			//server
-
-//			System.out.println("aguardando");
-//			byte[] data = udpComunication.readGroup("234.234.234.234", 4000);
-//			String str = new String(data);
-//			System.out.println("recebido " + str);
+			System.out.println(new String(p.getPayLoad()));
 			
-			
-			//cliente
-			String str = new String("louis gay");
-			byte[] data = str.getBytes();
-//			udpComunication.sendGroup("228.5.6.7", 4000, data);
-			udpComunication.send("228.5.6.7", 4000, data);
-			System.out.println("enviado " + str);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		
-	}
+	}	
+	
+	
+	
+	
 	
 }
