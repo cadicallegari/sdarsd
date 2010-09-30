@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
+
+import sdar.comunication.def.CommunicationEspecification;
 
 public class UDPComunication {
 
-	private int BUFFER_SIZE;
-	
-	
 	
 	/**
 	 * 
@@ -23,11 +23,65 @@ public class UDPComunication {
 		DatagramSocket clientSocket = new DatagramSocket();
 		InetAddress IPAddress = InetAddress.getByName(address);
 		
+		System.out.println(msg.length);
+		
 		DatagramPacket sendPacket = new DatagramPacket(msg, msg.length, IPAddress, port);
 		clientSocket.send(sendPacket);
 
 		clientSocket.close();
 	}
+	
+	
+	
+//	/**
+//	 * 
+//	 * @param group
+//	 * @param port
+//	 * @param msg
+//	 * @throws IOException
+//	 */
+//	public void sendGroup(String group, int port, byte[] msg) throws IOException {
+//		//TODO msg pode mudar de tipo desde que implemente serializable
+//
+//		InetAddress groupAddress = InetAddress.getByName(group);
+//	
+//		MulticastSocket multicastSocket = new MulticastSocket(port);
+//		multicastSocket.joinGroup(groupAddress);
+//		
+//		System.out.println(msg.length);
+//		
+//		DatagramPacket message = new DatagramPacket(msg, msg.length, groupAddress, port);
+//
+//		multicastSocket.send(message);
+//
+//		multicastSocket.leaveGroup(groupAddress);
+//	}
+	
+	
+	
+	public byte[] readGroup(String group, int port) throws IOException {
+		
+		InetAddress groupAddress = InetAddress.getByName(group);
+		
+		MulticastSocket multicastSocket = new MulticastSocket(port);
+		multicastSocket.joinGroup(groupAddress);
+		
+		byte[] receiveData = new byte[CommunicationEspecification.BUFFER_SIZE];
+		
+        DatagramPacket receivedMessage= new DatagramPacket(receiveData, receiveData.length);
+
+        multicastSocket.receive(receivedMessage);
+
+        receiveData = receivedMessage.getData();
+        
+		System.out.println(receiveData.length);
+        
+        multicastSocket.leaveGroup(groupAddress);
+        
+        return receiveData;
+	
+	}
+	
 
 	
 	/**
@@ -39,13 +93,13 @@ public class UDPComunication {
 	public byte[] read(int port) throws IOException {
 		
 		DatagramSocket serverSocket = new DatagramSocket(port);
-		byte[] receiveData = new byte[this.BUFFER_SIZE];
+		byte[] receiveData = new byte[CommunicationEspecification.BUFFER_SIZE];
 		
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-        System.out.println("aguardando conexao");
         serverSocket.receive(receivePacket);
-        System.out.println("conexao estabelecida");
         receiveData = receivePacket.getData();
+        
+		System.out.println(receiveData.length);
         
         return receiveData;
 	
@@ -53,36 +107,27 @@ public class UDPComunication {
 	
 	
 	
-	/**
-	 * @return the bUFFER_SIZE
-	 */
-	public int getBufferSize() {
-		return BUFFER_SIZE;
-	}
-
-
-	/**
-	 * @param bUFFER_SIZE the bUFFER_SIZE to set
-	 */
-	public void setBufferSize(int bUFFER_SIZE) {
-		BUFFER_SIZE = bUFFER_SIZE;
-	}
-
 
 	public static void main(String args[]) {
 		UDPComunication udpComunication = new UDPComunication();
 		
 		try {
+
 			
-			byte[] data = udpComunication.read(4000);
-			String str = new String(data);
-			System.out.println(str);
-//			
-//			String str = new String("louis gay");
-//			byte[] data = str.getBytes();
-//			udpComunication.send("localhost", 4000, data);
-//			System.out.println(str);
+//			//server
+
+//			System.out.println("aguardando");
+//			byte[] data = udpComunication.readGroup("234.234.234.234", 4000);
+//			String str = new String(data);
+//			System.out.println("recebido " + str);
 			
+			
+			//cliente
+			String str = new String("louis gay");
+			byte[] data = str.getBytes();
+//			udpComunication.sendGroup("228.5.6.7", 4000, data);
+			udpComunication.send("228.5.6.7", 4000, data);
+			System.out.println("enviado " + str);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
