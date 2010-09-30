@@ -8,6 +8,8 @@ import sdar.comunication.tcp.TCPComunication;
 import sdar.manager.client.ClientManager;
 
 
+//aguarda conexao do cliente
+
 public class Server implements Runnable {
 
 	public static int PORT = 4000;

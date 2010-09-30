@@ -6,7 +6,7 @@ import sdar.comunication.def.ComEspecification;
 import sdar.comunication.udp.UDPComunication;
 import sdar.repository.manager.MessageReceivedHandler;
 
-
+//aguarda conexao do manager
 
 public class Server implements Runnable {
 
