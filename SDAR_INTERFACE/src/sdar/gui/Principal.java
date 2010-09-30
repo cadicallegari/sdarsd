@@ -13,6 +13,7 @@ public class Principal {
 	private ImageMenuItem menuConectar;
 	private ImageMenuItem menuSair;
 	private ImageMenuItem menuSobre;
+	private Statusbar barraMensagem;
 
 	/**
 	 * Construtor da Classe
@@ -36,6 +37,7 @@ public class Principal {
 		menuConectar = (ImageMenuItem) gladeFile.getWidget("menu_conectar");
 		menuSair = (ImageMenuItem) gladeFile.getWidget("menu_sair");
 		menuSobre = (ImageMenuItem) gladeFile.getWidget("menu_sobre");
+		barraMensagem = (Statusbar) gladeFile.getWidget("barra_mensagem");
 	}
 	
 	/**
