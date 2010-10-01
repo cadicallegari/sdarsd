@@ -9,9 +9,12 @@ package sdar.repository.manager;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.LinkedList;
 
-import sdar.comunication.common.Packt;
+import sdar.comunication.common.Package;
 import sdar.comunication.common.Solicitation;
+import sdar.repository.file.TemporaryFile;
+import sdar.repository.server.Server;
 
 /**
  * @author cadi
@@ -36,11 +39,11 @@ public class MessageReceivedHandler implements Runnable {
 	public void run() {
 		String className = obj.getClass().getSimpleName();
 		
-		if (className.equals("Packt")) {
+		if (className.equals("Package")) {
 			try {
 				
-				Packt p = (Packt) obj;
-				this.packtHandler(p);
+				Package p = (Package) obj;
+				this.packageHandler(p);
 			
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -68,16 +71,75 @@ public class MessageReceivedHandler implements Runnable {
 	 * @param p
 	 * @throws IOException 
 	 */
-	private void packtHandler(Packt p) throws IOException {
+	private void packageHandler(Package p) throws IOException {
+		
+		System.out.println("ma oee");
+		
+		
+		if (p.isPool()) { 						//se nao for ultimo pacote do arquivo
+			Server.tmpFileList.add(p);
+		}
+		else {
+			
+			int pos = Server.tmpFileList.hasTmpFile(p);
+			
+			if (pos == -1) {				//se arquivos temporarios nao contem o arquivo do pacote
+				this.saveFile(p);							//cria arquivo pequenino
+			}
+			else {
+				TemporaryFile tmp = Server.tmpFileList.remove(pos);
+				this.saveFile(tmp);
+			}
+		}
+	
+	}
 
-		//TODO definir local dos arquivos do repositorio
+
+	/**
+	 * @param tmp
+	 * @throws IOException 
+	 */
+	private void saveFile(TemporaryFile tmp) throws IOException {
+		
+		System.out.println("salvo grandao");
+		
+		File f = new File(tmp.getFileName());
+		FileOutputStream fo = new FileOutputStream(f);
+		LinkedList<Package> list = tmp.getPackgeList();
+		
+		int start = 0;
+		int offset = 0;
+		byte [] buf;
+		
+		for (Package p : list) {
+			buf = p.getPayLoad();
+			offset = buf.length;
+			
+			fo.write(buf, start, offset);
+			
+			start = offset;
+		}
+
+		fo.close();
+		
+	}
+
+
+	/**
+	 * @param p
+	 * @throws IOException 
+	 */
+	private void saveFile(Package p) throws IOException {
+		
+		System.out.println("salvo pequeno");
+		
 		File f = new File(p.getFileName());
 		
 		FileOutputStream fo = new FileOutputStream(f);
 		
 		fo.write(p.getPayLoad());
 		
-		fo.close();
-	}
+		fo.close();	
 
+	}
 }

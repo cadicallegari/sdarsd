@@ -10,7 +10,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
-import sdar.comunication.common.Packt;
+import sdar.comunication.common.Package;
 import sdar.comunication.def.ComEspecification;
 
 public class UDPComunication {
@@ -205,7 +205,7 @@ public class UDPComunication {
 			
 			Object obj = udpComunication.readGroupObject(ComEspecification.GROUP, ComEspecification.UDP_PORT);
 
-			Packt p = (Packt) obj;
+			Package p = (Package) obj;
 			
 			System.out.println(p.getFileName());
 			System.out.println(new String(p.getPayLoad()));

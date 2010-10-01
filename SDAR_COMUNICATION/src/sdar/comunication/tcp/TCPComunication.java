@@ -13,7 +13,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import sdar.comunication.common.Packt;
+import sdar.comunication.common.Package;
 import sdar.comunication.common.Solicitation;
 import sdar.comunication.def.ComEspecification;
 
@@ -67,7 +67,7 @@ public class TCPComunication {
 			Socket sock = new Socket("localhost", ComEspecification.TCP_PORT);
 			System.out.println(sock.getLocalAddress());
 			TCPComunication c = new TCPComunication(sock);
-			Packt p = new Packt();
+			Package p = new Package();
 			Solicitation s = new Solicitation();
 			p.setFileName("muitoloconeh");
 			s.setMethodName("metodo muito loco");

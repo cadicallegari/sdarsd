@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import sdar.comunication.common.Packt;
+import sdar.comunication.common.Package;
 import sdar.comunication.common.Util;
 import sdar.comunication.def.ComEspecification;
 
@@ -29,7 +29,7 @@ public class Teste {
 			
 			File f = new File("teste.txt");
 			FileInputStream fi = new FileInputStream(f);
-			Packt p = new Packt();
+			Package p = new Package();
 			byte [] buf = new byte[ComEspecification.BUFFER_SIZE];
 			UDPComunication udpCom = new UDPComunication();
 			

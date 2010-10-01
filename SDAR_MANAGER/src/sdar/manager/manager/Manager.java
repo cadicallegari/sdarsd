@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import sdar.comunication.common.Packt;
+import sdar.comunication.common.Package;
 import sdar.comunication.common.Util;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.udp.UDPComunication;
@@ -27,17 +27,29 @@ public class Manager {
 		
 		File f = new File(filePath);
 		FileInputStream fi = new FileInputStream(f);
-		Packt p = new Packt();
 		byte [] buf = new byte[ComEspecification.BUFFER_SIZE];
 		UDPComunication udpCom = new UDPComunication();
+		Package p = null;
 		
 		int qtd = fi.read(buf);
 		
+		while (qtd == ComEspecification.BUFFER_SIZE) { 			//enquanto nao acabar de ler o arquivo
+			p = new Package();
+			p.setPayLoad(Util.copyBytes(buf, qtd));
+			p.setFileName(filePath);
+			p.setPool(true);
+			udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);
+			
+			qtd = fi.read(buf);
+		}
+		
+		p = new Package();								//quando terminar de ler o arquivo
 		p.setPayLoad(Util.copyBytes(buf, qtd));
 		p.setFileName(filePath);
-		p.setPool(false);
-		
+		p.setPool(false);								//ultimo pacote
 		udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);
+	
+		fi.close();
 		
 	}
 

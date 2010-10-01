@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.udp.UDPComunication;
+import sdar.repository.file.TemporaryFileList;
 import sdar.repository.manager.MessageReceivedHandler;
 
 //aguarda conexao do manager
@@ -11,6 +12,7 @@ import sdar.repository.manager.MessageReceivedHandler;
 public class Server implements Runnable {
 
 	
+	public static TemporaryFileList tmpFileList = new TemporaryFileList();
 	
 	private boolean finish = false;
 
@@ -98,6 +100,8 @@ public class Server implements Runnable {
 		System.out.println("inicizando...");
 		server.run();
 	}
-	
+
+
+
 	
 }
