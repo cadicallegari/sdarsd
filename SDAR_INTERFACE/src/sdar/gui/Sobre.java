@@ -19,7 +19,7 @@ public class Sobre {
 	 * @throws FileNotFoundException
 	 */
 	public Sobre() throws FileNotFoundException {
-		gladeFile = Glade.parse("sobre.glade", "janela");
+		gladeFile = Glade.parse("xml/sobre.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
 		this.gerenciaControles();

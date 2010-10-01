@@ -6,9 +6,13 @@ import org.gnome.gtk.*;
 import org.gnome.glade.Glade;
 import org.gnome.glade.XML;
 
+import sdar.manager.autentication.Person;
+
 public class Login {
 
 	private boolean autenticado;
+	private Person person;
+	
 	private XML gladeFile;
 	private Window mainWindow;
 	private Statusbar statusbar;
@@ -22,10 +26,11 @@ public class Login {
 	 * Construtor da Classe
 	 * @throws FileNotFoundException
 	 */
-	public Login(boolean autenticado, Statusbar statusbar) throws FileNotFoundException {
+	public Login(boolean autenticado, Person person, Statusbar statusbar) throws FileNotFoundException {
 		this.autenticado = autenticado;
+		this.person = person;
 		this.statusbar = statusbar;
-		gladeFile = Glade.parse("login.glade", "janela");
+		gladeFile = Glade.parse("xml/login.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
 		this.gerenciaControles();
@@ -58,6 +63,10 @@ public class Login {
 					setAutenticado(false);
 					setMensagemErro();
 				} else {
+					person = new Person();
+					person.setNome("Matheus Cristiano Barreto");
+					person.setUsuario(usuario.getText());
+					person.setSenha(senha.getText());
 					setAutenticado(true);
 					mainWindow.hide();
 				}
@@ -94,7 +103,7 @@ public class Login {
 	 */
 	public void setAutenticado(boolean autenticado) {
 		if (autenticado) {
-			this.setStatusBar("Usuário Conectado.");
+			this.setStatusBar("Usuário Conetado. Login: " + person.getUsuario());
 		} else {
 			this.setStatusBar("Usuário Desconectado.");
 		}
