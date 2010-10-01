@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import sdar.comunication.common.Packt;
+import sdar.comunication.common.Util;
 import sdar.comunication.def.ComEspecification;
 
 /**
@@ -34,15 +35,7 @@ public class Teste {
 			
 			int s = fi.read(buf);
 			
-			byte [] msg = new byte[s];
-			
-			for (int i = 0; i < s; i++) {
-				msg[i] = buf[i];
-			}
-			
-			System.out.println(msg.length);
-			
-			p.setPayLoad(msg);
+			p.setPayLoad(Util.copyBytes(buf, s));
 			p.setSequencieNumber(15);
 			p.setFileName("doido velho");
 			udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);

@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import sdar.comunication.common.Packt;
+import sdar.comunication.common.Util;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.udp.UDPComunication;
 
@@ -30,11 +31,11 @@ public class Manager {
 		byte [] buf = new byte[ComEspecification.BUFFER_SIZE];
 		UDPComunication udpCom = new UDPComunication();
 		
-		fi.read(buf);
+		int qtd = fi.read(buf);
 		
-		System.out.println(new String(buf));
-		
-		p.setPayLoad(buf);
+		p.setPayLoad(Util.copyBytes(buf, qtd));
+		p.setFileName(filePath);
+		p.setPool(false);
 		
 		udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);
 		

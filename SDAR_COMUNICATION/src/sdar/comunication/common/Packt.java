@@ -21,14 +21,25 @@ public class Packt implements Serializable {
 	
 	private String fileName;
 	private int sequencieNumber;
-	private byte[] payLoad;
+	private String payLoad; 
 	private int type;
 	private int next;
 	private boolean pool;
 
 	
 	
-	
+	/**
+	 * @return the payLoad
+	 */
+	public byte[] getPayLoad() {
+		return payLoad.getBytes();
+	}
+	/**
+	 * @param payLoad the payLoad to set
+	 */
+	public void setPayLoad(byte[] payLoad) {
+		this.payLoad = new String(payLoad);
+	}	
 	/**
 	 * @return the fileName
 	 */
@@ -53,18 +64,7 @@ public class Packt implements Serializable {
 	public void setSequencieNumber(int sequencieNumber) {
 		this.sequencieNumber = sequencieNumber;
 	}
-	/**
-	 * @return the payLoad
-	 */
-	public byte[] getPayLoad() {
-		return payLoad;
-	}
-	/**
-	 * @param payLoad the payLoad to set
-	 */
-	public void setPayLoad(byte[] payLoad) {
-		this.payLoad = payLoad;
-	}
+
 	/**
 	 * @return the type
 	 */
