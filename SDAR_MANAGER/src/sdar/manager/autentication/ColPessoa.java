@@ -54,4 +54,20 @@ public class ColPessoa {
 	public void delete(Pessoa pessoa) {
 		this.dbConnection.getObjectContainer().delete(pessoa);
 	}
+
+	/**
+	 * Metodo que retorna a conexao da base de dados
+	 * @return
+	 */
+	public DBConnection getDbConnection() {
+		return this.dbConnection;
+	}
+
+	/**
+	 * Metodo que seta a conexao da base de dados
+	 * @param dbConnection
+	 */
+	public void setDbConnection(DBConnection dbConnection) {
+		this.dbConnection = dbConnection;
+	}
 }
