@@ -8,13 +8,14 @@ import org.gnome.glade.XML;
 
 public class Principal {
 
-	public static boolean autenticado;
+	private boolean autenticado;
 	private XML gladeFile;
 	private Window mainWindow;
+	private Statusbar statusbar;
 	private ImageMenuItem menuConectar;
+	private ImageMenuItem menuDesconectar;
 	private ImageMenuItem menuSair;
 	private ImageMenuItem menuSobre;
-	private Statusbar barraMensagem;
 
 	/**
 	 * Construtor da Classe
@@ -27,6 +28,8 @@ public class Principal {
 		this.gerenciaControles();
 		this.gerenciaEventos();
 		
+		this.setAutenticado(false);
+		
 		mainWindow.showAll();
 		Gtk.main();
 	}
@@ -36,9 +39,10 @@ public class Principal {
 	 */
 	public void gerenciaControles() {
 		menuConectar = (ImageMenuItem) gladeFile.getWidget("menu_conectar");
+		menuDesconectar = (ImageMenuItem) gladeFile.getWidget("menu_desconectar");
 		menuSair = (ImageMenuItem) gladeFile.getWidget("menu_sair");
 		menuSobre = (ImageMenuItem) gladeFile.getWidget("menu_sobre");
-		barraMensagem = (Statusbar) gladeFile.getWidget("barra_mensagem");
+		statusbar = (Statusbar) gladeFile.getWidget("barra_mensagem");
 	}
 	
 	/**
@@ -50,10 +54,18 @@ public class Principal {
 			@Override
 			public void onActivate(MenuItem arg0) {
 				try {
-					new Login(autenticado);
+					new Login(autenticado, statusbar);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
+			}
+		});
+		
+		//Evento do menu Desconectar
+		menuDesconectar.connect(new MenuItem.Activate() {
+			@Override
+			public void onActivate(MenuItem arg0) {
+				setAutenticado(false);
 			}
 		});
 		
@@ -78,7 +90,32 @@ public class Principal {
 			}
 		});
 	}
+	
+	/**
+	 * Metodo que seta a mensagem do StatusBar
+	 * @param mensagem
+	 */
+	public void setStatusBar(String mensagem) {
+		this.statusbar.setMessage(mensagem);
+	}
+	
+	/**
+	 * Metodo que seta o atributo autenticado
+	 * @param autenticado
+	 */
+	public void setAutenticado(boolean autenticado) {
+		if (autenticado) {
+			this.setStatusBar("Usuário Conectado.");
+		} else {
+			this.setStatusBar("Usuário Desconectado.");
+		}
+ 		this.autenticado = autenticado;
+	}
 
+	/**
+	 * Main
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		try {
 			Gtk.init(args);

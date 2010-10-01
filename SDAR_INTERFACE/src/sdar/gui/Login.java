@@ -11,6 +11,7 @@ public class Login {
 	private boolean autenticado;
 	private XML gladeFile;
 	private Window mainWindow;
+	private Statusbar statusbar;
 	private Entry usuario;
 	private Entry senha;
 	private Label mensagem;
@@ -21,8 +22,9 @@ public class Login {
 	 * Construtor da Classe
 	 * @throws FileNotFoundException
 	 */
-	public Login(boolean autenticado) throws FileNotFoundException {
+	public Login(boolean autenticado, Statusbar statusbar) throws FileNotFoundException {
 		this.autenticado = autenticado;
+		this.statusbar = statusbar;
 		gladeFile = Glade.parse("login.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
@@ -53,9 +55,10 @@ public class Login {
 			@Override
 			public void onClicked(Button arg0) {
 				if (!usuario.getText().equals("matheusc") || !senha.getText().equals("123")) {
+					setAutenticado(false);
 					setMensagemErro();
 				} else {
-					autenticado = true;
+					setAutenticado(true);
 					mainWindow.hide();
 				}
 			}
@@ -75,5 +78,26 @@ public class Login {
 	 */
 	public void setMensagemErro() {
 		mensagem.setLabel("Usuário ou Senha Incorretos");
+	}
+	
+	/**
+	 * Metodo que seta a mensagem do StatusBar
+	 * @param mensagem
+	 */
+	public void setStatusBar(String mensagem) {
+		this.statusbar.setMessage(mensagem);
+	}
+	
+	/**
+	 * Metodo que seta o atributo autenticado
+	 * @param autenticado
+	 */
+	public void setAutenticado(boolean autenticado) {
+		if (autenticado) {
+			this.setStatusBar("Usuário Conectado.");
+		} else {
+			this.setStatusBar("Usuário Desconectado.");
+		}
+ 		this.autenticado = autenticado;
 	}
 }

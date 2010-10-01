@@ -26,14 +26,30 @@
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_conectar">
-                        <property name="label" translatable="yes">Conectar</property>
+                        <property name="label" translatable="yes">_Conectar</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">False</property>
                         <child internal-child="image">
                           <widget class="GtkImage" id="image2">
                             <property name="visible">True</property>
                             <property name="stock">gtk-missing-image</property>
-                            <property name="icon-size">0</property>
+                            <property name="icon-size">1</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="menu_desconectar">
+                        <property name="label" translatable="yes">_Desconectar</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image3">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-missing-image</property>
+                            <property name="icon-size">1</property>
                           </widget>
                         </child>
                       </widget>
@@ -58,15 +74,16 @@
             <child>
               <widget class="GtkMenuItem" id="menuitem2">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">_Comandos</property>
+                <property name="label" translatable="yes">Co_mandos</property>
                 <property name="use_underline">True</property>
                 <child>
                   <widget class="GtkMenu" id="menu2">
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem6">
-                        <property name="label" translatable="yes">Listar</property>
+                        <property name="label" translatable="yes">L_istar</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">False</property>
                         <child internal-child="image">
                           <widget class="GtkImage" id="image4">
@@ -78,8 +95,9 @@
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem7">
-                        <property name="label" translatable="yes">Download</property>
+                        <property name="label" translatable="yes">D_ownload</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">False</property>
                         <child internal-child="image">
                           <widget class="GtkImage" id="image5">
@@ -91,8 +109,9 @@
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem8">
-                        <property name="label" translatable="yes">Upload</property>
+                        <property name="label" translatable="yes">U_pload</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">False</property>
                         <child internal-child="image">
                           <widget class="GtkImage" id="image6">
