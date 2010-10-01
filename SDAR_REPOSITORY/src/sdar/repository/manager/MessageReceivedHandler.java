@@ -73,13 +73,13 @@ public class MessageReceivedHandler implements Runnable {
 	 */
 	private void packageHandler(Package p) throws IOException {
 		
-		System.out.println("ma oee");
-		
-		
 		if (p.isPool()) { 						//se nao for ultimo pacote do arquivo
+			System.out.println("ma oee");
 			Server.tmpFileList.add(p);
 		}
 		else {
+			
+			System.out.println("ma oee else");
 			
 			int pos = Server.tmpFileList.hasTmpFile(p);
 			

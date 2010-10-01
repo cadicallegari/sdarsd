@@ -33,6 +33,8 @@ public class Manager {
 		
 		int qtd = fi.read(buf);
 		
+		System.out.println("leu " + qtd);
+		
 		while (qtd == ComEspecification.BUFFER_SIZE) { 			//enquanto nao acabar de ler o arquivo
 			p = new Package();
 			p.setPayLoad(Util.copyBytes(buf, qtd));
@@ -41,6 +43,8 @@ public class Manager {
 			udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);
 			
 			qtd = fi.read(buf);
+			
+			System.out.println("leu " + qtd);
 		}
 		
 		p = new Package();								//quando terminar de ler o arquivo
