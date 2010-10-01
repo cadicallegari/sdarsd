@@ -9,11 +9,14 @@ package sdar.manager.manager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 import sdar.comunication.common.Package;
 import sdar.comunication.common.Util;
 import sdar.comunication.def.ComEspecification;
+import sdar.comunication.rmi.RemoteService;
 import sdar.comunication.udp.UDPComunication;
+import sdar.manager.server.Server;
 
 /**
  * @author cadi
@@ -21,8 +24,20 @@ import sdar.comunication.udp.UDPComunication;
  */
 public class Manager {
 
+	private Server serverRep;
+	private RemoteService serverRMI;
 	
 	
+	
+	public Manager() throws RemoteException {
+		
+		serverRMI = new RemoteService();
+		serverRep = new Server();
+		
+	}
+
+
+
 	public void sendFile(String filePath) throws IOException {
 		
 		File f = new File(filePath);
@@ -64,11 +79,10 @@ public class Manager {
 	 */
 	public static void main(String[] args) {
 
-		Manager manager = new Manager();
-		
 		try {
 			
-			manager.sendFile("teste.txt");
+			Manager manager = new Manager();
+			
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

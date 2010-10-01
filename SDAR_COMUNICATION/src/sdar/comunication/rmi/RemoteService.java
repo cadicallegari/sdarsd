@@ -34,7 +34,7 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	/**
 	 * @throws RemoteException
 	 */
-	protected RemoteService() throws RemoteException {
+	public RemoteService() throws RemoteException {
 		super();
 		this.initService();
 	}
