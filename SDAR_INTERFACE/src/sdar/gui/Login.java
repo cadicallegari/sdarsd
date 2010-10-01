@@ -8,6 +8,7 @@ import org.gnome.glade.XML;
 
 public class Login {
 
+	private boolean autenticado;
 	private XML gladeFile;
 	private Window mainWindow;
 	private Entry usuario;
@@ -20,7 +21,8 @@ public class Login {
 	 * Construtor da Classe
 	 * @throws FileNotFoundException
 	 */
-	public Login() throws FileNotFoundException {
+	public Login(boolean autenticado) throws FileNotFoundException {
+		this.autenticado = autenticado;
 		gladeFile = Glade.parse("login.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
@@ -53,6 +55,7 @@ public class Login {
 				if (!usuario.getText().equals("matheusc") || !senha.getText().equals("123")) {
 					setMensagemErro();
 				} else {
+					autenticado = true;
 					mainWindow.hide();
 				}
 			}

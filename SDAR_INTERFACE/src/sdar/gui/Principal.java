@@ -8,6 +8,7 @@ import org.gnome.glade.XML;
 
 public class Principal {
 
+	public static boolean autenticado;
 	private XML gladeFile;
 	private Window mainWindow;
 	private ImageMenuItem menuConectar;
@@ -49,7 +50,7 @@ public class Principal {
 			@Override
 			public void onActivate(MenuItem arg0) {
 				try {
-					new Login();
+					new Login(autenticado);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
