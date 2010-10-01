@@ -32,11 +32,19 @@ public class Teste {
 			byte [] buf = new byte[ComEspecification.BUFFER_SIZE];
 			UDPComunication udpCom = new UDPComunication();
 			
-			int i = fi.read(buf, 0, buf.length);
+			int s = fi.read(buf);
 			
-			System.out.println(new String(buf) + "\n" + i);
+			byte [] msg = new byte[s];
 			
-			p.setPayLoad(buf);
+			for (int i = 0; i < s; i++) {
+				msg[i] = buf[i];
+			}
+			
+			System.out.println(msg.length);
+			
+			p.setPayLoad(msg);
+			p.setSequencieNumber(15);
+			p.setFileName("doido velho");
 			udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);
 
 			fi.close();

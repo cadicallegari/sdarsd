@@ -30,6 +30,7 @@ public class UDPComunication {
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
         ObjectOutputStream out = new ObjectOutputStream(bos);
+        out.flush();
 	    out.writeObject(obj);
         out.close();
     
@@ -50,27 +51,20 @@ public class UDPComunication {
 	public Object readGroupObject(String group, int port) throws IOException, ClassNotFoundException {
 		
 		InetAddress groupAddress = InetAddress.getByName(group);
-		
 		MulticastSocket multicastSocket = new MulticastSocket(port);
 		multicastSocket.joinGroup(groupAddress);
 		
 		byte[] receiveData = new byte[ComEspecification.BUFFER_SIZE];
 		
-        DatagramPacket receivedMessage= new DatagramPacket(receiveData, receiveData.length);
+        DatagramPacket datagramPacket= new DatagramPacket(receiveData, receiveData.length);
 
-        multicastSocket.receive(receivedMessage);
+        multicastSocket.receive(datagramPacket);
 
-        receiveData = receivedMessage.getData();
+        receiveData = datagramPacket.getData();
 
-        System.out.println(new String(receiveData));
-        
         //converte byte[] para Object
         ByteArrayInputStream bas = new ByteArrayInputStream(receiveData);
         ObjectInputStream in = new ObjectInputStream(bas);
-        
-        System.out.println(receiveData.length);
-        System.out.println(bas.available());
-        System.out.println(in.available());
         
         Object obj = (Object) in.readObject();
 
@@ -212,7 +206,9 @@ public class UDPComunication {
 
 			Packt p = (Packt) obj;
 			
+			System.out.println(p.getFileName());
 			System.out.println(new String(p.getPayLoad()));
+			System.out.println(p.getSequencieNumber());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
