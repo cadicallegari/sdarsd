@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.udp.UDPComunication;
-import sdar.repository.file.TemporaryFileList;
-import sdar.repository.manager.MessageReceivedHandler;
+import sdar.repository.handler.MessageReceivedHandler;
+import sdar.repository.temporaryfile.TemporaryFileList;
 
 //aguarda conexao do manager
 
@@ -36,9 +36,9 @@ public class Server implements Runnable {
 				
 				obj = udp.readGroupObject(ComEspecification.GROUP, ComEspecification.UDP_PORT);
 				
-				new Thread(new MessageReceivedHandler(obj), "RECEPTOR").start();
+				new Thread(new MessageReceivedHandler(obj), "RECEPTORREP").start();
 				
-				System.out.println("RECEBIDO :" + obj.getClass().getSimpleName());
+				System.out.println("RECEBIDO: " + obj.getClass().getSimpleName());
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -97,7 +97,7 @@ public class Server implements Runnable {
 	 */
 	public static void main(String[] args) {
 		Server server = new Server();
-		System.out.println("inicizando...");
+		System.out.println("Iniciando modulo REPOSITORY             [OK]");
 		server.run();
 	}
 
