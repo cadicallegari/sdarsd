@@ -1,6 +1,10 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 import org.gnome.glade.Glade;
 import org.gnome.glade.XML;
@@ -9,6 +13,8 @@ import org.gnome.gtk.Entry;
 import org.gnome.gtk.Gtk;
 import org.gnome.gtk.Window;
 
+import sdar.comunication.def.ComEspecification;
+import sdar.comunication.rmi.RemoteServiceInterface;
 import sdar.manager.autentication.Person;
 
 public class UsuarioAdicionar {
@@ -59,12 +65,23 @@ public class UsuarioAdicionar {
 			public void onClicked(Button arg0) {
 				carregaPerson();
 				
-				if (!person.getNome().trim().equals("") &&
-						!person.getUsuario().trim().equals("") &&
-						!person.getSenha().trim().equals("")) {
-
-					//TODO Implementar Metodo de adicionar Pessoa
+				Registry reg;
+				
+				try {
+					reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
+				
+					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
+				
+					stub.insertPerson(person);
 					
+					mainWindow.hide();
+					
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NotBoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				
 				mainWindow.hide();

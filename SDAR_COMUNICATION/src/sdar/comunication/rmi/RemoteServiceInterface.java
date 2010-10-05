@@ -20,6 +20,8 @@ public interface RemoteServiceInterface extends Remote {
 	//TODO Assinatura provisoria dos metodos
 	
 	boolean getAutentication(Person p) throws RemoteException;
+	void insertPerson(Person p) throws RemoteException;
+	
 	boolean uploadFile() throws RemoteException;
 	boolean downloadFile() throws RemoteException;
 	

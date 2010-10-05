@@ -71,6 +71,7 @@ public class Login {
 			@Override
 			public void onClicked(Button arg0) {
 				Registry reg;
+				
 				try {
 					reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
 				

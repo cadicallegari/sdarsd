@@ -70,6 +70,20 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 		return uc.confirmAutentication(p);
 	}
 
+	
+	
+	
+	/* (non-Javadoc)
+	 * @see sdar.comunication.rmi.RemoteServiceInterface#insertPerson(sdar.manager.autentication.Person)
+	 */
+	@Override
+	public void insertPerson(Person p) throws RemoteException {
+		UCManterAutenticationManager uc = new UCManterAutenticationManager();
+		uc.insert(p);
+	}
+	
+	
+	
 	/* (non-Javadoc)
 	 * @see sdar.comunication.rmi.SDARRemoteService#uploadFile()
 	 */
@@ -104,5 +118,7 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 		}
 		
 	}
+
+
 
 }
