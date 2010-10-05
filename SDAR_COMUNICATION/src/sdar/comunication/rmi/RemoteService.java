@@ -13,6 +13,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 import sdar.comunication.def.ComEspecification;
 import sdar.manager.autentication.Person;
+import sdar.manager.autentication.UCManterAutenticationManager;
 
 /**
  * @author cadi
@@ -64,8 +65,9 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	 */
 	@Override
 	public boolean getAutentication(Person p) throws RemoteException {
-		System.out.println(p.getNome());
-		return false;
+		UCManterAutenticationManager uc = new UCManterAutenticationManager();
+		
+		return uc.confirmAutentication(p);
 	}
 
 	/* (non-Javadoc)
