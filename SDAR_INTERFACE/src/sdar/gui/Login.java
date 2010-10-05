@@ -1,11 +1,22 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
-import org.gnome.gtk.*;
 import org.gnome.glade.Glade;
 import org.gnome.glade.XML;
+import org.gnome.gtk.Button;
+import org.gnome.gtk.Entry;
+import org.gnome.gtk.Gtk;
+import org.gnome.gtk.Label;
+import org.gnome.gtk.Statusbar;
+import org.gnome.gtk.Window;
 
+import sdar.comunication.def.ComEspecification;
+import sdar.comunication.rmi.RemoteServiceInterface;
 import sdar.manager.autentication.Person;
 
 public class Login {
@@ -59,16 +70,29 @@ public class Login {
 		entrar.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				if (!usuario.getText().equals("matheusc") || !senha.getText().equals("123")) {
-					setAutenticado(false);
-					setMensagemErro();
-				} else {
-					person = new Person();
-					person.setNome("Matheus Cristiano Barreto");
+				Registry reg;
+				try {
+					reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
+				
+					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
+				
+					Person person = new Person();
 					person.setUsuario(usuario.getText());
 					person.setSenha(senha.getText());
-					setAutenticado(true);
-					mainWindow.hide();
+					setAutenticado(stub.getAutentication(person));
+					
+					if (getAutenticado()) {
+						mainWindow.hide();
+					} else {
+						setMensagemErro();
+					}
+
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NotBoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		});
@@ -108,5 +132,9 @@ public class Login {
 			this.setStatusBar("Usuário Desconectado.");
 		}
  		this.autenticado = autenticado;
+	}
+	
+	public boolean getAutenticado() {
+		return this.autenticado;
 	}
 }
