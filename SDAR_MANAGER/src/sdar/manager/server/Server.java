@@ -68,6 +68,7 @@ public class Server implements Runnable {
 	 */
 	public static void main(String[] args) {
 		Server server = new Server();
+		System.out.println("Iniciando modulo MANAGER             [OK]");
 		server.run();
 	}
 	

@@ -2,6 +2,7 @@ package sdar.comunication.udp;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -66,7 +67,17 @@ public class UDPComunication {
         ByteArrayInputStream bas = new ByteArrayInputStream(receiveData);
         ObjectInputStream in = new ObjectInputStream(bas);
         
-        Object obj = (Object) in.readObject();
+//        Object obj = (Object) in.readObject();
+        
+        Object obj = null;
+        try {
+        
+        	obj = (Object) in.readObject();
+        
+        } catch (EOFException e) {
+        	obj = in.readUnshared();
+        }
+        
 
         in.close();
         bas.close();

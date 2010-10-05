@@ -27,17 +27,31 @@ public class Teste {
 
 		try {
 			
-			File f = new File("teste.txt");
+//			File f = new File("teste.txt");
+			File f = new File("teste2.txt");
 			FileInputStream fi = new FileInputStream(f);
 			Package p = new Package();
 			byte [] buf = new byte[ComEspecification.BUFFER_SIZE];
 			UDPComunication udpCom = new UDPComunication();
 			
 			int s = fi.read(buf);
+			System.out.println(s);
 			
+			//TODO verificar quando a ultima leitura do arquivo der exatamente buffer_size
+			while (s == ComEspecification.BUFFER_SIZE) {
+				p.setPayLoad(Util.copyBytes(buf, s));
+				p.setSequencieNumber(15);
+				p.setPool(true);
+				p.setFileName("doidovelho.txt");
+				udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);
+				s = fi.read(buf);
+				System.out.println(s);
+			}
+				
 			p.setPayLoad(Util.copyBytes(buf, s));
 			p.setSequencieNumber(15);
-			p.setFileName("doido velho");
+			p.setFileName("doidovelho.txt");
+			p.setPool(false);
 			udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);
 
 			fi.close();
