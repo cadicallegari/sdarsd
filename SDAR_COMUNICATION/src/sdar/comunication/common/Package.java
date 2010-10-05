@@ -8,6 +8,8 @@ package sdar.comunication.common;
 
 import java.io.Serializable;
 
+import sdar.comunication.def.ComEspecification;
+
 /**
  * @author cadi
  *
@@ -19,9 +21,9 @@ public class Package implements Serializable {
 	 */
 	private static final long serialVersionUID = -9147464380706799772L;
 	
-	private String fileName;
+	private byte[] fileName = new byte[ComEspecification.NAME_MAX_SIZE];
 	private int sequencieNumber;
-	private String payLoad; 
+	private byte[] payLoad = new byte[ComEspecification.BUFFER_SIZE]; 
 	private int type;
 	private int next;
 	
@@ -34,25 +36,25 @@ public class Package implements Serializable {
 	 * @return the payLoad
 	 */
 	public byte[] getPayLoad() {
-		return payLoad.getBytes();
+		return payLoad;
 	}
 	/**
 	 * @param payLoad the payLoad to set
 	 */
 	public void setPayLoad(byte[] payLoad) {
-		this.payLoad = new String(payLoad);
+		this.payLoad = payLoad.clone();
 	}	
 	/**
 	 * @return the fileName
 	 */
 	public String getFileName() {
-		return fileName;
+		return new String(this.fileName);
 	}
 	/**
 	 * @param fileName the fileName to set
 	 */
 	public void setFileName(String fileName) {
-		this.fileName = fileName;
+		this.fileName = fileName.getBytes();
 	}
 	/**
 	 * @return the sequencieNumber

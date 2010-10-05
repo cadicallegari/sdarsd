@@ -2,7 +2,6 @@ package sdar.comunication.udp;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -37,6 +36,8 @@ public class UDPComunication {
     
         // Obtém os bytes do objeto serializado
         byte[] msg = bos.toByteArray();
+        
+        System.out.println(msg.length);
 		
 		DatagramPacket sendPacket = new DatagramPacket(msg, msg.length, IPAddress, port);
 		clientSocket.send(sendPacket);
@@ -55,7 +56,7 @@ public class UDPComunication {
 		MulticastSocket multicastSocket = new MulticastSocket(port);
 		multicastSocket.joinGroup(groupAddress);
 		
-		byte[] receiveData = new byte[ComEspecification.BUFFER_SIZE];
+		byte[] receiveData = new byte[ComEspecification.MAX_DATA_READ];
 		
         DatagramPacket datagramPacket= new DatagramPacket(receiveData, receiveData.length);
 
@@ -67,18 +68,8 @@ public class UDPComunication {
         ByteArrayInputStream bas = new ByteArrayInputStream(receiveData);
         ObjectInputStream in = new ObjectInputStream(bas);
         
-//        Object obj = (Object) in.readObject();
+        Object obj = (Object) in.readObject();
         
-        Object obj = null;
-        try {
-        
-        	obj = (Object) in.readObject();
-        
-        } catch (EOFException e) {
-        	obj = in.readUnshared();
-        }
-        
-
         in.close();
         bas.close();
         multicastSocket.leaveGroup(groupAddress);

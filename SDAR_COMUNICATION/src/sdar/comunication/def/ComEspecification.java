@@ -12,7 +12,9 @@ package sdar.comunication.def;
  */
 public class ComEspecification {
 
+	public static int MAX_DATA_READ		= 8000;
 	public static int BUFFER_SIZE 		= 7000;
+	public static int NAME_MAX_SIZE		=  500;
 	public static int TCP_PORT    		= 4000;
 	public static int UDP_PORT			= 2000;
 	public static int RMI_PORT_SERVER	= 3000;
