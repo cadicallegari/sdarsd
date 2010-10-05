@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import sdar.comunication.def.ComEspecification;
 import sdar.comunication.tcp.TCPComunication;
 import sdar.manager.client.ClientManager;
 
@@ -12,7 +13,6 @@ import sdar.manager.client.ClientManager;
 
 public class Server implements Runnable {
 
-	public static int PORT = 4000;
 	
 	private Socket clientSocket; // Socket do cliente
 	private ServerSocket serverSocket; // Servidor
@@ -23,6 +23,7 @@ public class Server implements Runnable {
 	 * 
 	 */
 	public Server() {
+		this.run();
 	}
 
 
@@ -35,7 +36,7 @@ public class Server implements Runnable {
 	public void run() {
 		try {
 			//cria socket servidor
-			this.serverSocket = new ServerSocket(Server.PORT);
+			this.serverSocket = new ServerSocket(ComEspecification.TCP_PORT);
 			
 			while (!finish) {
 				this.clientSocket = this.serverSocket.accept();
