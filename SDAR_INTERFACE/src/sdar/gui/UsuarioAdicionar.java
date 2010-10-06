@@ -70,24 +70,27 @@ public class UsuarioAdicionar {
 				person.setUsuario(usuario.getText());
 				person.setSenha(senha.getText());
 				
-				try {
-					Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
-					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
-					stub.insertPerson(person);
-					
-					mainWindow.hide();
-					if (janela) {
-						new UsuarioConsultar();
+				if (!person.getNome().trim().equals("") &&
+						!person.getUsuario().trim().equals("") &&
+						!person.getSenha().trim().equals("")) {
+					try {
+						Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
+						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
+						stub.insertPerson(person);
+						
+						mainWindow.hide();
+						if (janela) {
+							new UsuarioConsultar();
+						}
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					} catch (NotBoundException e) {
+						e.printStackTrace();
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
 					}
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				} catch (NotBoundException e) {
-					e.printStackTrace();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
+					mainWindow.hide();
 				}
-				
-				mainWindow.hide();
 			}
 		});
 		

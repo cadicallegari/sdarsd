@@ -88,16 +88,18 @@ public class UsuarioConsultar {
 		remover.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				try {
-					Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
-					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
-					stub.deletePerson(person);
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				} catch (NotBoundException e) {
-					e.printStackTrace();
+				if (!person.getNome().trim().equals("")) {
+					try {
+						Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
+						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
+						stub.deletePerson(person);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					} catch (NotBoundException e) {
+						e.printStackTrace();
+					}
+					updateTabela();
 				}
-				updateTabela();
 			}
 		});
 		
