@@ -16,6 +16,24 @@ public class Person implements Serializable {
 	private String nome;
 	private String usuario;
 	private String senha;
+
+	/**
+	 * Metodo construtor do objeto Person
+	 */
+	public Person() {
+	}
+	
+	/**
+	 * Metodo construtor do objeto Person
+	 * @param nome
+	 * @param usuario
+	 * @param senha
+	 */
+	public Person(String nome, String usuario, String senha) {
+		this.nome = nome;
+		this.usuario = usuario;
+		this.senha = senha;
+	}
 	
 	/**
 	 * Metodo que retorna o Nome da Person

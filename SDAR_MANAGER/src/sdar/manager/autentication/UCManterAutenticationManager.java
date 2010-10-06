@@ -95,10 +95,10 @@ public class UCManterAutenticationManager {
 	 * @param person
 	 * @return
 	 */
-	public boolean confirmAutentication(Person person) {
+	public boolean checkAutentication(Person person) {
 		List<Person> list = this.retrieve(person);
 		
-		if (list.size() > 0) {
+		if (list != null) {
 			return true;
 		} else {
 			return false;
