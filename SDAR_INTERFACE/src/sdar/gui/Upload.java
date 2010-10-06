@@ -13,6 +13,7 @@ public class Upload {
 
 	private XML gladeFile;
 	private Window mainWindow;
+	private Button enviar;
 	private Button voltar;
 	private FileChooser arquivo;
 	private String filename;
@@ -21,8 +22,7 @@ public class Upload {
 	 * Construtor da Classe
 	 * @throws FileNotFoundException
 	 */
-	public Upload(String filename) throws FileNotFoundException {
-		this.filename = filename;
+	public Upload() throws FileNotFoundException {
 		
 		gladeFile = Glade.parse("xml/upload.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
@@ -38,7 +38,8 @@ public class Upload {
 	 * Metodo que gerencia os controles da janela sobre
 	 */
 	public void gerenciaControles() {
-		voltar = (Button) gladeFile.getWidget("btn_voltar");
+		enviar = (Button) gladeFile.getWidget("btn_enviar");
+		voltar = (Button) gladeFile.getWidget("btn_fechar");
 		arquivo = (FileChooser) gladeFile.getWidget("arquivo");
 	}
 	
@@ -46,13 +47,24 @@ public class Upload {
 	 * Metodo que gerencia os eventos da janela sobre
 	 */
 	public void gerenciaEventos() {
+		
+		//Evento do botao Voltar
+		enviar.connect(new Button.Clicked() {
+			@Override
+			public void onClicked(Button arg0) {
+				filename = arquivo.getFilename();
+				System.out.println(filename);
+				//TODO Call Upload de Arquivo
+			}
+		});
+		
 		//Evento do botao Voltar
 		voltar.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				filename = arquivo.getFilename();
 				mainWindow.hide();
 			}
 		});
+		
 	}
 }
