@@ -37,8 +37,6 @@ public class UDPComunication {
         // Obtém os bytes do objeto serializado
         byte[] msg = bos.toByteArray();
         
-        System.out.println(msg.length);
-		
 		DatagramPacket sendPacket = new DatagramPacket(msg, msg.length, IPAddress, port);
 		clientSocket.send(sendPacket);
 

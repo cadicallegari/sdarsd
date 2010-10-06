@@ -28,29 +28,37 @@ public class Teste {
 		try {
 			
 //			File f = new File("teste.txt");
-			File f = new File("teste2.txt");
+//			File f = new File("teste2.txt");
+			File f = new File("curso_linux.pdf");
 			FileInputStream fi = new FileInputStream(f);
 			Package p = new Package();
 			byte [] buf = new byte[ComEspecification.BUFFER_SIZE];
 			UDPComunication udpCom = new UDPComunication();
+			String fileName = f.getName();
 			
 			int s = fi.read(buf);
-			System.out.println(s);
+			System.out.println("lido " + s);
+			
+			
 			
 			//TODO verificar quando a ultima leitura do arquivo der exatamente buffer_size
 			while (s == ComEspecification.BUFFER_SIZE) {
 				p.setPayLoad(Util.copyBytes(buf, s));
-				p.setSequencieNumber(15);
 				p.setPool(true);
-				p.setFileName("doidovelho.txt");
+				p.setFileName(fileName);
 				udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				s = fi.read(buf);
-				System.out.println(s);
+				System.out.println("lido " + s);
 			}
 				
 			p.setPayLoad(Util.copyBytes(buf, s));
-			p.setSequencieNumber(15);
-			p.setFileName("doidovelho.txt");
+			p.setFileName(fileName);
 			p.setPool(false);
 			udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);
 

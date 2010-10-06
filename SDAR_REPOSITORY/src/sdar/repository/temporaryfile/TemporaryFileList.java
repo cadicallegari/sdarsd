@@ -35,16 +35,17 @@ public class TemporaryFileList {
 		String fileName = "";
 		TemporaryFile tmpFile = null;
 		
-		while ((ret == -1) && (index < this.temporaryFileList.size()) && (!this.temporaryFileList.isEmpty())) {
-			tmpFile = this.temporaryFileList.get(index);
-			fileName = tmpFile.getFileName();
-			
-			if (tmpFile.getFileName().equals(fileName)) {
-				ret = index;
+		if (!this.temporaryFileList.isEmpty()) {
+			while ((ret == -1) && (index < this.temporaryFileList.size())) {
+				tmpFile = this.temporaryFileList.get(index);
+				fileName = tmpFile.getFileName();
+				
+				if (tmpFile.getFileName().equals(fileName)) {
+					ret = index;
+				}
+				index++;
 			}
-			index++;
 		}
-		
 		return ret;
 	}
 
@@ -75,13 +76,12 @@ public class TemporaryFileList {
 		
 		if (index == -1) {  			//nao existe arquivo temporario com mesmo nome
 			this.insertTmpFile(pkg);
-			index = this.temporaryFileList.size();
+			index = this.temporaryFileList.size() - 1;    // retorna posiçao de onde foi inserido
 		}
 		else {							//ja existe arquivo temporario incompleto na lista
 			TemporaryFile tmp = this.temporaryFileList.get(index);
 			tmp.add(pkg);
 		}
-		
 		
 		return index;
 	}

@@ -42,7 +42,6 @@ public class MessageReceivedHandler implements Runnable {
 		
 		if (className.equals("Package")) {
 			try {
-				System.out.println("Pakage");
 				Package p = (Package) obj;
 				this.packageHandler(p);
 			
@@ -75,23 +74,22 @@ public class MessageReceivedHandler implements Runnable {
 	 */
 	private void packageHandler(Package p) throws IOException {
 		
-		System.out.println(p.getPayLoad().length);
-		
 		if (p.isPool()) { 						//se nao for ultimo pacote do arquivo
-			System.out.println("ma oee");
-			Server.tmpFileList.add(p);
+			int i = Server.tmpFileList.add(p);
+			System.out.println("poll " + i);
 		}
 		else {
 			
-			System.out.println("ma oee else");
-			
 			int pos = Server.tmpFileList.hasTmpFile(p);
+			
+			System.out.println("not poll " + pos);
 			
 			if (pos == -1) {				//se arquivos temporarios nao contem o arquivo do pacote
 				this.saveFile(p);							//cria arquivo pequenino
 			}
 			else {
 				TemporaryFile tmp = Server.tmpFileList.remove(pos);
+				tmp.add(p);										//adiciona ultimo pacote
 				this.saveFile(tmp);
 			}
 		}
@@ -105,23 +103,15 @@ public class MessageReceivedHandler implements Runnable {
 	 */
 	private void saveFile(TemporaryFile tmp) throws IOException {
 		
-		System.out.println("salvo grandao");
-		
 		File f = new File(tmp.getFileName());
 		FileOutputStream fo = new FileOutputStream(f);
 		LinkedList<Package> list = tmp.getPackgeList();
 		
-		int start = 0;
-		int offset = 0;
 		byte [] buf;
 		
 		for (Package p : list) {
 			buf = p.getPayLoad();
-			offset = buf.length;
-			
-			fo.write(buf, start, offset);
-			
-			start = offset;
+			fo.write(buf);
 		}
 
 		fo.close();
@@ -134,8 +124,6 @@ public class MessageReceivedHandler implements Runnable {
 	 * @throws IOException 
 	 */
 	private void saveFile(Package p) throws IOException {
-		
-		System.out.println("salvo pequeno");
 		
 		File f = new File(p.getFileName());
 		
