@@ -12,6 +12,7 @@ public class Principal {
 
 	private boolean autenticado;
 	private Person person;
+	private String filename;
 	
 	private XML gladeFile;
 	private Window mainWindow;
@@ -129,7 +130,11 @@ public class Principal {
 		menuUpload.connect(new MenuItem.Activate() {
 			@Override
 			public void onActivate(MenuItem arg0) {
-				
+				try {
+					new Upload(filename);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		
