@@ -68,6 +68,7 @@ public class Principal {
 			@Override
 			public void onActivate(MenuItem arg0) {
 				try {
+					person = new Person();
 					new Login(autenticado, person, statusbar);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
@@ -89,7 +90,7 @@ public class Principal {
 			@Override
 			public void onActivate(MenuItem arg0) {
 				try {
-					new UsuarioAdicionar();
+					new UsuarioAdicionar(false);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
@@ -100,7 +101,11 @@ public class Principal {
 		menuUsuarioConsultar.connect(new MenuItem.Activate() {
 			@Override
 			public void onActivate(MenuItem arg0) {
-				new UsuarioConsultar();
+				try {
+					new UsuarioConsultar();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		

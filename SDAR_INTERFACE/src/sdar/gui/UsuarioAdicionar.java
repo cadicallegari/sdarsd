@@ -19,6 +19,9 @@ import sdar.manager.autentication.Person;
 
 public class UsuarioAdicionar {
 	
+	private boolean janela;
+	private Person person;
+	
 	private XML gladeFile;
 	private Window mainWindow;
 	private Entry nome;
@@ -27,13 +30,12 @@ public class UsuarioAdicionar {
 	private Button adicionar;
 	private Button voltar;
 	
-	private Person person;
-	
 	/**
 	 * Construtor da Classe
 	 * @throws FileNotFoundException
 	 */
-	public UsuarioAdicionar() throws FileNotFoundException {
+	public UsuarioAdicionar(boolean janela) throws FileNotFoundException {
+		this.janela = janela;
 		gladeFile = Glade.parse("xml/usuario-add.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
@@ -63,24 +65,25 @@ public class UsuarioAdicionar {
 		adicionar.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				carregaPerson();
-				
-				Registry reg;
+				person = new Person();
+				person.setNome(nome.getText());
+				person.setUsuario(usuario.getText());
+				person.setSenha(senha.getText());
 				
 				try {
-					reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
-				
+					Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
 					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
-				
 					stub.insertPerson(person);
 					
 					mainWindow.hide();
-					
+					if (janela) {
+						new UsuarioConsultar();
+					}
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (NotBoundException e) {
-					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
 				
@@ -95,15 +98,5 @@ public class UsuarioAdicionar {
 				mainWindow.hide();
 			}
 		});
-	}
-	
-	/**
-	 * Metodo que carrega os dados da Interface para o objeto Person
-	 */
-	public void carregaPerson() {
-		person = new Person();
-		person.setNome(nome.getText());
-		person.setUsuario(usuario.getText());
-		person.setSenha(senha.getText());
 	}
 }

@@ -41,6 +41,7 @@ public class Login {
 		this.autenticado = autenticado;
 		this.person = person;
 		this.statusbar = statusbar;
+		
 		gladeFile = Glade.parse("xml/login.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
@@ -70,29 +71,22 @@ public class Login {
 		entrar.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				Registry reg;
+				person.setUsuario(usuario.getText());
+				person.setSenha(senha.getText());
 				
 				try {
-					reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
-				
+					Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
 					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
-				
-					Person person = new Person();
-					person.setUsuario(usuario.getText());
-					person.setSenha(senha.getText());
-					setAutenticado(stub.getAutentication(person));
+					setAutenticado(stub.checkAutentication(person));
 					
 					if (getAutenticado()) {
 						mainWindow.hide();
 					} else {
 						setMensagemErro();
 					}
-
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (NotBoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
