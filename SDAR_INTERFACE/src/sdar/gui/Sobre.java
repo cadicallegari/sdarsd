@@ -12,7 +12,7 @@ public class Sobre {
 
 	private XML gladeFile;
 	private Window mainWindow;
-	private Button voltar;
+	private Button fechar;
 
 	/**
 	 * Construtor da Classe
@@ -33,15 +33,15 @@ public class Sobre {
 	 * Metodo que gerencia os controles da janela sobre
 	 */
 	public void gerenciaControles() {
-		voltar = (Button) gladeFile.getWidget("btn_voltar");
+		fechar = (Button) gladeFile.getWidget("btn_fechar");
 	}
 	
 	/**
 	 * Metodo que gerencia os eventos da janela sobre
 	 */
 	public void gerenciaEventos() {
-		//Evento do botao Voltar
-		voltar.connect(new Button.Clicked() {
+		//Evento do botao Fechar
+		fechar.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
 				mainWindow.hide();

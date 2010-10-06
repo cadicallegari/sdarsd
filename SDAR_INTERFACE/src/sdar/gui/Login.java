@@ -31,7 +31,7 @@ public class Login {
 	private Entry senha;
 	private Label mensagem;
 	private Button entrar;
-	private Button voltar;
+	private Button fechar;
 	
 	/**
 	 * Construtor da Classe
@@ -59,7 +59,7 @@ public class Login {
 		usuario = (Entry) gladeFile.getWidget("txt_usuario");
 		senha = (Entry) gladeFile.getWidget("txt_senha");
 		entrar = (Button) gladeFile.getWidget("btn_entrar");
-		voltar = (Button) gladeFile.getWidget("btn_voltar");
+		fechar = (Button) gladeFile.getWidget("btn_fechar");
 		mensagem = (Label) gladeFile.getWidget("lab_mensagem");
 	}
 	
@@ -92,8 +92,8 @@ public class Login {
 			}
 		});
 		
-		//Evento do botao Voltar
-		voltar.connect(new Button.Clicked() {
+		//Evento do botao Fechar
+		fechar.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
 				mainWindow.hide();

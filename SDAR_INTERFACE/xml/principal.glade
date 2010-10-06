@@ -49,7 +49,7 @@
                             <child>
                               <widget class="GtkMenuItem" id="menu_usuario_adicionar">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">A_dicionar</property>
+                                <property name="label" translatable="yes">_Novo</property>
                                 <property name="use_underline">True</property>
                               </widget>
                             </child>
@@ -83,7 +83,7 @@
             <child>
               <widget class="GtkMenuItem" id="menuitem2">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Co_mandos</property>
+                <property name="label" translatable="yes">O_p&#xE7;&#xF5;es</property>
                 <property name="use_underline">True</property>
                 <child>
                   <widget class="GtkMenu" id="menu2">

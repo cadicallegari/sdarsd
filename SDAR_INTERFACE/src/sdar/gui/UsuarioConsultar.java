@@ -33,7 +33,7 @@ public class UsuarioConsultar {
 	private Window mainWindow;
 	private Button adicionar;
 	private Button remover;
-	private Button voltar;
+	private Button fechar;
 	private TreeView tabela;
 	private ListStore model;
 	private DataColumnString nome;
@@ -61,7 +61,7 @@ public class UsuarioConsultar {
 		tabela = (TreeView) gladeFile.getWidget("tabela");
 		adicionar = (Button) gladeFile.getWidget("btn_adicionar");
 		remover = (Button) gladeFile.getWidget("btn_remover");
-		voltar = (Button) gladeFile.getWidget("btn_voltar");
+		fechar = (Button) gladeFile.getWidget("btn_fechar");
 		
 		this.setTabela();
 	}
@@ -115,8 +115,8 @@ public class UsuarioConsultar {
 		});
 
             	
-		//Evento do botao Voltar
-		voltar.connect(new Button.Clicked() {
+		//Evento do botao Fechar
+		fechar.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
 				mainWindow.hide();

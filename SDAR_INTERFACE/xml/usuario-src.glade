@@ -45,7 +45,7 @@
             <property name="layout_style">center</property>
             <child>
               <widget class="GtkButton" id="btn_adicionar">
-                <property name="label" translatable="yes">Adicionar</property>
+                <property name="label" translatable="yes">Novo</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -70,8 +70,8 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="btn_voltar">
-                <property name="label" translatable="yes">Voltar</property>
+              <widget class="GtkButton" id="btn_fechar">
+                <property name="label" translatable="yes">Fechar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
