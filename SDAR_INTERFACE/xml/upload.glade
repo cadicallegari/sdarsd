@@ -6,7 +6,7 @@
     <property name="width_request">400</property>
     <property name="height_request">200</property>
     <property name="border_width">3</property>
-    <property name="title" translatable="yes">Adicionar Usu&#xE1;rio</property>
+    <property name="title" translatable="yes">Upload de Arquivos</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="type_hint">menu</property>
@@ -16,9 +16,28 @@
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <child>
-          <widget class="GtkLabel" id="label1">
+          <widget class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">Seleciona o arquivo</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <widget class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Arquivo Selecionado:</property>
+              </widget>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkEntry" id="entry1">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="invisible_char">&#x25CF;</property>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="position">0</property>
@@ -41,8 +60,8 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="btn_voltar">
-                <property name="label" translatable="yes">Voltar</property>
+              <widget class="GtkButton" id="btn_enviar">
+                <property name="label" translatable="yes">Enviar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -51,6 +70,19 @@
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="btn_fechar">
+                <property name="label" translatable="yes">Fechar</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </widget>
