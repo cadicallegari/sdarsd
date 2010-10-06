@@ -1,124 +1,110 @@
-/**
- * SDARRemoteServiceImpl.java
- * cadi
- * SDAR_COMUNICATION
- * sdar.comunication.rmi
- */
 package sdar.comunication.rmi;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 import sdar.comunication.def.ComEspecification;
 import sdar.manager.autentication.Person;
 import sdar.manager.autentication.UCManterAutenticationManager;
 
-/**
- * @author cadi
- *
- */
 public class RemoteService extends UnicastRemoteObject implements RemoteServiceInterface {
 
-	
-
-	/**
-	 * long
-	 */
 	private static final long serialVersionUID = -5432021798076668288L;
 
-	
 	private Registry registryServer;
 	
-	
 	/**
+	 * Metodo construtora da classe RemoteService
 	 * @throws RemoteException
 	 */
 	public RemoteService() throws RemoteException {
 		super();
 		this.initService();
 	}
-
 	
-	
+	/**
+	 * Metodo que inicializa o serviço remoto
+	 */
 	private void initService() {
-		
 		try {
-			
 			this.registryServer = LocateRegistry.createRegistry(ComEspecification.RMI_PORT_SERVER);
-			
 			this.registryServer.rebind(ComEspecification.RMI_NAME, this);
-		
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
-	
-	
-	
-	/* (non-Javadoc)
-	 * @see sdar.comunication.rmi.SDARRemoteService#getAutentication()
+	/**
+	 * Metodo remoto que verifica a autenticacao de um objeto Person 
 	 */
 	@Override
-	public boolean getAutentication(Person p) throws RemoteException {
-		UCManterAutenticationManager uc = new UCManterAutenticationManager();
-		
-		return uc.confirmAutentication(p);
+	public boolean checkAutentication(Person person) throws RemoteException {
+		UCManterAutenticationManager uCManterAutenticationManager = new UCManterAutenticationManager();
+		return uCManterAutenticationManager.checkAutentication(person);
+	}
+	
+	/**
+	 * Metodo remoto que inseri um objeto Person
+	 */
+	@Override
+	public void insertPerson(Person person) throws RemoteException {
+		UCManterAutenticationManager uCManterAutenticationManager = new UCManterAutenticationManager();
+		uCManterAutenticationManager.insert(person);
+	}
+	
+	/**
+	 * Metodo remoto que remoto o objeto Person
+	 */
+	@Override
+	public void deletePerson(Person person) throws RemoteException {
+		UCManterAutenticationManager uCManterAutenticationManager = new UCManterAutenticationManager();
+		uCManterAutenticationManager.delete(person);
+	}
+	
+	/**
+	 * Metodo remoto que consulta o objeto Person
+	 */
+	@Override
+	public List<Person> retrieveAllPerson(Person person) throws RemoteException {
+		UCManterAutenticationManager uCManterAutenticationManager = new UCManterAutenticationManager();
+		return uCManterAutenticationManager.retrieve(person);
+	}
+	
+	/**
+	 * Metodo remoto que retorna todos os objetos Persons
+	 */
+	@Override
+	public List<Person> retrieveAllPerson() throws RemoteException {
+		UCManterAutenticationManager uCManterAutenticationManager = new UCManterAutenticationManager();
+		return uCManterAutenticationManager.retrieveAll();
 	}
 
-	
-	
-	
-	/* (non-Javadoc)
-	 * @see sdar.comunication.rmi.RemoteServiceInterface#insertPerson(sdar.manager.autentication.Person)
-	 */
-	@Override
-	public void insertPerson(Person p) throws RemoteException {
-		UCManterAutenticationManager uc = new UCManterAutenticationManager();
-		uc.insert(p);
-	}
-	
-	
-	
-	/* (non-Javadoc)
-	 * @see sdar.comunication.rmi.SDARRemoteService#uploadFile()
+	/**
+	 * Metodo remoto que executa a opcao de Upload do arquivo
 	 */
 	@Override
 	public boolean uploadFile() throws RemoteException {
-		System.out.println("upload muito loco");
+		System.out.println("Upload");
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see sdar.comunication.rmi.SDARRemoteService#downloadFile()
+	/**
+	 * Metodo remoto que executa a opcao de Download do arquivo
 	 */
 	@Override
 	public boolean downloadFile() throws RemoteException {
-		System.out.println("download muito loco");
+		System.out.println("Download");
 		return false;
 	}
-
-	
-	
-	
 	
 	public static void main(String[] args) {
-		
 		try {
-			
 			new RemoteService();
-			
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
-
-
-
 }
