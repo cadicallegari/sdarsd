@@ -9,6 +9,8 @@ import org.gnome.gtk.FileChooser;
 import org.gnome.gtk.Gtk;
 import org.gnome.gtk.Window;
 
+import sdar.client.manager.UCManterArquivoManager;
+
 public class Upload {
 
 	private XML gladeFile;
@@ -53,8 +55,9 @@ public class Upload {
 			@Override
 			public void onClicked(Button arg0) {
 				filename = arquivo.getFilename();
-				System.out.println(filename);
-				//TODO Call Upload de Arquivo
+
+				UCManterArquivoManager uc = new UCManterArquivoManager();
+				uc.sendFile(filename);
 			}
 		});
 		
