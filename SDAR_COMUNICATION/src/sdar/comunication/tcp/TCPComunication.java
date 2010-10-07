@@ -25,15 +25,31 @@ public class TCPComunication {
 
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
+	private Socket socket;
 	
 	
 	public TCPComunication(Socket socket) throws IOException {
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.out.flush(); // Descarrega o buffer
-		this.in = new ObjectInputStream(socket.getInputStream());	
+		this.in = new ObjectInputStream(socket.getInputStream());
+		this.socket = socket;
 	}
 
 
+	
+	public void send(byte [] buf) throws IOException {
+		this.out.write(buf);
+		this.out.flush();
+	}
+	
+
+	
+	public byte[] read() throws IOException {
+		byte [] b = new byte[ComEspecification.BUFFER_SIZE];
+		this.in.read(b);
+		return b;
+	}
+	
 	
 	/**
 	 * 
@@ -58,6 +74,13 @@ public class TCPComunication {
 	}
 	
 
+	
+	public void close() throws IOException {
+		this.in.close();
+		this.out.close();
+		this.socket.close();
+	}
+	
 	
 	public static void main(String args[]) {
 		

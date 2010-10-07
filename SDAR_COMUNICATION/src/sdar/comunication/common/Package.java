@@ -22,7 +22,7 @@ public class Package implements Serializable {
 	private static final long serialVersionUID = -9147464380706799772L;
 	
 	private byte[] fileName = new byte[ComEspecification.NAME_MAX_SIZE];
-	private int sequencieNumber;
+	private int sequenceNumber;
 	private byte[] payLoad = new byte[ComEspecification.BUFFER_SIZE]; 
 	private int type;
 	private int next;
@@ -59,14 +59,14 @@ public class Package implements Serializable {
 	/**
 	 * @return the sequencieNumber
 	 */
-	public int getSequencieNumber() {
-		return sequencieNumber;
+	public int getSequenceNumber() {
+		return sequenceNumber;
 	}
 	/**
 	 * @param sequencieNumber the sequencieNumber to set
 	 */
-	public void setSequencieNumber(int sequencieNumber) {
-		this.sequencieNumber = sequencieNumber;
+	public void setSequenceNumber(int sequencieNumber) {
+		this.sequenceNumber = sequencieNumber;
 	}
 
 	/**

@@ -21,4 +21,5 @@ public class ComEspecification {
 	public static int RMI_PORT_CLIENT	= 3000;
 	public static String RMI_NAME		= "SDARService";
 	public static String GROUP			= "234.5.6.7";
+	public static String TCP_ADDR		= "localhost";
 }

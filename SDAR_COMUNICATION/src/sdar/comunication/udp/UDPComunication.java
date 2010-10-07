@@ -209,7 +209,7 @@ public class UDPComunication {
 			
 			System.out.println(p.getFileName());
 			System.out.println(new String(p.getPayLoad()));
-			System.out.println(p.getSequencieNumber());
+			System.out.println(p.getSequenceNumber());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
