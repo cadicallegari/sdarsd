@@ -12,6 +12,7 @@ public class Principal {
 
 	private boolean autenticado;
 	private Person person;
+	private String filePath;
 	
 	private XML gladeFile;
 	private Window mainWindow;
@@ -21,10 +22,12 @@ public class Principal {
 	private MenuItem menuUsuarioAdicionar;
 	private MenuItem menuUsuarioConsultar;
 	private MenuItem menuSair;
-	private MenuItem menuListar;
-	private MenuItem menuDownload;
-	private MenuItem menuUpload;
 	private MenuItem menuSobre;
+	private FileChooserButton fcb_upload;
+	private Label labelUpload;
+	private Label labelDownload;
+	private Button upload;
+	private Button download;
 
 	/**
 	 * Construtor da Classe
@@ -52,17 +55,20 @@ public class Principal {
 		menuUsuarioAdicionar = (MenuItem) gladeFile.getWidget("menu_usuario_adicionar");
 		menuUsuarioConsultar = (MenuItem) gladeFile.getWidget("menu_usuario_consultar");
 		menuSair = (MenuItem) gladeFile.getWidget("menu_sair");
-		menuListar = (MenuItem) gladeFile.getWidget("menu_listar");
-		menuDownload = (MenuItem) gladeFile.getWidget("menu_download");
-		menuUpload = (MenuItem) gladeFile.getWidget("menu_upload");
 		menuSobre = (MenuItem) gladeFile.getWidget("menu_sobre");
 		statusbar = (Statusbar) gladeFile.getWidget("barra_mensagem");
+		fcb_upload = (FileChooserButton) gladeFile.getWidget("fcb_upload");
+		labelUpload = (Label) gladeFile.getWidget("txt_upload"); 
+		labelDownload = (Label) gladeFile.getWidget("txt_download");
+		upload = (Button) gladeFile.getWidget("btn_upload");
+		download = (Button) gladeFile.getWidget("btn_download");
 	}
 	
 	/**
 	 * Metodo que gerencia os eventos da janela principal
 	 */
 	public void gerenciaEventos() {
+		
 		//Evento do menu Conectar
 		menuConectar.connect(new MenuItem.Activate() {
 			@Override
@@ -109,34 +115,6 @@ public class Principal {
 			}
 		});
 		
-		//Evento do menu Listar
-		menuListar.connect(new MenuItem.Activate() {
-			@Override
-			public void onActivate(MenuItem arg0) {
-				
-			}
-		});
-
-		//Evento do menu Download
-		menuDownload.connect(new MenuItem.Activate() {
-			@Override
-			public void onActivate(MenuItem arg0) {
-				
-			}
-		});
-		
-		//Evento do menu Upload
-		menuUpload.connect(new MenuItem.Activate() {
-			@Override
-			public void onActivate(MenuItem arg0) {
-				try {
-					new Upload();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
 		//Evento do menu Sair
 		menuSair.connect(new MenuItem.Activate() {
 			@Override
@@ -155,6 +133,31 @@ public class Principal {
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
+			}
+		});
+		
+		//Evento do fileChooser de selecionar arquivo
+		fcb_upload.connect(new FileChooserButton.FileSet() {
+			@Override
+			public void onFileSet(FileChooserButton arg0) {
+				filePath = fcb_upload.getFilename();
+				labelUpload.setLabel(filePath);
+			}
+		});
+		
+		//Evento do botao Upload
+		upload.connect(new Button.Clicked() {
+			@Override
+			public void onClicked(Button arg0) {
+				//TODO Efetuar Upload
+			}
+		});
+		
+		//Evento do botao Download
+		download.connect(new Button.Clicked() {
+			@Override
+			public void onClicked(Button arg0) {
+				//TODO Efetuar Download
 			}
 		});
 	}
