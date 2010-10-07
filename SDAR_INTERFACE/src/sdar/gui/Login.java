@@ -10,43 +10,57 @@ import org.gnome.glade.Glade;
 import org.gnome.glade.XML;
 import org.gnome.gtk.Button;
 import org.gnome.gtk.Entry;
+import org.gnome.gtk.FileChooserButton;
 import org.gnome.gtk.Gtk;
 import org.gnome.gtk.Label;
 import org.gnome.gtk.Statusbar;
+import org.gnome.gtk.TreeView;
 import org.gnome.gtk.Window;
 
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.rmi.RemoteServiceInterface;
 import sdar.manager.autentication.Person;
 
+/**
+ * Classe que implementa a janela de login da interface
+ */
 public class Login {
 
-	private boolean autenticado;
+	private boolean authentication;
 	private Person person;
 	
 	private XML gladeFile;
 	private Window mainWindow;
 	private Statusbar statusbar;
-	private Entry usuario;
-	private Entry senha;
-	private Label mensagem;
-	private Button entrar;
-	private Button fechar;
+	private Entry user;
+	private Entry password;
+	private Label message;
+	private Button login;
+	private Button exit;
+	private FileChooserButton fileChooserUpload;
+	private Button upload;
+	private Button download;
+	private TreeView listFilesRepository;
 	
 	/**
 	 * Construtor da Classe
 	 * @throws FileNotFoundException
 	 */
-	public Login(boolean autenticado, Person person, Statusbar statusbar) throws FileNotFoundException {
-		this.autenticado = autenticado;
+	public Login(boolean authentication, Person person, Statusbar statusbar, FileChooserButton fileChooserUpload,
+				Button upload, Button download, TreeView listFilesRepository) throws FileNotFoundException {
+		this.authentication = authentication;
 		this.person = person;
 		this.statusbar = statusbar;
+		this.fileChooserUpload = fileChooserUpload;
+		this.upload = upload;
+		this.download = download;
+		this.listFilesRepository = listFilesRepository;
 		
-		gladeFile = Glade.parse("xml/login.glade", "janela");
+		gladeFile = Glade.parse("src/xml/login.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
-		this.gerenciaControles();
-		this.gerenciaEventos();
+		this.manageControls();
+		this.manageEvents();
 		
 		mainWindow.showAll();
 		Gtk.main();
@@ -55,34 +69,35 @@ public class Login {
 	/**
 	 * Metodo que gerencia os controles da janela de login
 	 */
-	public void gerenciaControles() {
-		usuario = (Entry) gladeFile.getWidget("txt_usuario");
-		senha = (Entry) gladeFile.getWidget("txt_senha");
-		entrar = (Button) gladeFile.getWidget("btn_entrar");
-		fechar = (Button) gladeFile.getWidget("btn_fechar");
-		mensagem = (Label) gladeFile.getWidget("lab_mensagem");
+	public void manageControls() {
+		user = (Entry) gladeFile.getWidget("txt_usuario");
+		password = (Entry) gladeFile.getWidget("txt_senha");
+		login = (Button) gladeFile.getWidget("btn_entrar");
+		exit = (Button) gladeFile.getWidget("btn_fechar");
+		message = (Label) gladeFile.getWidget("lab_mensagem");
 	}
 	
 	/**
 	 * Metodo que gerencia os eventos da janela de login
 	 */
-	public void gerenciaEventos() {
+	public void manageEvents() {
+		
 		//Evento do botao Entrar
-		entrar.connect(new Button.Clicked() {
+		login.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				person.setUsuario(usuario.getText());
-				person.setSenha(senha.getText());
+				person.setUsuario(user.getText());
+				person.setSenha(password.getText());
 				
 				try {
 					Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
 					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
-					setAutenticado(stub.checkAutentication(person));
+					setAuthentication(stub.checkAutentication(person));
 					
-					if (getAutenticado()) {
+					if (getAuthentication()) {
 						mainWindow.hide();
 					} else {
-						setMensagemErro();
+						setMessageError();
 					}
 				} catch (RemoteException e) {
 					e.printStackTrace();
@@ -93,7 +108,7 @@ public class Login {
 		});
 		
 		//Evento do botao Fechar
-		fechar.connect(new Button.Clicked() {
+		exit.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
 				mainWindow.hide();
@@ -104,8 +119,8 @@ public class Login {
 	/**
 	 * Metodo que seta a mensagem de erro de login incorreto
 	 */
-	public void setMensagemErro() {
-		mensagem.setLabel("Usuário ou Senha Incorretos");
+	public void setMessageError() {
+		message.setLabel("Usuário e/ou Senha Incorretos");
 	}
 	
 	/**
@@ -118,18 +133,35 @@ public class Login {
 	
 	/**
 	 * Metodo que seta o atributo autenticado
-	 * @param autenticado
+	 * @param authentication
 	 */
-	public void setAutenticado(boolean autenticado) {
-		if (autenticado) {
+	public void setAuthentication(boolean authentication) {
+		if (authentication) {
 			this.setStatusBar("Usuário Conetado. Login: " + person.getUsuario());
+			setSensitive(true);
 		} else {
 			this.setStatusBar("Usuário Desconectado.");
+			setSensitive(false);
 		}
- 		this.autenticado = autenticado;
+ 		this.authentication = authentication;
 	}
 	
-	public boolean getAutenticado() {
-		return this.autenticado;
+	/**
+	 * Metodo que retorna o atributo autenticado
+	 * @return
+	 */
+	public boolean getAuthentication() {
+		return this.authentication;
+	}
+	
+	/**
+	 * Metodo que seta a sensibilidade dos botoes da janela principal
+	 * @param sensitive
+	 */
+	public void setSensitive(boolean sensitive) {
+		this.fileChooserUpload.setSensitive(sensitive);
+		this.upload.setSensitive(sensitive);
+		this.download.setSensitive(sensitive);
+		this.listFilesRepository.setSensitive(sensitive);
 	}
 }
