@@ -1,6 +1,8 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 import org.gnome.glade.Glade;
 import org.gnome.glade.XML;
@@ -57,7 +59,17 @@ public class Upload {
 				filename = arquivo.getFilename();
 
 				UCManterArquivoManager uc = new UCManterArquivoManager();
-				uc.sendFile(filename);
+				try {
+					
+					uc.sendFile(filename);
+					
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		
