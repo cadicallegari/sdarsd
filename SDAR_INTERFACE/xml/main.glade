@@ -261,6 +261,7 @@
                     <child>
                       <widget class="GtkAlignment" id="alignment3">
                         <property name="visible">True</property>
+                        <property name="border_width">5</property>
                         <property name="left_padding">12</property>
                         <child>
                           <widget class="GtkTreeView" id="lista_arquivos">
