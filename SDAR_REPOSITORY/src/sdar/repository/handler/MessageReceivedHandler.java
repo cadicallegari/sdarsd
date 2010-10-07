@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import sdar.comunication.common.Package;
 import sdar.comunication.common.Solicitation;
 import sdar.repository.server.Server;
-import sdar.repository.temporaryfile.TemporaryFile;
+import sdar.util.temporaryfile.TemporaryFile;
 
 /**
  * @author cadi
@@ -110,6 +110,7 @@ public class MessageReceivedHandler implements Runnable {
 		byte [] buf;
 		
 		for (Package p : list) {
+			System.out.println("seq " + p.getSequenceNumber());
 			buf = p.getPayLoad();
 			fo.write(buf);
 		}

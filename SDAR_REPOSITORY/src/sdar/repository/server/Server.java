@@ -5,7 +5,7 @@ import java.io.IOException;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.udp.UDPComunication;
 import sdar.repository.handler.MessageReceivedHandler;
-import sdar.repository.temporaryfile.TemporaryFileList;
+import sdar.util.temporaryfile.TemporaryFileList;
 
 //aguarda conexao do manager
 
@@ -61,36 +61,7 @@ public class Server implements Runnable {
 	}
 	
 
-	
-	
-//	public void run() {
-//		
-//		try {
-//			DatagramSocket serverSocket = new DatagramSocket(RepositoryEspecification.PORT);
-//			byte[] receiveData = new byte[RepositoryEspecification.BUFFER_SIZE];
-//	        DatagramPacket receivePacket = null;
-//			
-//			while (!finish) {
-//		        //recebe o pacote UDP
-//				receivePacket = new DatagramPacket(receiveData, receiveData.length);
-//		        System.out.println("aguardando conexao");
-//		        serverSocket.receive(receivePacket);
-//		        System.out.println("conexao estabelecida");
-//		        receiveData = receivePacket.getData();
-//
-//		        //TODO tratar receiveData
-//		        System.out.println("doido velho");
-//			}
-//			
-//			
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
 
-	
-	
-	
 	
 	/**
 	 * @param args
