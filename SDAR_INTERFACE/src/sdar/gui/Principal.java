@@ -1,11 +1,20 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
-import org.gnome.gtk.*;
 import org.gnome.glade.Glade;
 import org.gnome.glade.XML;
+import org.gnome.gtk.Button;
+import org.gnome.gtk.FileChooserButton;
+import org.gnome.gtk.Gtk;
+import org.gnome.gtk.Label;
+import org.gnome.gtk.MenuItem;
+import org.gnome.gtk.Statusbar;
+import org.gnome.gtk.Window;
 
+import sdar.client.manager.UCManterArquivoManager;
 import sdar.manager.autentication.Person;
 
 public class Principal {
@@ -149,7 +158,18 @@ public class Principal {
 		upload.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				//TODO Efetuar Upload
+				UCManterArquivoManager uc = new UCManterArquivoManager();
+				try {
+					
+					uc.sendFile(filePath);
+					
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		
