@@ -1,6 +1,7 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -21,9 +22,9 @@ import org.gnome.gtk.TreeView;
 import org.gnome.gtk.TreeViewColumn;
 import org.gnome.gtk.Window;
 
+import sdar.bo.Person;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.rmi.RemoteServiceInterface;
-import sdar.manager.autentication.Person;
 
 /**
  * Classe que implementa a janela de consulta de usuarios
@@ -91,7 +92,7 @@ public class UserConsult {
 		remove.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				if (person != null && !person.getNome().trim().equals("")) {
+				if (person != null && !person.getName().trim().equals("")) {
 					try {
 						Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
 						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
@@ -113,8 +114,8 @@ public class UserConsult {
             public void onRowActivated(TreeView treeView, TreePath treePath, TreeViewColumn treeViewColumn) {
 				TreeIter row = model.getIter(treePath);
                 person = new Person();
-                person.setNome(model.getValue(row, name));
-                person.setUsuario(model.getValue(row, user));
+                person.setName(model.getValue(row, name));
+                person.setUser(model.getValue(row, user));
             }
 		});
 
@@ -161,8 +162,8 @@ public class UserConsult {
         model = new ListStore(new DataColumn[] {name = new DataColumnString(), user = new DataColumnString()});
         for (Person person : persons) {
             row = model.appendRow();
-            model.setValue(row, name, person.getNome());
-            model.setValue(row, user, person.getUsuario());
+            model.setValue(row, name, person.getName());
+            model.setValue(row, user, person.getUser());
         }
         listUsers.setModel(model);
 
@@ -211,8 +212,8 @@ public class UserConsult {
         model = new ListStore(new DataColumn[] {name = new DataColumnString(), user = new DataColumnString()});
         for (Person person : persons) {
             row = model.appendRow();
-            model.setValue(row, name, person.getNome());
-            model.setValue(row, user, person.getUsuario());
+            model.setValue(row, name, person.getName());
+            model.setValue(row, user, person.getUser());
         }
         listUsers.setModel(model);
 	}

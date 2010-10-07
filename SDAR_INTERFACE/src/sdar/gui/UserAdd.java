@@ -13,9 +13,9 @@ import org.gnome.gtk.Entry;
 import org.gnome.gtk.Gtk;
 import org.gnome.gtk.Window;
 
+import sdar.bo.Person;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.rmi.RemoteServiceInterface;
-import sdar.manager.autentication.Person;
 
 /**
  * Classe que implementa a janela de adicionar usuario
@@ -70,13 +70,13 @@ public class UserAdd {
 			@Override
 			public void onClicked(Button arg0) {
 				person = new Person();
-				person.setNome(name.getText());
-				person.setUsuario(user.getText());
-				person.setSenha(password.getText());
+				person.setName(name.getText());
+				person.setUser(user.getText());
+				person.setPassword(password.getText());
 				
-				if (!person.getNome().trim().equals("") &&
-						!person.getUsuario().trim().equals("") &&
-						!person.getSenha().trim().equals("")) {
+				if (!person.getName().trim().equals("") &&
+						!person.getUser().trim().equals("") &&
+						!person.getPassword().trim().equals("")) {
 					try {
 						Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
 						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);

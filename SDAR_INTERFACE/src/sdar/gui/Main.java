@@ -30,10 +30,10 @@ import org.gnome.gtk.Widget;
 import org.gnome.gtk.Window;
 
 import sdar.bo.File;
+import sdar.bo.Person;
 import sdar.client.manager.UCManterArquivoManager;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.rmi.RemoteServiceInterface;
-import sdar.manager.autentication.Person;
 
 /**
  * Classe que implementa a janela principal da interface
@@ -242,7 +242,7 @@ public class Main {
 	 */
 	public void setAuthentication(boolean authentication) {
 		if (authentication) {
-			this.setStatusBar("Usuário Conetado. Login: " + person.getUsuario());
+			this.setStatusBar("Usuário Conetado. Login: " + person.getUser());
 			setSensitive(true);
 		} else {
 			this.setStatusBar("Usuário Desconectado.");

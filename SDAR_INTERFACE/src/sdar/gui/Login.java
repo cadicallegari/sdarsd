@@ -17,9 +17,9 @@ import org.gnome.gtk.Statusbar;
 import org.gnome.gtk.TreeView;
 import org.gnome.gtk.Window;
 
+import sdar.bo.Person;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.rmi.RemoteServiceInterface;
-import sdar.manager.autentication.Person;
 
 /**
  * Classe que implementa a janela de login da interface
@@ -86,8 +86,8 @@ public class Login {
 		login.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				person.setUsuario(user.getText());
-				person.setSenha(password.getText());
+				person.setUser(user.getText());
+				person.setPassword(password.getText());
 				
 				try {
 					Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
@@ -137,7 +137,7 @@ public class Login {
 	 */
 	public void setAuthentication(boolean authentication) {
 		if (authentication) {
-			this.setStatusBar("Usuário Conetado. Login: " + person.getUsuario());
+			this.setStatusBar("Usuário Conetado. Login: " + person.getUser());
 			setSensitive(true);
 		} else {
 			this.setStatusBar("Usuário Desconectado.");
