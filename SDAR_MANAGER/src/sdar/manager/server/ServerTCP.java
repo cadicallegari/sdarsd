@@ -6,12 +6,12 @@ import java.net.Socket;
 
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.tcp.TCPComunication;
-import sdar.manager.client.ClientManager;
+import sdar.manager.handler.ManagerHandler;
 
 
 //aguarda conexao do cliente
 
-public class Server implements Runnable {
+public class ServerTCP implements Runnable {
 
 	
 	private Socket clientSocket; // Socket do cliente
@@ -22,7 +22,7 @@ public class Server implements Runnable {
 	/**
 	 * 
 	 */
-	public Server() {
+	public ServerTCP() {
 		this.run();
 	}
 
@@ -42,7 +42,7 @@ public class Server implements Runnable {
 				this.clientSocket = this.serverSocket.accept();
 				this.socketCommunication = new TCPComunication(this.clientSocket);
 				System.out.println("Connection received from " + this.clientSocket.getInetAddress().getHostName());
-				new Thread(new ClientManager(this.socketCommunication), "RECEPTOR").start();
+				new Thread(new ManagerHandler(this.socketCommunication), "RECEPTOR_TCP").start();
 			}
 			
 			this.serverSocket.close();
@@ -67,7 +67,7 @@ public class Server implements Runnable {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Server server = new Server();
+		ServerTCP server = new ServerTCP();
 		System.out.println("Iniciando modulo MANAGER             [OK]");
 		server.run();
 	}
