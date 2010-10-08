@@ -26,18 +26,14 @@ public class Solicitation implements Serializable {
 	
 	private String methodName;
 	private int code;
-	private InetAddress address;
-	
-	
-	
-
-	
+	private String address;
+	private int port;
 	
 	
 	/**
 	 * @return the address
 	 */
-	public InetAddress getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
@@ -77,8 +73,18 @@ public class Solicitation implements Serializable {
 	/**
 	 * @param address
 	 */
-	public void setAddress(InetAddress address) {
+	public void setAddress(String address) {
 		this.address = address;		
+	}
+
+
+	public int getPort() {
+		return port;
+	}
+
+
+	public void setPort(int port) {
+		this.port = port;
 	}
 	
 }

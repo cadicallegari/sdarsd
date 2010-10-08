@@ -94,8 +94,7 @@ public class MessageReceivedHandler implements Runnable {
 	 * @throws IOException 
 	 */
 	private void sendListFile(Solicitation s) throws IOException {
-
-		Socket sock = new Socket(s.getAddress(), ComEspecification.RECEIVE_PORT);
+		Socket sock = new Socket(s.getAddress(), s.getPort());
 		TCPComunication com = new TCPComunication(sock);
 		Archive arq;
 		File [] fileList = this.getFileList();
@@ -111,7 +110,7 @@ public class MessageReceivedHandler implements Runnable {
 			com.sendObject(arq);
 		}
 		
-		File f = fileList[fileList.length];
+		File f = fileList[fileList.length-1];
 		arq = new Archive();
 		arq.setFilename(f.getName());
 		arq.setSize(f.length());

@@ -214,23 +214,7 @@ public class Main {
 		listar.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				//TODO Efetuar Listamento
-				try {
-					Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
-					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
-
-					System.out.println("alou 1");
-					List<Archive> l = stub.retrieveAllArchive();
-					System.out.println("alou 1");
-					
-					System.out.println(l.size());
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				} catch (NotBoundException e) {
-					e.printStackTrace();
-				}
-				
-				
+				setListFiles();
 			}
 		});
 		

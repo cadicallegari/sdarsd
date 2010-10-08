@@ -7,6 +7,7 @@
 package sdar.manager.solicitation;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
@@ -33,6 +34,9 @@ public class UCManterSolicitationManager {
 		Solicitation solicitation = new Solicitation();
 		
 		solicitation.setCode(Solicitation.LIST_FILE);
+		InetAddress inetAddress = InetAddress.getLocalHost();
+		solicitation.setAddress(inetAddress.getHostAddress());
+		solicitation.setPort(ComEspecification.RECEIVE_PORT);
 		
 		System.out.println("enviou");
 		comUdp.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, solicitation);
