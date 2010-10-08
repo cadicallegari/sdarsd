@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy toplevel-contextual -->
@@ -6,13 +6,12 @@
     <property name="width_request">1200</property>
     <property name="height_request">650</property>
     <property name="border_width">3</property>
-    <property name="title" translatable="yes">SDAR - Sistema Distribu&#xED;do de Arquivos Redundante</property>
+    <property name="title" translatable="yes">SDAR - Sistema Distribuído de Arquivos Redundante</property>
     <property name="window_position">center</property>
     <property name="type_hint">menu</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkMenuBar" id="menubar1">
             <property name="visible">True</property>
@@ -41,7 +40,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="menu_usuario">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Us_u&#xE1;rios</property>
+                        <property name="label" translatable="yes">Us_uários</property>
                         <property name="use_underline">True</property>
                         <child>
                           <widget class="GtkMenu" id="menu3">
@@ -111,7 +110,6 @@
             <child>
               <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkFrame" id="frame1">
                     <property name="visible">True</property>
@@ -235,6 +233,20 @@
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
                                 <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkButton" id="btn_listar">
+                                <property name="label" translatable="yes">Listar</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="border_width">3</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                           </widget>
