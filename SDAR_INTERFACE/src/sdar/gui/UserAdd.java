@@ -39,7 +39,7 @@ public class UserAdd {
 	 */
 	public UserAdd(boolean previousConsult) throws FileNotFoundException {
 		this.previousConsult = previousConsult;
-		gladeFile = Glade.parse("src/xml/usuario-add.glade", "janela");
+		gladeFile = Glade.parse("src/sdar/xml/usuario-add.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
 		this.manageControls();

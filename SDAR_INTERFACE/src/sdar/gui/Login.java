@@ -56,7 +56,7 @@ public class Login {
 		this.download = download;
 		this.listFilesRepository = listFilesRepository;
 		
-		gladeFile = Glade.parse("src/xml/login.glade", "janela");
+		gladeFile = Glade.parse("src/sdar/xml/login.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
 		this.manageControls();

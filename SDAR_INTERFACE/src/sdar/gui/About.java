@@ -22,7 +22,7 @@ public class About {
 	 * @throws FileNotFoundException
 	 */
 	public About() throws FileNotFoundException {
-		gladeFile = Glade.parse("src/xml/about.glade", "janela");
+		gladeFile = Glade.parse("src/sdar/xml/about.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
 		this.manageControls();

@@ -68,7 +68,7 @@ public class Main {
 	 * @throws FileNotFoundException
 	 */
 	public Main() throws FileNotFoundException {
-		gladeFile = Glade.parse("src/xml/main.glade", "janela");
+		gladeFile = Glade.parse("src/sdar/xml/main.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
 		this.manageControls();

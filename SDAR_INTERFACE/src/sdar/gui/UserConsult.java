@@ -48,7 +48,7 @@ public class UserConsult {
 	 * @throws FileNotFoundException
 	 */
 	public UserConsult() throws FileNotFoundException {
-		gladeFile = Glade.parse("src/xml/usuario-consult.glade", "janela");
+		gladeFile = Glade.parse("src/sdar/xml/usuario-consult.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
 		this.manageControls();
