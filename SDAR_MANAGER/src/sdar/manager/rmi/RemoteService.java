@@ -1,4 +1,4 @@
-package sdar.comunication.rmi;
+package sdar.manager.rmi;
 
 import java.io.IOException;
 import java.rmi.RemoteException;

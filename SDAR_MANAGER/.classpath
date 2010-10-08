@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="/home/cadi/workspace/SDAR/SDAR_LIB/sdar_comunicacao.jar"/>
-	<classpathentry kind="lib" path="/home/cadi/workspace/SDAR/SDAR_LIB/sdar_bo.jar"/>
-	<classpathentry kind="lib" path="/home/cadi/workspace/SDAR/SDAR_LIB/db4o-7.12/db4o-7.12.145.14409-all-java5.jar"/>
+	<classpathentry kind="lib" path="/home/matheus/workspace/SDAR_LIB/sdar_comunication.jar"/>
+	<classpathentry kind="lib" path="/home/matheus/workspace/SDAR_LIB/sdar_bo.jar"/>
+	<classpathentry kind="lib" path="/home/matheus/workspace/SDAR_LIB/db4o-7.12.145.14409-all-java5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

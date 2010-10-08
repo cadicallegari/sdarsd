@@ -13,8 +13,8 @@ import java.util.LinkedList;
 
 import sdar.comunication.common.Package;
 import sdar.comunication.def.ComEspecification;
-import sdar.comunication.rmi.RemoteService;
 import sdar.comunication.udp.UDPComunication;
+import sdar.manager.rmi.RemoteService;
 import sdar.manager.server.ServerTCP;
 import sdar.util.temporaryfile.TemporaryFile;
 import sdar.util.temporaryfile.TemporaryFileList;

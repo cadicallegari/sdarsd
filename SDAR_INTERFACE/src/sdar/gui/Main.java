@@ -33,7 +33,7 @@ import sdar.bo.Archive;
 import sdar.bo.Person;
 import sdar.client.manager.UCManterArquivoManager;
 import sdar.comunication.def.ComEspecification;
-import sdar.comunication.rmi.RemoteServiceInterface;
+import sdar.manager.rmi.RemoteServiceInterface;
 
 /**
  * Classe que implementa a janela principal da interface
@@ -192,7 +192,7 @@ public class Main {
 				UCManterArquivoManager uc = new UCManterArquivoManager();
 				try {
 					uc.sendFile(filePath);
-					updateListFiles();
+//					updateListFiles();
 				} catch (UnknownHostException e) {
 					e.printStackTrace();
 				} catch (IOException e) {

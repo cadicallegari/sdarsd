@@ -1,4 +1,4 @@
-package sdar.comunication.rmi;
+package sdar.manager.rmi;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;

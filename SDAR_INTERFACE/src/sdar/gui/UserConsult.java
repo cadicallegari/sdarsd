@@ -24,7 +24,7 @@ import org.gnome.gtk.Window;
 
 import sdar.bo.Person;
 import sdar.comunication.def.ComEspecification;
-import sdar.comunication.rmi.RemoteServiceInterface;
+import sdar.manager.rmi.RemoteServiceInterface;
 
 /**
  * Classe que implementa a janela de consulta de usuarios
