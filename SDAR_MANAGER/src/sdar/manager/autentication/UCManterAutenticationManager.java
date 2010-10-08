@@ -3,6 +3,8 @@ package sdar.manager.autentication;
 import java.util.LinkedList;
 import java.util.List;
 
+import sdar.bo.Person;
+
 import com.db4o.ObjectSet;
 
 public class UCManterAutenticationManager {

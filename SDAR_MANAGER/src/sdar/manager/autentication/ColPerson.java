@@ -1,8 +1,9 @@
 package sdar.manager.autentication;
 
-import com.db4o.ObjectSet;
-
+import sdar.bo.Person;
 import sdar.manager.database.DBConnection;
+
+import com.db4o.ObjectSet;
 
 /**
  * Classe que representa a Collection de Person
