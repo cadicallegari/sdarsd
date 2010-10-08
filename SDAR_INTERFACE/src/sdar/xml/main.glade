@@ -115,6 +115,7 @@
                 <child>
                   <widget class="GtkFrame" id="frame1">
                     <property name="visible">True</property>
+                    <property name="border_width">3</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">out</property>
                     <child>
@@ -146,6 +147,7 @@
                             <child>
                               <widget class="GtkFileChooserButton" id="fcb_upload">
                                 <property name="visible">True</property>
+                                <property name="border_width">3</property>
                                 <property name="create_folders">False</property>
                               </widget>
                               <packing>
@@ -160,6 +162,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="border_width">3</property>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
@@ -191,6 +194,7 @@
                 <child>
                   <widget class="GtkFrame" id="frame2">
                     <property name="visible">True</property>
+                    <property name="border_width">3</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">out</property>
                     <child>
@@ -225,6 +229,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="border_width">3</property>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
@@ -256,6 +261,7 @@
                 <child>
                   <widget class="GtkFrame" id="frame3">
                     <property name="visible">True</property>
+                    <property name="border_width">3</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">out</property>
                     <child>
