@@ -11,6 +11,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 import sdar.comunication.common.Package;
+import sdar.comunication.common.Solicitation;
 import sdar.comunication.def.ComEspecification;
 
 public class UDPComunication {
@@ -68,6 +69,10 @@ public class UDPComunication {
         
         Object obj = (Object) in.readObject();
         
+        if (obj.getClass().getName().equals(ComEspecification.SOLICITATION_NAME)) {
+        	obj = this.setSender(obj, datagramPacket);
+        }
+        
         in.close();
         bas.close();
         multicastSocket.leaveGroup(groupAddress);
@@ -77,6 +82,23 @@ public class UDPComunication {
 	}	
 	
 	
+	
+	/**
+	 * @param obj
+	 * @param datagramPacket
+	 * @return
+	 */
+	private Object setSender(Object obj, DatagramPacket datagramPacket) {
+		Solicitation sol = (Solicitation) obj;
+		sol.setAddress(datagramPacket.getAddress());
+		return sol;
+	}
+
+
+
+
+
+
 	/**
 	 * 
 	 * @param address

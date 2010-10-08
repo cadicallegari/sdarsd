@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Classe que implementa o objeto File que representa um arquivo
  */
-public class File implements Serializable {
+public class Archive implements Serializable {
 
 	/**
 	 * 
@@ -13,8 +13,25 @@ public class File implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String filename;
-	private int size;
+	private long size;
 	
+	private boolean pool;
+	
+	
+	/**
+	 * @return the pool
+	 */
+	public boolean isPool() {
+		return pool;
+	}
+
+	/**
+	 * @param pool the pool to set
+	 */
+	public void setPool(boolean pool) {
+		this.pool = pool;
+	}
+
 	/**
 	 * Metodo que retorna o nome do arquivo
 	 * @return
@@ -35,7 +52,7 @@ public class File implements Serializable {
 	 * Metodo que retorna o tamanho do arquivo
 	 * @return
 	 */
-	public int getSize() {
+	public long getSize() {
 		return size;
 	}
 	
@@ -43,7 +60,7 @@ public class File implements Serializable {
 	 * Metodo que seta o tamanho do arquivo
 	 * @param size
 	 */
-	public void setSize(int size) {
+	public void setSize(long size) {
 		this.size = size;
 	}
 }

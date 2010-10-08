@@ -1,13 +1,11 @@
 /**
  * Manager.java
- * cadi
  * SDAR_MANAGER
  * sdar.manager.manager
  */
 package sdar.manager.manager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -54,7 +52,7 @@ public class Manager {
 			for(Package pack : list) {
 				System.out.println("enviado seq " + pack.getSequenceNumber());
 				com.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, pack);
-				Thread.sleep(500);
+				Thread.sleep(ComEspecification.DELAY);
 			}
 		
 		

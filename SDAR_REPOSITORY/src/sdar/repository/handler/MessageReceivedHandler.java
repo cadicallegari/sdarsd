@@ -9,10 +9,15 @@ package sdar.repository.handler;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.LinkedList;
 
+import sdar.bo.Archive;
 import sdar.comunication.common.Package;
 import sdar.comunication.common.Solicitation;
+import sdar.comunication.def.ComEspecification;
+import sdar.comunication.tcp.TCPComunication;
+import sdar.repository.especification.Especification;
 import sdar.repository.server.Server;
 import sdar.util.temporaryfile.TemporaryFile;
 
@@ -53,18 +58,83 @@ public class MessageReceivedHandler implements Runnable {
 		else if (className.equals("Solicitation")) {
 			System.out.println("Solicitation");
 			Solicitation s = (Solicitation) obj;
-			this.solicitation(s);
+			
+			try {
+				this.solicitation(s);
+			
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 	}
 
 
+	
+	
 	/**
 	 * @param s
+	 * @throws IOException 
 	 */
-	private void solicitation(Solicitation s) {
-		// TODO Auto-generated method stub
-		System.out.println("tratar solicitaçao");
+	private void solicitation(Solicitation s) throws IOException {
+		
+		int code = s.getCode();
+		
+		if (code == Solicitation.LIST_FILE) {
+			this.sendListFile(s);
+		}
+		
+	}
+
+
+	
+	/**
+	 * @param s
+	 * @throws IOException 
+	 */
+	private void sendListFile(Solicitation s) throws IOException {
+
+		Socket sock = new Socket(s.getAddress(), ComEspecification.RECEIVE_PORT);
+		TCPComunication com = new TCPComunication(sock);
+		Archive arq;
+		File [] fileList = this.getFileList();
+		
+		for (int i = 0; i < fileList.length - 1; i++) {
+			File f = fileList[i];
+			
+			arq = new Archive();
+			arq.setFilename(f.getName());
+			arq.setSize(f.length());
+			arq.setPool(true);
+			
+			com.sendObject(arq);
+		}
+		
+		File f = fileList[fileList.length];
+		arq = new Archive();
+		arq.setFilename(f.getName());
+		arq.setSize(f.length());
+		arq.setPool(false);
+		
+		com.sendObject(arq);
+		
+		com.close();
+		sock.close();
+	}
+
+
+	
+	/**
+	 * @return
+	 */
+	private File[] getFileList() {
+		File [] list;
+		File directory = new File(Especification.REP_DIRECTORY);
+		
+		list = directory.listFiles();
+		
+		return list;
 	}
 
 

@@ -8,12 +8,12 @@ package sdar.client.manager;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 import sdar.comunication.common.Package;
+import sdar.comunication.common.Util;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.tcp.TCPComunication;
 
@@ -41,8 +41,8 @@ public class UCManterArquivoManager {
 		int pakageNumber = 1;
 		Package pack;
 		
-		File fTeste = new File("teste" + file.getName());
-		FileOutputStream fout = new FileOutputStream(fTeste);
+//		File fTeste = new File("teste" + file.getName());
+//		FileOutputStream fout = new FileOutputStream(fTeste);
 		
 		do {
 			
@@ -60,22 +60,14 @@ public class UCManterArquivoManager {
 			}
 			else {
 				pack.setPool(false);
+				pack.setPayLoad(Util.copyBytes(buf, read));
 			}
 			
-			fout.write(buf);
+//			fout.write(buf);
 			
 			com.sendObject(pack);
 
 		} while (read == ComEspecification.BUFFER_SIZE);
-		
-//		pack = new Package();			
-//		pack.setFileName(file.getName());
-//		pack.setPool(false);
-//		pack.setSequenceNumber(pakageNumber++);
-//		pack.setNext(-1);
-//		pack.setPayLoad(buf);
-//		
-//		com.sendObject(pack);
 		
 		com.close();
 		sock.close();
