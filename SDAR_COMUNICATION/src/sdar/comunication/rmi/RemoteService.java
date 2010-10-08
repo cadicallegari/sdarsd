@@ -114,9 +114,12 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	 * Metodo remoto que retorna todos os objetos Archives
 	 */
 	public List<Archive> retrieveAllArchive() throws RemoteException {
+		System.out.println("rmi chamando caso de uso");
+		
 		UCManterSolicitationManager uc = new UCManterSolicitationManager();
 		List<Archive> list = null;
 
+		System.out.println("rmi chamando caso de uso");
 		try {
 			
 			list = uc.listFile();

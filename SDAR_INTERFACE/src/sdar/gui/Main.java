@@ -218,7 +218,12 @@ public class Main {
 				try {
 					Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
 					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
-					System.out.println(stub.retrieveAllArchive().size());
+
+					System.out.println("alou 1");
+					List<Archive> l = stub.retrieveAllArchive();
+					System.out.println("alou 1");
+					
+					System.out.println(l.size());
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				} catch (NotBoundException e) {
