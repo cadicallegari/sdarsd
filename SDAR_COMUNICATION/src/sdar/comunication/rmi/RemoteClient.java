@@ -5,8 +5,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import sdar.bo.Person;
 import sdar.comunication.def.ComEspecification;
-import sdar.manager.autentication.Person;
 
 public class RemoteClient {
 	
@@ -16,7 +16,7 @@ public class RemoteClient {
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
 			
 			Person p = new Person();
-			p.setNome("Matheus");
+			p.setName("Matheus");
 			stub.checkAutentication(p);
 			
 		} catch (RemoteException e) {

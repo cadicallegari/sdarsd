@@ -6,8 +6,9 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
+import sdar.bo.File;
+import sdar.bo.Person;
 import sdar.comunication.def.ComEspecification;
-import sdar.manager.autentication.Person;
 import sdar.manager.autentication.UCManterAutenticationManager;
 
 public class RemoteService extends UnicastRemoteObject implements RemoteServiceInterface {
@@ -100,11 +101,12 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 		return false;
 	}
 	
-	public static void main(String[] args) {
-		try {
-			new RemoteService();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
+	/**
+	 * Metodo remoto que retorna todos os objetos Files
+	 */
+	public List<File> retrieveAllFile() throws RemoteException {
+		System.out.println("retrieveAllFiles");
+		return null;
 	}
+	
 }

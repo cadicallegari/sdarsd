@@ -4,7 +4,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import sdar.manager.autentication.Person;
+import sdar.bo.File;
+import sdar.bo.Person;
 
 public interface RemoteServiceInterface extends Remote {
 
@@ -42,4 +43,10 @@ public interface RemoteServiceInterface extends Remote {
 	 * Metodo remoto que executa a opcao de Download do arquivo
 	 */
 	public boolean downloadFile() throws RemoteException;
+	
+	/**
+	 * Metodo remoto que retorna todos os objetos Files
+	 */
+	public List<File> retrieveAllFile() throws RemoteException;
+	
 }
