@@ -18,6 +18,7 @@ import org.gnome.gtk.DataColumn;
 import org.gnome.gtk.DataColumnString;
 import org.gnome.gtk.FileChooserButton;
 import org.gnome.gtk.Gtk;
+import org.gnome.gtk.Justification;
 import org.gnome.gtk.Label;
 import org.gnome.gtk.ListStore;
 import org.gnome.gtk.MenuItem;
@@ -176,7 +177,8 @@ public class Main {
 			@Override
 			public void onFileSet(FileChooserButton arg0) {
 				filePath = fileChooserUpload.getFilename();
-				labelUpload.setLabel(filePath);
+				labelUpload.setAlignment(0, Float.valueOf("0.5"));
+				labelUpload.setLabel(filePath);				
 			}
 		});
 		
@@ -223,6 +225,7 @@ public class Main {
                 File file = new File();
                 file.setFilename(model.getValue(row, fileName));
                 file.setSize(Integer.valueOf(model.getValue(row, fileSize)));
+                labelDownload.setAlignment(0, Float.valueOf("0.5"));
                 labelDownload.setLabel(file.getFilename());
             }
 		});
