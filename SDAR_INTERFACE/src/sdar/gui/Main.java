@@ -243,10 +243,10 @@ public class Main {
 	public void setAuthentication(boolean authentication) {
 		if (authentication) {
 			this.setStatusBar("Usuário Conetado. Login: " + person.getUser());
-			setSensitive(true);
+			//setSensitive(true);
 		} else {
 			this.setStatusBar("Usuário Desconectado.");
-			setSensitive(false);
+			//setSensitive(false);
 		}
  		this.authentication = authentication;
 	}
