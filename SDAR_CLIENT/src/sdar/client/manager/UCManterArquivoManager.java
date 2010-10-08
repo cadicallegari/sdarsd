@@ -8,6 +8,7 @@ package sdar.client.manager;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -40,32 +41,41 @@ public class UCManterArquivoManager {
 		int pakageNumber = 1;
 		Package pack;
 		
-		read = fi.read(buf);
-		System.out.println(read);
+		File fTeste = new File("teste" + file.getName());
+		FileOutputStream fout = new FileOutputStream(fTeste);
 		
-		while (read == ComEspecification.BUFFER_SIZE) {
+		do {
+			
+			read = fi.read(buf);
+			System.out.println(read);	
 		
 			pack = new Package();			
 			pack.setFileName(file.getName());
-			pack.setPool(true);
 			pack.setSequenceNumber(pakageNumber++);
 			pack.setNext(pakageNumber);
 			pack.setPayLoad(buf);
+
+			if (read == ComEspecification.BUFFER_SIZE) {
+				pack.setPool(true);
+			}
+			else {
+				pack.setPool(false);
+			}
+			
+			fout.write(buf);
 			
 			com.sendObject(pack);
-			
-			read = fi.read(buf);
-			System.out.println("dentro " + read);
-		}
+
+		} while (read == ComEspecification.BUFFER_SIZE);
 		
-		pack = new Package();			
-		pack.setFileName(file.getName());
-		pack.setPool(false);
-		pack.setSequenceNumber(pakageNumber++);
-		pack.setNext(-1);
-		pack.setPayLoad(buf);
-		
-		com.sendObject(pack);
+//		pack = new Package();			
+//		pack.setFileName(file.getName());
+//		pack.setPool(false);
+//		pack.setSequenceNumber(pakageNumber++);
+//		pack.setNext(-1);
+//		pack.setPayLoad(buf);
+//		
+//		com.sendObject(pack);
 		
 		com.close();
 		sock.close();

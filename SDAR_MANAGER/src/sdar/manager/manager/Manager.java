@@ -6,6 +6,9 @@
  */
 package sdar.manager.manager;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
@@ -113,6 +116,32 @@ public class Manager {
 			e.printStackTrace();
 		}
 		
+		
+	}
+
+
+
+	/**
+	 * @param fileName
+	 * @throws IOException 
+	 */
+	public static void saveFile(String fileName) throws IOException {
+
+		File f = new File(fileName);
+		FileOutputStream fo = new FileOutputStream(f);
+		TemporaryFile tempFile = Manager.fileBuffer.remove(fileName);
+		LinkedList<Package> list = tempFile.getPackgeList();
+		
+		
+		byte [] buf;
+		
+		for (Package p : list) {
+			System.out.println("seq " + p.getSequenceNumber());
+			buf = p.getPayLoad();
+			fo.write(buf);
+		}
+
+		fo.close();
 		
 	}
 	

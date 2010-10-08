@@ -41,19 +41,15 @@ public class ManagerHandler implements Runnable {
 		
 		try {
 			
-			pack = (Package) this.comunication.readObject();
-			
-			System.out.println(pack.isPool());
-			
-			while (pack.isPool()) {
-				
-				Manager.fileBuffer.add(pack);
+			do {
 				
 				pack = (Package) this.comunication.readObject();
+				Manager.fileBuffer.add(pack);
+
 				System.out.println(pack.isPool());
-			}
+				
+			} while (pack.isPool());
 			
-			Manager.fileBuffer.add(pack);
 			Manager.sendFile(pack.getFileName());
 			
 			this.comunication.close();
