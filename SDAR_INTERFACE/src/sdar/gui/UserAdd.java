@@ -22,6 +22,7 @@ import sdar.manager.rmi.RemoteServiceInterface;
  */
 public class UserAdd {
 	
+	
 	private boolean previousConsult;
 	private Person person;
 	
@@ -32,6 +33,7 @@ public class UserAdd {
 	private Entry password;
 	private Button add;
 	private Button exit;
+	
 	
 	/**
 	 * Construtor da Classe
@@ -49,6 +51,7 @@ public class UserAdd {
 		Gtk.main();
 	}
 	
+	
 	/**
 	 * Metodo que gerencia os controles da janela de login
 	 */
@@ -59,6 +62,7 @@ public class UserAdd {
 		add = (Button) gladeFile.getWidget("btn_adicionar");
 		exit = (Button) gladeFile.getWidget("btn_fechar");
 	}
+	
 	
 	/**
 	 * Metodo que gerencia os eventos da janela de login

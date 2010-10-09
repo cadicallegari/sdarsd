@@ -26,6 +26,7 @@ import sdar.manager.rmi.RemoteServiceInterface;
  */
 public class Login {
 
+	
 	private boolean authentication;
 	private Person person;
 	
@@ -40,21 +41,30 @@ public class Login {
 	private FileChooserButton fileChooserUpload;
 	private Button upload;
 	private Button download;
-	private TreeView listFilesRepository;
+	private Button listar;
+	private TreeView listArchivesRepository;
+
 	
 	/**
 	 * Construtor da Classe
 	 * @throws FileNotFoundException
 	 */
-	public Login(boolean authentication, Person person, Statusbar statusbar, FileChooserButton fileChooserUpload,
-				Button upload, Button download, TreeView listFilesRepository) throws FileNotFoundException {
+	public Login(boolean authentication, 
+					Person person, 
+					Statusbar statusbar, 
+					FileChooserButton fileChooserUpload,
+					Button upload, 
+					Button download, 
+					Button listar,
+					TreeView listFilesRepository) throws FileNotFoundException {
 		this.authentication = authentication;
 		this.person = person;
 		this.statusbar = statusbar;
 		this.fileChooserUpload = fileChooserUpload;
 		this.upload = upload;
 		this.download = download;
-		this.listFilesRepository = listFilesRepository;
+		this.listar = listar;
+		this.listArchivesRepository = listFilesRepository;
 		
 		gladeFile = Glade.parse("src/sdar/xml/login.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
@@ -66,6 +76,7 @@ public class Login {
 		Gtk.main();
 	}
 	
+	
 	/**
 	 * Metodo que gerencia os controles da janela de login
 	 */
@@ -76,6 +87,7 @@ public class Login {
 		exit = (Button) gladeFile.getWidget("btn_fechar");
 		message = (Label) gladeFile.getWidget("lab_mensagem");
 	}
+	
 	
 	/**
 	 * Metodo que gerencia os eventos da janela de login
@@ -93,12 +105,6 @@ public class Login {
 					Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
 					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
 					setAuthentication(stub.checkAutentication(person));
-					
-					if (getAuthentication()) {
-						mainWindow.hide();
-					} else {
-						setMessageError();
-					}
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				} catch (NotBoundException e) {
@@ -116,12 +122,14 @@ public class Login {
 		});
 	}
 	
+	
 	/**
 	 * Metodo que seta a mensagem de erro de login incorreto
 	 */
 	public void setMessageError() {
 		message.setLabel("Usuário e/ou Senha Incorretos");
 	}
+	
 	
 	/**
 	 * Metodo que seta a mensagem do StatusBar
@@ -131,6 +139,7 @@ public class Login {
 		this.statusbar.setMessage(mensagem);
 	}
 	
+	
 	/**
 	 * Metodo que seta o atributo autenticado
 	 * @param authentication
@@ -139,12 +148,15 @@ public class Login {
 		if (authentication) {
 			this.setStatusBar("Usuário Conetado. Login: " + person.getUser());
 			setSensitive(true);
+			mainWindow.hide();
 		} else {
 			this.setStatusBar("Usuário Desconectado.");
 			setSensitive(false);
+			setMessageError();
 		}
  		this.authentication = authentication;
 	}
+	
 	
 	/**
 	 * Metodo que retorna o atributo autenticado
@@ -154,6 +166,7 @@ public class Login {
 		return this.authentication;
 	}
 	
+	
 	/**
 	 * Metodo que seta a sensibilidade dos botoes da janela principal
 	 * @param sensitive
@@ -162,6 +175,7 @@ public class Login {
 		this.fileChooserUpload.setSensitive(sensitive);
 		this.upload.setSensitive(sensitive);
 		this.download.setSensitive(sensitive);
-		this.listFilesRepository.setSensitive(sensitive);
+		this.listar.setSensitive(sensitive);
+		this.listArchivesRepository.setSensitive(sensitive);
 	}
 }

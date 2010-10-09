@@ -13,10 +13,12 @@ import org.gnome.gtk.Window;
  */
 public class About {
 
+	
 	private XML gladeFile;
 	private Window mainWindow;
 	private Button exit;
 
+	
 	/**
 	 * Construtor da Classe
 	 * @throws FileNotFoundException
@@ -32,12 +34,14 @@ public class About {
 		Gtk.main();
 	}
 	
+	
 	/**
 	 * Metodo que gerencia os controles da janela sobre
 	 */
 	public void manageControls() {
 		exit = (Button) gladeFile.getWidget("btn_fechar");
 	}
+	
 	
 	/**
 	 * Metodo que gerencia os eventos da janela sobre

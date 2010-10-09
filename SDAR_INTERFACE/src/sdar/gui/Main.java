@@ -40,6 +40,7 @@ import sdar.manager.rmi.RemoteServiceInterface;
  */
 public class Main {
 
+	
 	private boolean authentication;
 	private Person person;
 	private String filePath;
@@ -53,19 +54,19 @@ public class Main {
 	private MenuItem menuUserConsult;
 	private MenuItem menuExit;
 	private MenuItem menuAbout;
-	
-	
 	private Label labelUpload;
 	private Label labelDownload;
+	private Label labelListar;
 	private Button upload;
-	private Button listar;
 	private Button download;
+	private Button listar;
 	private FileChooserButton fileChooserUpload;
 	private TreeView listArchivesRepository;
 	private ListStore model;
-	private DataColumnString fileName;
-	private DataColumnString fileSize;
+	private DataColumnString archiveName;
+	private DataColumnString archiveSize;
 
+	
 	/**
 	 * Construtor da Classe
 	 * @throws FileNotFoundException
@@ -76,12 +77,12 @@ public class Main {
 		
 		this.manageControls();
 		this.manageEvents();
-		
 		this.setAuthentication(false);
 		
 		mainWindow.showAll();
 		Gtk.main();
 	}
+	
 	
 	/**
 	 * Metodo que gerencia os controles da janela principal
@@ -97,11 +98,13 @@ public class Main {
 		fileChooserUpload = (FileChooserButton) gladeFile.getWidget("fcb_upload");
 		labelUpload = (Label) gladeFile.getWidget("txt_upload"); 
 		labelDownload = (Label) gladeFile.getWidget("txt_download");
+		labelListar = (Label) gladeFile.getWidget("txt_listar");
 		upload = (Button) gladeFile.getWidget("btn_upload");
 		download = (Button) gladeFile.getWidget("btn_download");
 		listar = (Button) gladeFile.getWidget("btn_listar");
 		listArchivesRepository = (TreeView) gladeFile.getWidget("lista_arquivos");
 	}
+	
 	
 	/**
 	 * Metodo que gerencia os eventos da janela principal
@@ -114,7 +117,7 @@ public class Main {
 			public void onActivate(MenuItem arg0) {
 				try {
 					person = new Person();
-					new Login(authentication, person, statusBar, fileChooserUpload, upload, download, listArchivesRepository);
+					new Login(authentication, person, statusBar, fileChooserUpload, upload, download, listar, listArchivesRepository);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
@@ -192,12 +195,12 @@ public class Main {
 				UCManterArquivoManager uc = new UCManterArquivoManager();
 				try {
 					uc.sendFile(filePath);
-//					updateListFiles();
 				} catch (UnknownHostException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				labelUpload.setLabel("");
 			}
 		});
 		
@@ -205,8 +208,9 @@ public class Main {
 		download.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				//TODO Efetuar Download
-				updateListFiles();
+				UCManterArquivoManager uc = new UCManterArquivoManager();
+				uc.receiveFile(labelDownload.getText());
+				labelDownload.setLabel("");
 			}
 		});
 		
@@ -214,7 +218,7 @@ public class Main {
 		listar.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				setListFiles();
+				updateListArchives();
 			}
 		});
 		
@@ -228,19 +232,20 @@ public class Main {
 			}
 		});
 		
-		//Evento da ativacao de uma linha da tabela
+		//Evento da seleção de uma linha da tabela
 		listArchivesRepository.connect(new TreeView.RowActivated() {
 			@Override
             public void onRowActivated(TreeView treeView, TreePath treePath, TreeViewColumn treeViewColumn) {
 				TreeIter row = model.getIter(treePath);
                 Archive archive = new Archive();
-                archive.setFilename(model.getValue(row, fileName));
-                archive.setSize(Integer.valueOf(model.getValue(row, fileSize)));
+                archive.setFilename(model.getValue(row, archiveName));
+                archive.setSize(Integer.valueOf(model.getValue(row, archiveSize)));
                 labelDownload.setAlignment(0, Float.valueOf("0.5"));
                 labelDownload.setLabel(archive.getFilename());
             }
 		});
 	}
+	
 	
 	/**
 	 * Metodo que seta a mensagem do StatusBar
@@ -250,6 +255,7 @@ public class Main {
 		this.statusBar.setMessage(mensagem);
 	}
 	
+	
 	/**
 	 * Metodo que seta o atributo autenticado
 	 * @param authentication
@@ -257,14 +263,15 @@ public class Main {
 	public void setAuthentication(boolean authentication) {
 		if (authentication) {
 			this.setStatusBar("Usuário Conetado. Login: " + person.getUser());
-			//setSensitive(true);
+			setSensitive(true);
 		} else {
 			this.setStatusBar("Usuário Desconectado.");
-			//setSensitive(false);
+			setSensitive(false);
 		}
  		this.authentication = authentication;
 	}
 
+	
 	/**
 	 * Metodo que seta a sensibilidade dos botoes da janela principal
 	 * @param sensitive
@@ -273,19 +280,26 @@ public class Main {
 		this.fileChooserUpload.setSensitive(sensitive);
 		this.upload.setSensitive(sensitive);
 		this.download.setSensitive(sensitive);
+		this.listar.setSensitive(sensitive);
 		this.listArchivesRepository.setSensitive(sensitive);
+		if (!sensitive) {
+			this.labelUpload.setLabel("");
+			this.labelDownload.setLabel("");
+			this.clearListFiles();
+		}
 	}
 	
+	
 	/**
-	 * Metodo que seta os dados do banco de dados na lista de arquivos
+	 * Metodo que seta os dados na tabela
 	 */
-	public void setListFiles() {
-        TreeIter row = null;
+	public void updateListArchives() {
+		TreeIter row = null;
         CellRendererText renderer = null;
         TreeViewColumn column = null;
 		List<Archive> listArchives = null;
 		
-		//Conexao RMI onde invoca metodo remoto para retornar todos os objetos Files
+		//Conexao RMI onde invoca metodo remoto para retornar todos os objetos Archives
 		try {
 			Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
@@ -295,76 +309,46 @@ public class Main {
 		} catch (NotBoundException e) {
 			e.printStackTrace();
 		}
-		
-		//Transforma de Lista para Vector de Archive
-		Archive[] archives = new Archive[0];
-		if (listArchives != null) {
-			archives = new Archive[listArchives.size()];
-			for (int i = 0; i < listArchives.size(); i++) {
-				archives[i] = listArchives.get(i);
-			}
-		}
-		
+
 		//Preenche a lista de arquivos com os dados
-        model = new ListStore(new DataColumn[] {fileName = new DataColumnString(), fileSize = new DataColumnString()});
-        for (Archive archive : archives) {
+        model = new ListStore(new DataColumn[] {archiveName = new DataColumnString(), archiveSize = new DataColumnString()});
+        for (Archive archive : listArchives) {
             row = model.appendRow();
-            model.setValue(row, fileName, archive.getFilename());
-            model.setValue(row, fileSize, String.valueOf(archive.getSize()));
+            model.setValue(row, archiveName, archive.getFilename());
+            model.setValue(row, archiveSize, String.valueOf(archive.getSize()));
         }
         listArchivesRepository.setModel(model);
-
         
         //Seta as propriedades das colunas
-        column = listArchivesRepository.appendColumn();
-        column.setTitle("Nome do Arquivo");
-        column.setMinWidth(300);
-        renderer = new CellRendererText(column);
-        renderer.setText(fileName);
-
-        column = listArchivesRepository.appendColumn();
-        column.setTitle("Tamanho do Arquivo");
-        renderer = new CellRendererText(column);
-        renderer.setText(fileSize);
+        if (listArchivesRepository.getColumns().length != 2) {
+	        column = listArchivesRepository.appendColumn();
+	        column.setTitle("Nome do Arquivo");
+	        column.setMinWidth(300);
+	        renderer = new CellRendererText(column);
+	        renderer.setText(archiveName);
+	
+	        column = listArchivesRepository.appendColumn();
+	        column.setTitle("Tamanho do Arquivo");
+	        renderer = new CellRendererText(column);
+	        renderer.setText(archiveSize);
+        }
+        if (listArchives != null) {
+        	labelListar.setLabel("Total de Arquivos: " + listArchives.size());
+        }
 	}
 	
+	
 	/**
-	 * Metodo que seta os dados do banco de dados na tabela
+	 * Metodo que limpa os dados da tabela
 	 */
-	public void updateListFiles() {
-		TreeIter row = null;
-		List<Archive> listArchives = null;
-		
-		//Conexao RMI onde invoca metodo remoto para retornar todos os objetos Files
-		try {
-			Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
-			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
-			listArchives = stub.retrieveAllArchive();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (NotBoundException e) {
-			e.printStackTrace();
-		}
-		
-		//Transforma de Lista para Vector de Archive
-		Archive[] archives = new Archive[0];
-		if (listArchives != null) {
-			archives = new Archive[listArchives.size()];
-			for (int i = 0; i < listArchives.size(); i++) {
-				archives[i] = listArchives.get(i);
-			}
-		}
-		
-		//Preenche a lista de arquivos com os dados
-        model = new ListStore(new DataColumn[] {fileName = new DataColumnString(), fileSize = new DataColumnString()});
-        for (Archive archive : archives) {
-            row = model.appendRow();
-            model.setValue(row, fileName, archive.getFilename());
-            model.setValue(row, fileSize, String.valueOf(archive.getSize()));
-        }
+	public void clearListFiles() {
+		//Instancia um model com nenhum valor
+        model = new ListStore(new DataColumn[] {archiveName = new DataColumnString(), archiveSize = new DataColumnString()});
         listArchivesRepository.setModel(model);
+        labelListar.setLabel("");
 	}
 
+	
 	/**
 	 * Main
 	 * @param args

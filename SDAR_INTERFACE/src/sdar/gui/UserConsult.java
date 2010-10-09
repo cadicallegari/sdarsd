@@ -31,6 +31,7 @@ import sdar.manager.rmi.RemoteServiceInterface;
  */
 public class UserConsult {
 	
+	
 	private Person person;
 	
 	private XML gladeFile;
@@ -42,6 +43,7 @@ public class UserConsult {
 	private ListStore model;
 	private DataColumnString name;
 	private DataColumnString user;
+	
 	
 	/**
 	 * Construtor da Classe
@@ -58,6 +60,7 @@ public class UserConsult {
 		Gtk.main();
 	}
 	
+	
 	/**
 	 * Metodo que gerencia os controles da janela de login
 	 */
@@ -69,6 +72,7 @@ public class UserConsult {
 		
 		this.setListUsers();
 	}
+	
 	
 	/**
 	 * Metodo que gerencia os eventos da janela de login
@@ -129,6 +133,7 @@ public class UserConsult {
 		});
 	}
 	
+	
 	/**
 	 * Metodo que seta os dados do banco de dados na lista de usuarios
 	 */
@@ -180,6 +185,7 @@ public class UserConsult {
         renderer = new CellRendererText(column);
         renderer.setText(user);
 	}
+	
 	
 	/**
 	 * Metodo que seta os dados do banco de dados na tabela
