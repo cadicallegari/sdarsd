@@ -102,7 +102,7 @@ public class Login {
 				person.setPassword(password.getText());
 				
 				try {
-					Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
+					Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT);
 					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
 					setAuthentication(stub.checkAutentication(person));
 				} catch (RemoteException e) {

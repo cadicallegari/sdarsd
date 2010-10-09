@@ -98,7 +98,7 @@ public class UserConsult {
 			public void onClicked(Button arg0) {
 				if (person != null && !person.getName().trim().equals("")) {
 					try {
-						Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
+						Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT);
 						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
 						stub.deletePerson(person);
 						person = null;
@@ -145,7 +145,7 @@ public class UserConsult {
 		
 		//Conexao RMI onde invoca metodo remoto para retornar todos os objetos Person
 		try {
-			Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
+			Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT);
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
 			listPersons = stub.retrieveAllPerson();
 		} catch (RemoteException e) {
@@ -196,7 +196,7 @@ public class UserConsult {
 		
 		//Conexao RMI onde invoca metodo remoto para retornar todos os objetos Person
 		try {
-			Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
+			Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT);
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
 			listPersons = stub.retrieveAllPerson();
 		} catch (RemoteException e) {

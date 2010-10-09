@@ -7,14 +7,17 @@
 package sdar.repository.handler;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 
 import sdar.bo.Archive;
 import sdar.comunication.common.Package;
 import sdar.comunication.common.Solicitation;
+import sdar.comunication.common.Util;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.tcp.TCPComunication;
 import sdar.repository.especification.Especification;
@@ -84,11 +87,64 @@ public class MessageReceivedHandler implements Runnable {
 		if (code == Solicitation.LIST_FILE) {
 			this.sendListFile(s);
 		}
+		else if (code == Solicitation.DOWNLOAD) {
+			this.sendFile(s);
+		}
 		
 	}
 
 
 	
+	/**
+	 * @param s
+	 */
+	private void sendFile(Solicitation s) {
+		
+		try {
+			//TENTA conectar ao remetente da solicitaçao
+			//Se nao der provavelmente alguem ja conectou entao ta tudo certo
+			Socket sock = new Socket(s.getAddress(), s.getPort());
+			TCPComunication com = new TCPComunication(sock);
+			File file = new File(s.getArchiveName());
+			FileInputStream fi = new FileInputStream(file);
+			Package pack;
+			int read;
+			int packageNumber = 1;
+			byte [] buf = new byte[ComEspecification.BUFFER_SIZE];
+			
+			do {
+				read = fi.read(buf);
+
+				pack = new Package();			
+				pack.setFileName(file.getName());
+				pack.setSequenceNumber(packageNumber++);
+				pack.setNext(packageNumber);
+				pack.setPayLoad(buf);
+
+				if (read == ComEspecification.BUFFER_SIZE) {
+					pack.setPool(true);
+				}
+				else {
+					pack.setPool(false);
+					pack.setPayLoad(Util.copyBytes(buf, read));
+				}
+
+				com.sendObject(pack);
+				
+			} while (read == ComEspecification.BUFFER_SIZE);
+			
+			com.close();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+
 	/**
 	 * @param s
 	 * @throws IOException 

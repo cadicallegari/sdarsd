@@ -16,7 +16,6 @@ import sdar.comunication.common.Package;
 import sdar.comunication.common.Util;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.tcp.TCPComunication;
-import sdar.manager.handler.ManagerHandler;
 
 /**
  * @author cadi
@@ -26,6 +25,7 @@ public class UCManterArquivoManager {
 
 	
 	/**
+	 * Faz o upload do arquivo para os repositorios
 	 * Envia arquivo passado como parametro para o modulo de gerenciamento (Manager)
 	 * @param filePath
 	 * @throws UnknownHostException
@@ -33,7 +33,7 @@ public class UCManterArquivoManager {
 	 */
 	public void sendFile(String filePath) throws UnknownHostException, IOException {
 		
-		Socket sock = new Socket(ComEspecification.TCP_ADDR, ComEspecification.TCP_PORT);
+		Socket sock = new Socket(ComEspecification.MANAGER_ADDR, ComEspecification.TCP_PORT);
 		File file = new File(filePath);
 		FileInputStream fi = new FileInputStream(file);
 		TCPComunication com = new TCPComunication(sock);
@@ -78,7 +78,7 @@ public class UCManterArquivoManager {
 	
 	public void receiveFile(String fileName) {
 		
-		new Thread(new FileSender(fileName), "FILESENDER").start();
+		new Thread(new FileReceiver(fileName), "FILESENDER").start();
 		
 	}
 	

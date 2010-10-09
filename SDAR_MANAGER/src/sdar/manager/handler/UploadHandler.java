@@ -16,7 +16,7 @@ import sdar.manager.manager.Manager;
  * @author cadi
  *
  */
-public class ManagerHandler implements Runnable {
+public class UploadHandler implements Runnable {
 
 	
 	private TCPComunication comunication;
@@ -24,7 +24,7 @@ public class ManagerHandler implements Runnable {
 	/**
 	 * @param socketCommunication
 	 */
-	public ManagerHandler(TCPComunication socketCommunication) {
+	public UploadHandler(TCPComunication socketCommunication) {
 		this.comunication = socketCommunication;
 	}
 
@@ -44,7 +44,7 @@ public class ManagerHandler implements Runnable {
 			do {
 				
 				pack = (Package) this.comunication.readObject();
-				Manager.fileBuffer.add(pack);
+				Manager.uploadBuffer.add(pack);
 
 				System.out.println(pack.isPool());
 				

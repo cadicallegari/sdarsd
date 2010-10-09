@@ -11,7 +11,6 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 import sdar.comunication.common.Package;
-import sdar.comunication.common.Solicitation;
 import sdar.comunication.def.ComEspecification;
 
 public class UDPComunication {

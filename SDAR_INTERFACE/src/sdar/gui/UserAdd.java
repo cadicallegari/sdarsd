@@ -82,7 +82,7 @@ public class UserAdd {
 						!person.getUser().trim().equals("") &&
 						!person.getPassword().trim().equals("")) {
 					try {
-						Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
+						Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT);
 						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
 						stub.insertPerson(person);
 						

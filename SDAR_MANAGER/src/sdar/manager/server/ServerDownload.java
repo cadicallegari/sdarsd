@@ -1,3 +1,9 @@
+/**
+ * ServerDownload.java
+ * cadi
+ * SDAR_MANAGER
+ * sdar.manager.server
+ */
 package sdar.manager.server;
 
 import java.io.IOException;
@@ -6,13 +12,13 @@ import java.net.Socket;
 
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.tcp.TCPComunication;
-import sdar.manager.handler.ManagerHandler;
+import sdar.manager.handler.DownloadHandler;
 
-
-//aguarda conexao do cliente
-
-public class ServerTCP implements Runnable {
-
+/**
+ * @author cadi
+ *
+ */
+public class ServerDownload implements Runnable {
 	
 	private Socket clientSocket; // Socket do cliente
 	private ServerSocket serverSocket; // Servidor
@@ -22,7 +28,7 @@ public class ServerTCP implements Runnable {
 	/**
 	 * 
 	 */
-	public ServerTCP() {
+	public ServerDownload() {
 		this.run();
 	}
 
@@ -36,13 +42,13 @@ public class ServerTCP implements Runnable {
 	public void run() {
 		try {
 			//cria socket servidor
-			this.serverSocket = new ServerSocket(ComEspecification.TCP_PORT);
+			this.serverSocket = new ServerSocket(ComEspecification.DOWNLOAD_PORT);
 			
 			while (!finish) {
 				this.clientSocket = this.serverSocket.accept();
 				this.socketCommunication = new TCPComunication(this.clientSocket);
-				System.out.println("Connection received from " + this.clientSocket.getInetAddress().getHostName());
-				new Thread(new ManagerHandler(this.socketCommunication), "RECEPTOR_TCP").start();
+				System.out.println("[Download]Connection received from " + this.clientSocket.getInetAddress().getHostName());
+				new Thread(new DownloadHandler(this.socketCommunication), "SENDER_TCP").start();
 			}
 			
 			this.serverSocket.close();
@@ -60,17 +66,5 @@ public class ServerTCP implements Runnable {
 	public void finish() {
 		this.finish = true;
 	}
-	
-	
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		ServerTCP server = new ServerTCP();
-		System.out.println("Iniciando modulo MANAGER             [OK]");
-		server.run();
-	}
-	
-	
+
 }

@@ -301,7 +301,7 @@ public class Main {
 		
 		//Conexao RMI onde invoca metodo remoto para retornar todos os objetos Archives
 		try {
-			Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT_SERVER);
+			Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT);
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
 			listArchives = stub.retrieveAllArchive();
 		} catch (RemoteException e) {

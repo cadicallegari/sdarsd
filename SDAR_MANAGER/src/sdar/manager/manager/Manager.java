@@ -14,8 +14,10 @@ import java.util.LinkedList;
 import sdar.comunication.common.Package;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.udp.UDPComunication;
+import sdar.manager.handler.DownloadHandler;
 import sdar.manager.rmi.RemoteService;
-import sdar.manager.server.ServerTCP;
+import sdar.manager.server.ServerDownload;
+import sdar.manager.server.ServerUpload;
 import sdar.util.temporaryfile.TemporaryFile;
 import sdar.util.temporaryfile.TemporaryFileList;
 
@@ -25,24 +27,36 @@ import sdar.util.temporaryfile.TemporaryFileList;
  */
 public class Manager {
 
-	public static TemporaryFileList fileBuffer = new TemporaryFileList();
-	private ServerTCP serverRep;
+	public static TemporaryFileList uploadBuffer = new TemporaryFileList();
+	public static TemporaryFileList downloadBuffer = new TemporaryFileList();
+	private ServerUpload serverUp;
+	private ServerDownload serverDown;
 	private RemoteService serverRMI;
 	
 	
 	
 	public Manager() throws RemoteException {
-		
-		serverRMI = new RemoteService();
-		serverRep = new ServerTCP();
-		
+		this.serverRMI = new RemoteService();
+//		new Thread(new ServerUpload(), "upload_server").start();
+//		new Thread(new ServerDownload(), "download_server").start();
+		this.serverUp = new ServerUpload();
+		this.serverDown = new ServerDownload();
 	}
 
 
 	
+	
+	
+	/**
+	 * Método utilizado para enviar arquivo para so repositorios quando ele chega
+	 * por completo ao buffer de Upload
+	 * @param filePath
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public static void sendFile(String filePath) throws IOException, InterruptedException {
 
-		TemporaryFile tmp = Manager.fileBuffer.remove(filePath);
+		TemporaryFile tmp = Manager.uploadBuffer.remove(filePath);
 		
 		if (tmp != null) {
 		
@@ -55,71 +69,17 @@ public class Manager {
 				Thread.sleep(ComEspecification.DELAY);
 			}
 		
-		
 		}
 		
 	}
 
-	
-	
 
-//	public static void sendFile(String filePath) throws IOException {
-//		//TODO aqui vai a logica de retirar do buffer de arquivos e enviar para os repositorios
-//		File f = new File(filePath);
-//		FileInputStream fi = new FileInputStream(f);
-//		byte [] buf = new byte[ComEspecification.BUFFER_SIZE];
-//		UDPComunication udpCom = new UDPComunication();
-//		Package p = null;
-//		
-//		int qtd = fi.read(buf);
-//		
-//		System.out.println("leu " + qtd);
-//		
-//		while (qtd == ComEspecification.BUFFER_SIZE) { 			//enquanto nao acabar de ler o arquivo
-//			p = new Package();
-//			p.setPayLoad(Util.copyBytes(buf, qtd));
-//			p.setFileName(filePath);
-//			p.setPool(true);
-//			udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);
-//			
-//			qtd = fi.read(buf);
-//			
-//			System.out.println("leu " + qtd);
-//		}
-//		
-//		p = new Package();								//quando terminar de ler o arquivo
-//		p.setPayLoad(Util.copyBytes(buf, qtd));
-//		p.setFileName(filePath);
-//		p.setPool(false);								//ultimo pacote
-//		udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, p);
-//	
-//		fi.close();
-//		
-//	}
-
+	
 	
 	
 	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
-		try {
-			
-			Manager manager = new Manager();
-			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-	}
-
-
-
-	/**
+	 * 
+	 * Metodo de teste para verificar arquivos que chegam ao Manager
 	 * @param fileName
 	 * @throws IOException 
 	 */
@@ -127,7 +87,7 @@ public class Manager {
 
 		File f = new File(fileName);
 		FileOutputStream fo = new FileOutputStream(f);
-		TemporaryFile tempFile = Manager.fileBuffer.remove(fileName);
+		TemporaryFile tempFile = Manager.uploadBuffer.remove(fileName);
 		LinkedList<Package> list = tempFile.getPackgeList();
 		
 		
@@ -144,4 +104,25 @@ public class Manager {
 	}
 	
 	
+	
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+
+		try {
+			
+//			Manager manager = new Manager();
+			System.out.println("Iniciando modulo MANAGER             [OK]");
+			new Manager();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
 }

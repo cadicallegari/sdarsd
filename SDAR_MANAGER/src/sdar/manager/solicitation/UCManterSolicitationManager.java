@@ -36,13 +36,13 @@ public class UCManterSolicitationManager {
 		solicitation.setCode(Solicitation.LIST_FILE);
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		solicitation.setAddress(inetAddress.getHostAddress());
-		solicitation.setPort(ComEspecification.RECEIVE_PORT);
+		solicitation.setPort(ComEspecification.UPLOAD_PORT);
 		
 		System.out.println("enviou");
 		comUdp.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, solicitation);
 		
 		System.out.println("esperando resposta");
-		serverSocket = new ServerSocket(ComEspecification.RECEIVE_PORT);
+		serverSocket = new ServerSocket(ComEspecification.UPLOAD_PORT);
 		sock = serverSocket.accept();
 		
 		System.out.println("recebendo retorno");

@@ -34,7 +34,7 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	 */
 	private void initService() {
 		try {
-			this.registryServer = LocateRegistry.createRegistry(ComEspecification.RMI_PORT_SERVER);
+			this.registryServer = LocateRegistry.createRegistry(ComEspecification.RMI_PORT);
 			this.registryServer.rebind(ComEspecification.RMI_NAME, this);
 		} catch (RemoteException e) {
 			e.printStackTrace();

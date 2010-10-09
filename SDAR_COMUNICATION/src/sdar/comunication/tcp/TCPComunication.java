@@ -93,7 +93,6 @@ public class TCPComunication {
 			Package p = new Package();
 			Solicitation s = new Solicitation();
 			p.setFileName("muitoloconeh");
-			s.setMethodName("metodo muito loco");
 			System.out.println("enviando");
 //			c.sendObject(p);
 			c.sendObject(s);
