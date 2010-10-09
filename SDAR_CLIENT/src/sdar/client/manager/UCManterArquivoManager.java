@@ -16,6 +16,7 @@ import sdar.comunication.common.Package;
 import sdar.comunication.common.Util;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.tcp.TCPComunication;
+import sdar.manager.handler.ManagerHandler;
 
 /**
  * @author cadi
@@ -71,6 +72,14 @@ public class UCManterArquivoManager {
 		
 		com.close();
 		sock.close();
+	}
+	
+	
+	
+	public void receiveFile(String fileName) {
+		
+		new Thread(new FileSender(fileName), "FILESENDER").start();
+		
 	}
 	
 	
