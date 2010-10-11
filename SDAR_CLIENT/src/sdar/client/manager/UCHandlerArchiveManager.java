@@ -8,13 +8,13 @@ import java.net.UnknownHostException;
 
 import sdar.comunication.common.Package;
 import sdar.comunication.common.Util;
-import sdar.comunication.def.ComEspecification;
+import sdar.comunication.especification.Especification;
 import sdar.comunication.tcp.TCPComunication;
 
 /**
  * Classe que gerencia o Arquivo no modulo do Cliente (Client)
  */
-public class UCFacebookArchiveManager {
+public class UCHandlerArchiveManager {
 
 	
 	/**
@@ -28,7 +28,7 @@ public class UCFacebookArchiveManager {
 		System.out.println("[Modulo Client] - Enviando arquivo ao modulo de Gerenciamento");
 		
 		//Cria Socket de comunicação com o modulo Manager
-		Socket socket = new Socket(ComEspecification.MANAGER_ADDR, ComEspecification.TCP_PORT);
+		Socket socket = new Socket(Especification.MANAGER_ADDR, Especification.TCP_PORT);
 		
 		//Carrega arquivo 
 		File file = new File(filePath);
@@ -38,7 +38,7 @@ public class UCFacebookArchiveManager {
 		TCPComunication comunicationTCP = new TCPComunication(socket);
 		
 		//Instancia variaveis
-		byte [] buffer = new byte[ComEspecification.BUFFER_SIZE];
+		byte [] buffer = new byte[Especification.BUFFER_SIZE];
 		int read;
 		int pakageNumber = 1;
 		Package pack;
@@ -53,7 +53,7 @@ public class UCFacebookArchiveManager {
 			pack.setNext(pakageNumber);
 			pack.setPayLoad(buffer);
 
-			if (read == ComEspecification.BUFFER_SIZE) {
+			if (read == Especification.BUFFER_SIZE) {
 				pack.setNotLast(true);
 			}
 			else {
@@ -64,7 +64,7 @@ public class UCFacebookArchiveManager {
 			System.out.println("[Modulo Client] - Enviando pacote ao modulo de gerenciamento. Nº pacote: " + pack.getSequenceNumber());
 			comunicationTCP.sendObject(pack);
 
-		} while (read == ComEspecification.BUFFER_SIZE);
+		} while (read == Especification.BUFFER_SIZE);
 		
 		//Fecha os canais de comunicação
 		comunicationTCP.close();
@@ -81,6 +81,6 @@ public class UCFacebookArchiveManager {
 	 */
 	public void receiveFile(String fileName, String path) {
 		System.out.println("[Modulo Client] - Solicitando arquivo ao modulo de Gerenciamento");
-		new Thread(new FileReceiver(fileName, path), "FILESENDER").start();
+		new Thread(new FileReceiver(fileName, path), "file_receiver").start();
 	}
 }

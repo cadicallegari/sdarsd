@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 import sdar.comunication.common.Package;
 import sdar.comunication.common.Solicitation;
-import sdar.comunication.def.ComEspecification;
+import sdar.comunication.especification.Especification;
 import sdar.comunication.tcp.TCPComunication;
 import sdar.util.temporaryfile.TemporaryFile;
 import sdar.util.temporaryfile.TemporaryFileList;
@@ -69,7 +69,7 @@ public class FileReceiver implements Runnable {
 	 */
 	private void connect() throws UnknownHostException, IOException {
 		//Estabelece canais de comunicação
-		this.socket = new Socket(ComEspecification.MANAGER_ADDR, ComEspecification.DOWNLOAD_PORT);
+		this.socket = new Socket(Especification.MANAGER_ADDR, Especification.DOWNLOAD_PORT);
 		this.comunicationTCP = new TCPComunication(socket);
 	}
 	
