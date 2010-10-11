@@ -4,54 +4,53 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import sdar.comunication.def.ComEspecification;
+import sdar.comunication.especification.Especification;
 import sdar.comunication.tcp.TCPComunication;
 import sdar.manager.handler.UploadHandler;
 
-
-//aguarda conexao do cliente
-
+/**
+ * Classe que implementa o servidor de Upload
+ */
 public class ServerUpload extends Thread {
 
-	
-	private Socket clientSocket; // Socket do cliente
-	private ServerSocket serverSocket; // Servidor
+	private Socket clientSocket;
+	private ServerSocket serverSocket;
 	private boolean finish = false;
 	private TCPComunication socketCommunication;
 	
+	
 	/**
-	 * 
+	 * Construtor da classe
+	 * @param threadName
 	 */
 	public ServerUpload(String threadName) {
 		super(threadName);
 	}
 
-
-
-	/** 
-	 * Método que ouve a porta esperando conexoes
-	 * @see java.lang.Runnable#run()
+	
+	/**
+	 * Metodo que fica ouvindo a porta do servidor a espera de novas conexões
 	 */
 	@Override
 	public void run() {
 		try {
-			//cria socket servidor
-			this.serverSocket = new ServerSocket(ComEspecification.TCP_PORT);
+			//Cria canal de comunicação
+			this.serverSocket = new ServerSocket(Especification.TCP_PORT);
 			
+			//Aguarda nova conexão
 			while (!finish) {
 				this.clientSocket = this.serverSocket.accept();
 				this.socketCommunication = new TCPComunication(this.clientSocket);
-				System.out.println("[Upload]Connection received from " + this.clientSocket.getInetAddress().getHostName());
-				new Thread(new UploadHandler(this.socketCommunication), "RECEPTOR_TCP").start();
+				new Thread(new UploadHandler(this.socketCommunication), "upload").start();
 			}
 			
+			//Fecha canal de comunicação
 			this.serverSocket.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
 	
 	
 	/**
@@ -59,7 +58,5 @@ public class ServerUpload extends Thread {
 	 */
 	public void finish() {
 		this.finish = true;
-	}
-	
-	
+	}	
 }

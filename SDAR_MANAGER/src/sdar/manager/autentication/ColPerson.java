@@ -7,11 +7,11 @@ import com.db4o.ObjectSet;
 
 /**
  * Classe que representa a Collection de Person
- * @author matheus
  */
 public class ColPerson {
 	
 	private DBConnection dbConnection;
+	
 	
 	/**
 	 * Metodo construtor da classe Colection de Person
@@ -20,6 +20,7 @@ public class ColPerson {
 		this.dbConnection = new DBConnection();
 	}
 	
+	
 	/**
 	 * Meotod que insere o objeto
 	 * @param person
@@ -27,6 +28,7 @@ public class ColPerson {
 	public void insert(Person person) {
 		this.dbConnection.getObjectContainer().store(person);
 	}
+	
 	
 	/**
 	 * Metodo que retorna todos os objetos Person
@@ -38,6 +40,7 @@ public class ColPerson {
 		return result;
 	}
 
+	
 	/**
 	 * Metodo que retorna um objeto Person
 	 * @param person
@@ -48,6 +51,7 @@ public class ColPerson {
 		return result;
 	}
 	
+	
 	/**
 	 * Metodo que remove um objeto Person
 	 * @param person
@@ -56,6 +60,7 @@ public class ColPerson {
 		this.dbConnection.getObjectContainer().delete(person);
 	}
 
+	
 	/**
 	 * Metodo que retorna a conexao da base de dados
 	 * @return
@@ -64,6 +69,7 @@ public class ColPerson {
 		return this.dbConnection;
 	}
 
+	
 	/**
 	 * Metodo que seta a conexao da base de dados
 	 * @param dbConnection

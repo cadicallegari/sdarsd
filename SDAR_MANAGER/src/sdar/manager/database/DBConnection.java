@@ -5,11 +5,11 @@ import com.db4o.ObjectContainer;
 
 /**
  * Classe que faz os tratamentos refente as conexoes com a base de dados (DB4O)
- * @author matheus
  */
 public class DBConnection {
 	
 	private ObjectContainer objectContainer;
+	
 	
 	/**
 	 * Metodo que efetua a conexao com a base de dados
@@ -18,6 +18,7 @@ public class DBConnection {
 		this.objectContainer = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DBEspecification.FILE_NAME);
     }
 	
+	
 	/**
 	 * Metodo que fecha a conexao com a base de dados
 	 */
@@ -25,12 +26,14 @@ public class DBConnection {
 		this.objectContainer.close();
 	}
 	
+	
 	/**
 	 * Metodo que efetua a operacao de commit na base de dados
 	 */
 	public void commit() {
 		this.objectContainer.commit();
 	}
+	
 	
 	/**
 	 * Metodo que retorna a conexao da base de dados

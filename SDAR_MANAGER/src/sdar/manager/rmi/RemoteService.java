@@ -9,15 +9,24 @@ import java.util.List;
 
 import sdar.bo.Archive;
 import sdar.bo.Person;
-import sdar.comunication.def.ComEspecification;
-import sdar.manager.autentication.UCManterAutenticationManager;
-import sdar.manager.solicitation.UCManterSolicitationManager;
+import sdar.comunication.especification.Especification;
+import sdar.manager.autentication.UCHandlerAuthenticationManager;
+import sdar.manager.solicitation.UCHandlerSolicitationManager;
 
+/**
+ * Classe que implementa os serviços remotos
+ * @author matheus
+ *
+ */
 public class RemoteService extends UnicastRemoteObject implements RemoteServiceInterface {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = -5432021798076668288L;
 
 	private Registry registryServer;
+	
 	
 	/**
 	 * Metodo construtora da classe RemoteService
@@ -34,8 +43,8 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	 */
 	private void initService() {
 		try {
-			this.registryServer = LocateRegistry.createRegistry(ComEspecification.RMI_PORT);
-			this.registryServer.rebind(ComEspecification.RMI_NAME, this);
+			this.registryServer = LocateRegistry.createRegistry(Especification.RMI_PORT);
+			this.registryServer.rebind(Especification.RMI_NAME, this);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -47,7 +56,7 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	 */
 	@Override
 	public boolean checkAutentication(Person person) throws RemoteException {
-		UCManterAutenticationManager uCManterAutenticationManager = new UCManterAutenticationManager();
+		UCHandlerAuthenticationManager uCManterAutenticationManager = new UCHandlerAuthenticationManager();
 		return uCManterAutenticationManager.checkAutentication(person);
 	}
 	
@@ -57,7 +66,7 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	 */
 	@Override
 	public void insertPerson(Person person) throws RemoteException {
-		UCManterAutenticationManager uCManterAutenticationManager = new UCManterAutenticationManager();
+		UCHandlerAuthenticationManager uCManterAutenticationManager = new UCHandlerAuthenticationManager();
 		uCManterAutenticationManager.insert(person);
 	}
 	
@@ -67,7 +76,7 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	 */
 	@Override
 	public void deletePerson(Person person) throws RemoteException {
-		UCManterAutenticationManager uCManterAutenticationManager = new UCManterAutenticationManager();
+		UCHandlerAuthenticationManager uCManterAutenticationManager = new UCHandlerAuthenticationManager();
 		uCManterAutenticationManager.delete(person);
 	}
 	
@@ -77,7 +86,7 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	 */
 	@Override
 	public List<Person> retrieveAllPerson(Person person) throws RemoteException {
-		UCManterAutenticationManager uCManterAutenticationManager = new UCManterAutenticationManager();
+		UCHandlerAuthenticationManager uCManterAutenticationManager = new UCHandlerAuthenticationManager();
 		return uCManterAutenticationManager.retrieve(person);
 	}
 	
@@ -87,52 +96,26 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	 */
 	@Override
 	public List<Person> retrieveAllPerson() throws RemoteException {
-		UCManterAutenticationManager uCManterAutenticationManager = new UCManterAutenticationManager();
+		UCHandlerAuthenticationManager uCManterAutenticationManager = new UCHandlerAuthenticationManager();
 		return uCManterAutenticationManager.retrieveAll();
 	}
-	
 
-	/**
-	 * Metodo remoto que executa a opcao de Upload do arquivo
-	 */
-	@Override
-	public boolean uploadFile() throws RemoteException {
-		System.out.println("Upload");
-		return false;
-	}
-
-	/**
-	 * Metodo remoto que executa a opcao de Download do arquivo
-	 */
-	@Override
-	public boolean downloadFile() throws RemoteException {
-		System.out.println("Download");
-		return false;
-	}
 	
 	/**
 	 * Metodo remoto que retorna todos os objetos Archives
 	 */
 	public List<Archive> retrieveAllArchive() throws RemoteException {
-		System.out.println("rmi chamando caso de uso");
-		
-		UCManterSolicitationManager uc = new UCManterSolicitationManager();
+		UCHandlerSolicitationManager uCHandlerSolicitationManager = new UCHandlerSolicitationManager();
 		List<Archive> list = null;
 
-		System.out.println("rmi chamando caso de uso");
 		try {
-			
-			list = uc.listFile();
-			
+			list = uCHandlerSolicitationManager.listArchives();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		return list;
 	}
-	
 }

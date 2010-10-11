@@ -1,63 +1,56 @@
-/**
- * ServerDownload.java
- * cadi
- * SDAR_MANAGER
- * sdar.manager.server
- */
 package sdar.manager.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import sdar.comunication.def.ComEspecification;
+import sdar.comunication.especification.Especification;
 import sdar.comunication.tcp.TCPComunication;
 import sdar.manager.handler.DownloadHandler;
 
 /**
- * @author cadi
- *
+ * Classe que implementa o servidor de Download
  */
 public class ServerDownload extends Thread {
 	
-	private Socket clientSocket; // Socket do cliente
-	private ServerSocket serverSocket; // Servidor
+	private Socket clientSocket;
+	private ServerSocket serverSocket;
 	private boolean finish = false;
-	private TCPComunication socketCommunication;
+	private TCPComunication comunicationTCP;
+	
 	
 	/**
-	 * 
+	 * Construtor da classe
+	 * @param threadName
 	 */
 	public ServerDownload(String threadName) {
 		super(threadName);
 	}
 
 
-	/** 
-	 * Método que ouve a porta esperando conexoes
-	 * @see java.lang.Runnable#run()
+	/**
+	 * Metodo que fica ouvindo a porta do servidor a espera de novas conexões
 	 */
 	@Override
 	public void run() {
 		try {
-			//cria socket servidor
-			System.out.println("Porta para servidor do Socket: " + ComEspecification.DOWNLOAD_PORT);
-			this.serverSocket = new ServerSocket(ComEspecification.DOWNLOAD_PORT);
+			//Cria canal de comunicação
+			this.serverSocket = new ServerSocket(Especification.DOWNLOAD_PORT);
 			
+			//Aguarda nova conexão
 			while (!finish) {
 				this.clientSocket = this.serverSocket.accept();
-				this.socketCommunication = new TCPComunication(this.clientSocket);
-				System.out.println("[Download]Connection received from " + this.clientSocket.getInetAddress().getHostName());
-				new Thread(new DownloadHandler(this.socketCommunication), "SENDER_TCP").start();
+				this.comunicationTCP = new TCPComunication(this.clientSocket);
+				new Thread(new DownloadHandler(this.comunicationTCP), "download").start();
 			}
 			
+			//Fecha canal de comunicação
 			this.serverSocket.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
 	
 	
 	/**
@@ -66,5 +59,4 @@ public class ServerDownload extends Thread {
 	public void finish() {
 		this.finish = true;
 	}
-
 }

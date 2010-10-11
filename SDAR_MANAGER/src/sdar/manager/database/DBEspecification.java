@@ -2,7 +2,6 @@ package sdar.manager.database;
 
 /**
  * Classe de Especificação de atributos da base de dados
- * @author matheus
  */
 public class DBEspecification {
 	

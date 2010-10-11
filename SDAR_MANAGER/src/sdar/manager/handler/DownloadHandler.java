@@ -1,9 +1,3 @@
-/**
- * DownloadHandler.java
- * cadi
- * SDAR_MANAGER
- * sdar.manager.handler
- */
 package sdar.manager.handler;
 
 import java.io.IOException;
@@ -14,147 +8,138 @@ import java.util.LinkedList;
 
 import sdar.comunication.common.Package;
 import sdar.comunication.common.Solicitation;
-import sdar.comunication.def.ComEspecification;
+import sdar.comunication.especification.Especification;
 import sdar.comunication.tcp.TCPComunication;
 import sdar.comunication.udp.UDPComunication;
 import sdar.util.temporaryfile.TemporaryFile;
 import sdar.util.temporaryfile.TemporaryFileList;
 
 /**
- * @author cadi
- *
+ * Classe que gerencia a thread de Download de um arquivo
  */
 public class DownloadHandler implements Runnable {
-
 	
-	private TCPComunication comunication;
-	private TCPComunication comRep;
+	private TCPComunication comunicationClient;
+	private TCPComunication comunicationRepository;
 	private TemporaryFileList buffer = new TemporaryFileList();
 	
+	
 	/**
+	 * Construtor da Classe
 	 * @param socketCommunication
 	 */
 	public DownloadHandler(TCPComunication socketCommunication) {
-		this.comunication = socketCommunication;
+		this.comunicationClient = socketCommunication;
 	}
-
 	
 	
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
+	/**
+	 * Metodo que executa as funcoes da thread
 	 */
 	@Override
 	public void run() {
 		try {
+			//Recebe a solicitacao do modulo do cliente
+			Solicitation sol = (Solicitation) this.comunicationClient.readObject();
 			
-			Solicitation sol = (Solicitation) this.comunication.readObject();
-			System.out.println("Atributos da Solicitação");
-			System.out.println("Address: " + sol.getAddress());
-			System.out.println("FileName: " + sol.getArchiveName());
-			System.out.println("Code: " + sol.getCode());
-			System.out.println("Porta: " + sol.getPort());
-			
+			//Conecta com o repositorio e envia solicitacao de download
 			this.connectToRepository(sol);
-			System.out.println("Comecando a receber arquivo do servidor");
+
+			//Recebe arquivo do repositorio
 			this.receiveArchive();
-			this.comRep.close();
-			System.out.println("Arquivo recebido do servidor");
-			System.out.println("Enviando arquivo para client");
-			this.sendArchive();
-			this.comunication.close();
 			
+			//Fecha canal de comunicacao
+			this.comunicationRepository.close();
+			
+			//Envia arquivo para o cliente
+			this.sendArchive();
+			
+			//Fecha canal de comunicacao
+			this.comunicationClient.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
 
-
+	
+	/**
+	 * Metodo que efetua a conexao com o repositorio
+	 * @param sol
+	 * @throws IOException
+	 */
+	private void connectToRepository(Solicitation sol) throws IOException {
+		//Canal de comunicacao Socket com o repositorio
+		ServerSocket serverSocket = new ServerSocket(Especification.DOWNLOAD_RECEIVE_PORT);
+		Socket clientSockt;
+		
+		//Atribui endereco e porta do modulo do gerenciador na solicitacao
+		sol.setAddress(InetAddress.getLocalHost().getHostAddress());
+		sol.setPort(Especification.DOWNLOAD_RECEIVE_PORT);
+		
+		//Envia solicitacao
+		this.sendSolicitation(sol);
+		
+		//Aguarda conexao de um repositorio
+		clientSockt = serverSocket.accept();
+		this.comunicationRepository = new TCPComunication(clientSockt);
+		
+		//Fecha canal de comunicacao
+		serverSocket.close();
+	}
 
 
 	/**
-	 * @throws IOException 
-	 * 
+	 * Metodo que envia uma solicicacao UDP
+	 * @param sol
+	 * @throws IOException
+	 */
+	private void sendSolicitation(Solicitation sol) throws IOException {
+		System.out.println("[Modulo Manager] - Enviando solicitação de downlo ao modulo de Repositorio");
+		UDPComunication uDPComunication = new UDPComunication();
+		uDPComunication.sendObject(Especification.GROUP, Especification.UDP_PORT, sol);
+	}
+
+	
+	/**
+	 * Metodo que envia o arquivo ao modulo do Cliente
+	 * @throws IOException
 	 */
 	private void sendArchive() throws IOException {
-
+		//Instacia arquivo temporario
 		TemporaryFile tempFile = this.buffer.remove(0);
 		LinkedList<Package> list = tempFile.getPackgeList();
 		
-		for (Package pack : list) {
-			System.out.println("Enviando pacote para client: " + pack.getSequenceNumber());
-			this.comunication.sendObject(pack);
+		//Envia pacotes para o modulo do cliente
+		System.out.println("[Modulo Manager] - Enviando arquivo ao modulo do Cliente");
+		for (Package newPackage : list) {
+			System.out.println("[Modulo Manager] - Enviando pacote ao modulo do Cliente. Nº pacote: " + newPackage.getSequenceNumber());
+			this.comunicationClient.sendObject(newPackage);
 		}
 	}
 
 
-
-
 	/**
-	 * 
+	 * Metodo que recebe arquivo do modulo de repositorio
 	 */
 	private void receiveArchive() {
-		Package pack;
+		Package newPackage;
 		
 		try {
+			//Recebe todos os pacotes do repositorio
+			System.out.println("[Modulo Manager] - Recebendo arquivo do modulo de Repositorio");
 			do {
-
-				pack = (Package) this.comRep.readObject();
-				System.out.println("Pacote recebido: " + pack.getSequenceNumber());
-				this.buffer.add(pack);
-				
-			} while (pack.isNotLast());
+				newPackage = (Package) this.comunicationRepository.readObject();
+				System.out.println("[Modulo Manager] - Recebendo pacote do modulo de Repositorio. Nº pacote: " + newPackage.getSequenceNumber());
+				this.buffer.add(newPackage);
+			} while (newPackage.isNotLast());
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
-
-
-
-
-	/**
-	 * @param sol
-	 * @throws IOException 
-	 */
-	private void connectToRepository(Solicitation sol) throws IOException {
-		//TODO Tratar timeout
-		ServerSocket serverSocket = new ServerSocket(ComEspecification.DOWNLOAD_RECEIVE_PORT);
-		Socket clientSockt;
-		
-		sol.setAddress(InetAddress.getLocalHost().getHostAddress());
-		sol.setPort(ComEspecification.DOWNLOAD_RECEIVE_PORT);
-		this.sendSolicitation(sol);
-		
-		System.out.println("aguardando conexao de algum repositorio");
-		clientSockt = serverSocket.accept();
-		System.out.println("Conexao aceito do repositorio");
-		this.comRep = new TCPComunication(clientSockt);
-		System.out.println("Instanciada Comunicacao TCP");
-		serverSocket.close();
-		System.out.println("Retorno metodo connectToRepository");
-	}
-
-
-
-
-	/**
-	 * @param sol
-	 * @throws IOException 
-	 */
-	private void sendSolicitation(Solicitation sol) throws IOException {
-		UDPComunication udpCom = new UDPComunication();
-		udpCom.sendObject(ComEspecification.GROUP, ComEspecification.UDP_PORT, sol);
-	}
-
 }
