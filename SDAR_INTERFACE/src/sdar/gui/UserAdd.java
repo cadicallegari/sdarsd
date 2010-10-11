@@ -14,7 +14,7 @@ import org.gnome.gtk.Gtk;
 import org.gnome.gtk.Window;
 
 import sdar.bo.Person;
-import sdar.comunication.def.ComEspecification;
+import sdar.comunication.especification.Especification;
 import sdar.manager.rmi.RemoteServiceInterface;
 
 /**
@@ -82,8 +82,8 @@ public class UserAdd {
 						!person.getUser().trim().equals("") &&
 						!person.getPassword().trim().equals("")) {
 					try {
-						Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT);
-						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
+						Registry reg = LocateRegistry.getRegistry("localhost", Especification.RMI_PORT);
+						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 						stub.insertPerson(person);
 						
 						mainWindow.hide();

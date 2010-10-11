@@ -1,7 +1,6 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
-
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -23,7 +22,7 @@ import org.gnome.gtk.TreeViewColumn;
 import org.gnome.gtk.Window;
 
 import sdar.bo.Person;
-import sdar.comunication.def.ComEspecification;
+import sdar.comunication.especification.Especification;
 import sdar.manager.rmi.RemoteServiceInterface;
 
 /**
@@ -98,8 +97,8 @@ public class UserConsult {
 			public void onClicked(Button arg0) {
 				if (person != null && !person.getName().trim().equals("")) {
 					try {
-						Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT);
-						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
+						Registry reg = LocateRegistry.getRegistry("localhost", Especification.RMI_PORT);
+						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 						stub.deletePerson(person);
 						person = null;
 					} catch (RemoteException e) {
@@ -145,8 +144,8 @@ public class UserConsult {
 		
 		//Conexao RMI onde invoca metodo remoto para retornar todos os objetos Person
 		try {
-			Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT);
-			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
+			Registry reg = LocateRegistry.getRegistry("localhost", Especification.RMI_PORT);
+			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 			listPersons = stub.retrieveAllPerson();
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -196,8 +195,8 @@ public class UserConsult {
 		
 		//Conexao RMI onde invoca metodo remoto para retornar todos os objetos Person
 		try {
-			Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT);
-			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
+			Registry reg = LocateRegistry.getRegistry("localhost", Especification.RMI_PORT);
+			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 			listPersons = stub.retrieveAllPerson();
 		} catch (RemoteException e) {
 			e.printStackTrace();

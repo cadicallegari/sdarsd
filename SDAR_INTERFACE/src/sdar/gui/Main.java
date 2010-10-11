@@ -31,8 +31,8 @@ import org.gnome.gtk.Window;
 
 import sdar.bo.Archive;
 import sdar.bo.Person;
-import sdar.client.manager.UCFacebookArchiveManager;
-import sdar.comunication.def.ComEspecification;
+import sdar.client.manager.UCHandlerArchiveManager;
+import sdar.comunication.especification.Especification;
 import sdar.manager.rmi.RemoteServiceInterface;
 
 /**
@@ -194,7 +194,7 @@ public class Main {
 		upload.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				UCFacebookArchiveManager uc = new UCFacebookArchiveManager();
+				UCHandlerArchiveManager uc = new UCHandlerArchiveManager();
 				try {
 					uc.sendFile(filePath);
 				} catch (UnknownHostException e) {
@@ -210,7 +210,7 @@ public class Main {
 		download.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				UCFacebookArchiveManager uc = new UCFacebookArchiveManager();
+				UCHandlerArchiveManager uc = new UCHandlerArchiveManager();
 				uc.receiveFile(labelDownload.getText(), fileChooserDownload.getFilename());
 				labelDownload.setLabel("");
 			}
@@ -304,8 +304,8 @@ public class Main {
 		
 		//Conexao RMI onde invoca metodo remoto para retornar todos os objetos Archives
 		try {
-			Registry reg = LocateRegistry.getRegistry("localhost", ComEspecification.RMI_PORT);
-			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(ComEspecification.RMI_NAME);
+			Registry reg = LocateRegistry.getRegistry("localhost", Especification.RMI_PORT);
+			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 			listArchives = stub.retrieveAllArchive();
 		} catch (RemoteException e) {
 			e.printStackTrace();
