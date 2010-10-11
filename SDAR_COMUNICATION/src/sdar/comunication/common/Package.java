@@ -2,7 +2,7 @@ package sdar.comunication.common;
 
 import java.io.Serializable;
 
-import sdar.comunication.def.ComEspecification;
+import sdar.comunication.especification.Especification;
 
 /**
  * Classe que implementa o objeto Package que representa um pacote a ser enviado
@@ -14,9 +14,9 @@ public class Package implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private byte[] fileName = new byte[ComEspecification.NAME_MAX_SIZE];
+	private byte[] fileName = new byte[Especification.NAME_MAX_SIZE];
 	private int sequenceNumber;
-	private byte[] payLoad = new byte[ComEspecification.BUFFER_SIZE]; 
+	private byte[] payLoad = new byte[Especification.BUFFER_SIZE]; 
 	private int type;
 	private int next;
 	private boolean notLast;

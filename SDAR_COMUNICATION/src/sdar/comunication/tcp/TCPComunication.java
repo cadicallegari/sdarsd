@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import sdar.comunication.def.ComEspecification;
+import sdar.comunication.especification.Especification;
 
 /**
  * Classe que implementa a comunicacao TCP
@@ -47,7 +47,7 @@ public class TCPComunication {
 	 * @throws IOException
 	 */
 	public byte[] read() throws IOException {
-		byte [] newByte = new byte[ComEspecification.BUFFER_SIZE];
+		byte [] newByte = new byte[Especification.BUFFER_SIZE];
 		this.in.read(newByte);
 		return newByte;
 	}

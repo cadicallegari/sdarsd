@@ -10,7 +10,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
-import sdar.comunication.def.ComEspecification;
+import sdar.comunication.especification.Especification;
 
 /**
  * Classe que implementa comunicação UDP
@@ -64,7 +64,7 @@ public class UDPComunication {
 		multicastSocket.joinGroup(groupAddress);
 		
 		//Recebe o objeto
-		byte[] receiveData = new byte[ComEspecification.MAX_DATA_READ];
+		byte[] receiveData = new byte[Especification.MAX_DATA_READ];
         DatagramPacket datagramPacket= new DatagramPacket(receiveData, receiveData.length);
         multicastSocket.receive(datagramPacket);
         receiveData = datagramPacket.getData();
