@@ -1,14 +1,7 @@
-/**
- * Especification.java
- * cadi
- * SDAR_REPOSITORY
- * sdar.repository.especification
- */
 package sdar.repository.especification;
 
 /**
- * @author cadi
- *
+ * Classe que contem as especificações estaticas utilizadas no modulo de Repositorio
  */
 public class Especification {
 

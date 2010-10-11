@@ -2,54 +2,44 @@ package sdar.repository.server;
 
 import java.io.IOException;
 
-import sdar.comunication.def.ComEspecification;
+import sdar.comunication.especification.Especification;
 import sdar.comunication.udp.UDPComunication;
 import sdar.repository.handler.MessageReceivedHandler;
-import sdar.util.temporaryfile.TemporaryFileList;
 
-//aguarda conexao do manager
-
+/**
+ * Classe que implementa o servidor do repositorio
+ */
 public class Server implements Runnable {
-
-	
-	public static TemporaryFileList tmpFileList = new TemporaryFileList();
 	
 	private boolean finish = false;
-
 	
 	/**
-	 * 
+	 * Construtor da classe
 	 */
 	public Server() {
 	}
 
 
-	
+	/**
+	 * Metodo que fica ouvindo o grupo UDP
+	 */
 	public void run() {
-		
-		UDPComunication udp = new UDPComunication();
-		Object obj;
+		//Cria canal de comunicação
+		UDPComunication comunicationUDP = new UDPComunication();
+		Object object;
 		
 		while (!finish) {
-			
 			try {
-				
-				obj = udp.readGroupObject(ComEspecification.GROUP, ComEspecification.UDP_PORT);
-				
-				new Thread(new MessageReceivedHandler(obj), "RECEPTORREP").start();
-				
-				System.out.println("RECEBIDO: " + obj.getClass().getSimpleName());
-				
+				//Lê um objeto do grupo
+				object = comunicationUDP.readGroupObject(Especification.GROUP, Especification.UDP_PORT);
+				//Instancia uma nova thread
+				new Thread(new MessageReceivedHandler(object), "repository_server").start();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
 		}
-
 	}
 	
 	
@@ -59,8 +49,6 @@ public class Server implements Runnable {
 	public void finish() {
 		this.finish = true;
 	}
-	
-
 
 	
 	/**
@@ -68,11 +56,7 @@ public class Server implements Runnable {
 	 */
 	public static void main(String[] args) {
 		Server server = new Server();
-		System.out.println("Iniciando modulo REPOSITORY             [OK]");
+		System.out.println("Iniciando modulo de Repositorio (REPOSITORY)");
 		server.run();
-	}
-
-
-
-	
+	}	
 }
