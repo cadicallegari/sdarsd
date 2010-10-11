@@ -1,9 +1,3 @@
-/**
- * TemporaryFileList.java
- * cadi
- * SDAR_REPOSITORY
- * sdar.repository.file
- */
 package sdar.util.temporaryfile;
 
 import java.util.LinkedList;
@@ -11,24 +5,22 @@ import java.util.LinkedList;
 import sdar.comunication.common.Package;
 
 /**
- * @author cadi
+ * Classe que implementa uma lista de arquivos temporarios
  *
  */
 public class TemporaryFileList {
-
 	
 	private LinkedList<TemporaryFile> temporaryFileList = new LinkedList<TemporaryFile>();
-	
 	
 	
 	/**
 	 * Verifica se existe algum arquivo temporario na lista de arquivos temporarios com o mesmo nome
 	 * se existir retorna a posiçao em que o arquivo se encontra na lista
 	 * se nao existir retorna -1
-	 * @param pkg
+	 * @param newPackage
 	 * @return posiçao do arquivo temporario que tem o mesmo nome do pkg na lista
 	 */
-	public int hasTmpFile(Package pkg) {
+	public int hasTmpFile(Package newPackage) {
 		int ret = -1;
 		int index = 0;
 		
@@ -50,6 +42,11 @@ public class TemporaryFileList {
 	}
 
 	
+	/**
+	 * Verifica se existe algum arquivo temporario na lista de arquivos temporarios com o mesmo nome
+	 * @param fileName
+	 * @return
+	 */
 	public int hasTmpFile(String fileName) {
 		int ret = -1;
 		int index = 0;
@@ -72,33 +69,32 @@ public class TemporaryFileList {
 	
 	
 	/**
+	 * Metodo que insere um novo arquivo a lista de arquivos temporarios
 	 * @param pkg
 	 */
-	private void insertTmpFile(Package pkg) {
+	private void insertTmpFile(Package newPackage) {
 		TemporaryFile tmp = new TemporaryFile();
-		tmp.setFileName(pkg.getFileName());
-		tmp.add(pkg);
+		tmp.setFileName(newPackage.getFileName());
+		tmp.add(newPackage);
 		this.temporaryFileList.add(tmp);
 	}
 	
 	
-	
 	/**
-	 * 
-	 * @param pkg
+	 * Metodo que adiciona um novo arquivo a lista de arquivos temporarios
+	 * @param newPackave
 	 * @return
 	 */
-	public synchronized int add(Package pkg) {
-		
-		int index = this.hasTmpFile(pkg);
+	public synchronized int add(Package newPackave) {
+		int index = this.hasTmpFile(newPackave);
 		
 		if (index == -1) {  			//nao existe arquivo temporario com mesmo nome
-			this.insertTmpFile(pkg);
+			this.insertTmpFile(newPackave);
 			index = this.temporaryFileList.size() - 1;    // retorna posiçao de onde foi inserido
 		}
 		else {							//ja existe arquivo temporario incompleto na lista
 			TemporaryFile tmp = this.temporaryFileList.get(index);
-			tmp.add(pkg);
+			tmp.add(newPackave);
 		}
 		
 		return index;
@@ -107,11 +103,11 @@ public class TemporaryFileList {
 	
 	
 	/**
-	 * @param p
+	 * Metodo que remove um arquivo da lista de arquivos temporarios
+	 * @param fileName
 	 * @return
 	 */
 	public synchronized TemporaryFile remove(String fileName) {
-		
 		int pos = this.hasTmpFile(fileName);
 		
 		if (pos >= 0) {
@@ -122,27 +118,12 @@ public class TemporaryFileList {
 	}
 	
 	
-	
 	/**
-	 * @param p
+	 * Metodo que remove um arquivo da lista de arquivos temporarios
+	 * @param pos
 	 * @return
 	 */
 	public synchronized TemporaryFile remove(int pos) {
-		
 		return this.temporaryFileList.remove(pos);
-		
 	}
-	
-	
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
-	
-
 }

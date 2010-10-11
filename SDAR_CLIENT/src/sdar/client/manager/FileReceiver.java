@@ -1,9 +1,3 @@
-/**
- * FileSender.java
- * cadi
- * SDAR_CLIENT
- * sdar.client.manager
- */
 package sdar.client.manager;
 
 import java.io.File;
@@ -21,123 +15,112 @@ import sdar.util.temporaryfile.TemporaryFile;
 import sdar.util.temporaryfile.TemporaryFileList;
 
 /**
- * @author cadi
- *
+ * Metodo que implementa uma Thread que gerencia o download de um arquivo dos repositorios
  */
 public class FileReceiver implements Runnable {
 	
 	String fileName;
-	Socket sock;
-	TCPComunication com;
+	String path;
+	Socket socket;
+	TCPComunication comunicationTCP;
 	TemporaryFileList tempFile = new TemporaryFileList();
 	
 	
 	/**
-	 * @param fileName
+	 * Construtor da Thread
+	 * @param fileName - Nome do Arquivo a ser solicitado download
+	 * @param path - Caminho a ser salvo o arquivo efetuado o download
 	 */
-	public FileReceiver(String fileName) {
+	public FileReceiver(String fileName, String path) {
 		this.fileName = fileName;
+		this.path = path;
 	}
 
 
-
-
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
+	/**
+	 * Metodo com as funcionalidades de execução da Thread
 	 */
 	@Override
 	public void run() {
-		
 		try {
-		
+			//Efetua conexao com o modulo de Gerenciamento
 			this.connect();
+			//Envia solicitação de downlaod
 			this.sendSolicitation(this.fileName);
+			//Recebe o arquivo de download do modulo de Gerenciamento
 			this.receiveFile();
+			//Salva o arquivo de download
 			this.saveFile();
-			
+			System.out.println("[Modulo Client] - Completado download e arquivo salvo");
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 
-
+	/**
+	 * Metodo que efetua a conexao com o modulo de gerenciamento 
+	 * @throws UnknownHostException
+	 * @throws IOException
+	 */
+	private void connect() throws UnknownHostException, IOException {
+		//Estabelece canais de comunicação
+		this.socket = new Socket(ComEspecification.MANAGER_ADDR, ComEspecification.DOWNLOAD_PORT);
+		this.comunicationTCP = new TCPComunication(socket);
+	}
+	
+	
+	/**
+	 * Metodo que envia a solicitacao de download para o modulo de gerenciamento
+	 * @param fileName
+	 * @throws IOException
+	 */
+	private void sendSolicitation(String fileName) throws IOException {
+		//Instancia uma solicitação
+		Solicitation solicitation = new Solicitation();
+		solicitation.setCode(Solicitation.DOWNLOAD);
+		solicitation.setArchiveName(fileName);
+		//Encia a solicitação
+		this.comunicationTCP.sendObject(solicitation);
+	}
+	
 
 	/**
-	 * @throws IOException 
-	 * 
+	 * Metodo que recebe o arquivo do modulo de gerenciamento
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void receiveFile() throws IOException, ClassNotFoundException {
+		Package pack;
+		
+		//Recebe todos os pacotes e armazena no buffer
+		do {
+			pack = (Package) this.comunicationTCP.readObject();
+			System.out.println("[Modulo Client] - Recebendo pacote do modulo de gerenciamento. Nº pacote: " + pack.getSequenceNumber());
+			this.tempFile.add(pack);
+		} while (pack.isNotLast());
+	}
+	
+	
+	/**
+	 * Metodo que salva o arquivo de downlaod no caminho de destino
+	 * @throws IOException
 	 */
 	private void saveFile() throws IOException {
-		
+		//Instancia variaveis de buffer do arquivo
 		TemporaryFile tempFile = this.tempFile.remove(this.fileName);
 		LinkedList<Package> list = tempFile.getPackgeList();
-		File file = new File(this.fileName);
+
+		//Cria o arquivo de download
+		File file = new File(this.path + "/" + this.fileName);
 		FileOutputStream fo = new FileOutputStream(file);
-		
 		for (Package pack : list) {
 			fo.write(pack.getPayLoad());
 		}
-		
 		fo.close();
-		
 	}
-
-
-
-
-	/**
-	 * @throws ClassNotFoundException 
-	 * @throws IOException 
-	 * 
-	 */
-	private void receiveFile() throws IOException, ClassNotFoundException {
-		
-		Package pack;
-		
-		do {
-			
-			pack = (Package) this.com.readObject();
-			this.tempFile.add(pack);
-			
-		} while (pack.isPool());
-		
-	}
-
-
-
-
-	/**
-	 * @param fileName2
-	 * @throws IOException 
-	 */
-	private void sendSolicitation(String fileName2) throws IOException {
-		
-		Solicitation solicitation = new Solicitation();
-		solicitation.setCode(Solicitation.DOWNLOAD);
-		solicitation.setArchiveName(fileName2);
-		this.com.sendObject(solicitation);
-		
-	}
-
-
-
-
-	/**
-	 * @throws IOException 
-	 * @throws UnknownHostException 
-	 * 
-	 */
-	private void connect() throws UnknownHostException, IOException {
-		this.sock = new Socket(ComEspecification.MANAGER_ADDR, ComEspecification.DOWNLOAD_PORT);
-		this.com = new TCPComunication(sock);
-	}
-
 }

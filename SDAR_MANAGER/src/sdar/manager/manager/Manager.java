@@ -14,7 +14,6 @@ import java.util.LinkedList;
 import sdar.comunication.common.Package;
 import sdar.comunication.def.ComEspecification;
 import sdar.comunication.udp.UDPComunication;
-import sdar.manager.handler.DownloadHandler;
 import sdar.manager.rmi.RemoteService;
 import sdar.manager.server.ServerDownload;
 import sdar.manager.server.ServerUpload;
@@ -29,18 +28,13 @@ public class Manager {
 
 	public static TemporaryFileList uploadBuffer = new TemporaryFileList();
 	public static TemporaryFileList downloadBuffer = new TemporaryFileList();
-	private ServerUpload serverUp;
-	private ServerDownload serverDown;
-	private RemoteService serverRMI;
 	
 	
 	
 	public Manager() throws RemoteException {
-		this.serverRMI = new RemoteService();
-//		new Thread(new ServerUpload(), "upload_server").start();
-//		new Thread(new ServerDownload(), "download_server").start();
-		this.serverUp = new ServerUpload();
-		this.serverDown = new ServerDownload();
+		new RemoteService();
+		new ServerUpload("upload_server").start();
+		new ServerDownload("download_server").start();
 	}
 
 
@@ -110,19 +104,12 @@ public class Manager {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
 		try {
-			
-//			Manager manager = new Manager();
 			System.out.println("Iniciando modulo MANAGER             [OK]");
 			new Manager();
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
-
 }

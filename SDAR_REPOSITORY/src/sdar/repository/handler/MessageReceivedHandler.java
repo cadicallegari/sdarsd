@@ -47,6 +47,7 @@ public class MessageReceivedHandler implements Runnable {
 	public void run() {
 		
 		String className = obj.getClass().getSimpleName();
+		System.out.println(className);
 		
 		if (className.equals("Package")) {
 			try {
@@ -59,7 +60,6 @@ public class MessageReceivedHandler implements Runnable {
 			}
 		}
 		else if (className.equals("Solicitation")) {
-			System.out.println("Solicitation");
 			Solicitation s = (Solicitation) obj;
 			
 			try {
@@ -70,6 +70,8 @@ public class MessageReceivedHandler implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		
+		System.out.println("Retorno do metodo Run");
 		
 	}
 
@@ -83,13 +85,15 @@ public class MessageReceivedHandler implements Runnable {
 	private void solicitation(Solicitation s) throws IOException {
 		
 		int code = s.getCode();
-		
+		System.out.println(code);
 		if (code == Solicitation.LIST_FILE) {
 			this.sendListFile(s);
 		}
 		else if (code == Solicitation.DOWNLOAD) {
 			this.sendFile(s);
 		}
+		
+		System.out.println("Retorno do metodo Solicitation");
 		
 	}
 
@@ -99,7 +103,7 @@ public class MessageReceivedHandler implements Runnable {
 	 * @param s
 	 */
 	private void sendFile(Solicitation s) {
-		
+		System.out.println("Metodo de SendFile");
 		try {
 			//TENTA conectar ao remetente da solicitaçao
 			//Se nao der provavelmente alguem ja conectou entao ta tudo certo
@@ -122,18 +126,20 @@ public class MessageReceivedHandler implements Runnable {
 				pack.setPayLoad(buf);
 
 				if (read == ComEspecification.BUFFER_SIZE) {
-					pack.setPool(true);
+					pack.setNotLast(true);
 				}
 				else {
-					pack.setPool(false);
+					pack.setNotLast(false);
 					pack.setPayLoad(Util.copyBytes(buf, read));
 				}
-
+				
+				System.out.println("Enviando PACKAGE from REP to MAN" + pack.getSequenceNumber());
 				com.sendObject(pack);
 				
 			} while (read == ComEspecification.BUFFER_SIZE);
-			
+			System.out.println("Terminou de enviar os pacotes");
 			com.close();
+			sock.close();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -159,18 +165,18 @@ public class MessageReceivedHandler implements Runnable {
 			File f = fileList[i];
 			
 			arq = new Archive();
-			arq.setFilename(f.getName());
+			arq.setName(f.getName());
 			arq.setSize(f.length());
-			arq.setPool(true);
+			arq.setNotLast(true);
 			
 			com.sendObject(arq);
 		}
 		
 		File f = fileList[fileList.length-1];
 		arq = new Archive();
-		arq.setFilename(f.getName());
+		arq.setName(f.getName());
 		arq.setSize(f.length());
-		arq.setPool(false);
+		arq.setNotLast(false);
 		
 		com.sendObject(arq);
 		
@@ -199,7 +205,7 @@ public class MessageReceivedHandler implements Runnable {
 	 */
 	private void packageHandler(Package p) throws IOException {
 		
-		if (p.isPool()) { 						//se nao for ultimo pacote do arquivo
+		if (p.isNotLast()) { 						//se nao for ultimo pacote do arquivo
 			int i = Server.tmpFileList.add(p);
 			System.out.println("poll " + i);
 		}

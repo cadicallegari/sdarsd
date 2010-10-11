@@ -74,7 +74,7 @@ public class UCManterSolicitationManager {
 			archive = (Archive) com.readObject();
 			list.add(archive);
 			
-		} while (archive.isPool());
+		} while (archive.isNotLast());
 		
 		com.close();
 		return list;

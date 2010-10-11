@@ -46,9 +46,9 @@ public class UploadHandler implements Runnable {
 				pack = (Package) this.comunication.readObject();
 				Manager.uploadBuffer.add(pack);
 
-				System.out.println(pack.isPool());
+				System.out.println(pack.isNotLast());
 				
-			} while (pack.isPool());
+			} while (pack.isNotLast());
 			
 			Manager.sendFile(pack.getFileName());
 			

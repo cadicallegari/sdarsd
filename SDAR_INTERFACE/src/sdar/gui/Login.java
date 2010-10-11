@@ -39,6 +39,7 @@ public class Login {
 	private Button login;
 	private Button exit;
 	private FileChooserButton fileChooserUpload;
+	private FileChooserButton fileChooserDownload;
 	private Button upload;
 	private Button download;
 	private Button listar;
@@ -53,6 +54,7 @@ public class Login {
 					Person person, 
 					Statusbar statusbar, 
 					FileChooserButton fileChooserUpload,
+					FileChooserButton fileChooserDownload,
 					Button upload, 
 					Button download, 
 					Button listar,
@@ -61,6 +63,7 @@ public class Login {
 		this.person = person;
 		this.statusbar = statusbar;
 		this.fileChooserUpload = fileChooserUpload;
+		this.fileChooserDownload = fileChooserDownload;
 		this.upload = upload;
 		this.download = download;
 		this.listar = listar;
@@ -173,6 +176,7 @@ public class Login {
 	 */
 	public void setSensitive(boolean sensitive) {
 		this.fileChooserUpload.setSensitive(sensitive);
+		this.fileChooserDownload.setSensitive(sensitive);
 		this.upload.setSensitive(sensitive);
 		this.download.setSensitive(sensitive);
 		this.listar.setSensitive(sensitive);

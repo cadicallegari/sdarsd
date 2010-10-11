@@ -1,6 +1,10 @@
 package sdar.comunication.encryption;
 
+/**
+ * Classe que contem os algoritmos de criptografia do projeto
+ */
 public class Encryption {
+
 	
     /**
      * Metodo que faz a criptografia de uma mensagem
@@ -20,6 +24,7 @@ public class Encryption {
     	}
     	return mensagemRetorno;
     }
+    
     
     /**
      * Metodo que faz a descriptografia de uma mensagem

@@ -18,7 +18,7 @@ import sdar.manager.handler.DownloadHandler;
  * @author cadi
  *
  */
-public class ServerDownload implements Runnable {
+public class ServerDownload extends Thread {
 	
 	private Socket clientSocket; // Socket do cliente
 	private ServerSocket serverSocket; // Servidor
@@ -28,10 +28,9 @@ public class ServerDownload implements Runnable {
 	/**
 	 * 
 	 */
-	public ServerDownload() {
-		this.run();
+	public ServerDownload(String threadName) {
+		super(threadName);
 	}
-
 
 
 	/** 
@@ -42,6 +41,7 @@ public class ServerDownload implements Runnable {
 	public void run() {
 		try {
 			//cria socket servidor
+			System.out.println("Porta para servidor do Socket: " + ComEspecification.DOWNLOAD_PORT);
 			this.serverSocket = new ServerSocket(ComEspecification.DOWNLOAD_PORT);
 			
 			while (!finish) {

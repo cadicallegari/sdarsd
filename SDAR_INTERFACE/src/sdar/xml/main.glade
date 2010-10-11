@@ -145,7 +145,19 @@
                               </packing>
                             </child>
                             <child>
+                              <widget class="GtkLabel" id="label6">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Selecione Arquivo:</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
                               <widget class="GtkFileChooserButton" id="fcb_upload">
+                                <property name="width_request">150</property>
                                 <property name="visible">True</property>
                                 <property name="border_width">3</property>
                                 <property name="create_folders">False</property>
@@ -153,7 +165,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
-                                <property name="position">2</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                             <child>
@@ -167,7 +179,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
-                                <property name="position">3</property>
+                                <property name="position">4</property>
                               </packing>
                             </child>
                           </widget>
@@ -224,6 +236,31 @@
                               </packing>
                             </child>
                             <child>
+                              <widget class="GtkLabel" id="label7">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Selecione Destino:</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkFileChooserButton" id="fcb_download">
+                                <property name="width_request">150</property>
+                                <property name="visible">True</property>
+                                <property name="border_width">3</property>
+                                <property name="action">select-folder</property>
+                                <property name="title" translatable="yes">Selecione uma pasta</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
                               <widget class="GtkButton" id="btn_download">
                                 <property name="label" translatable="yes">Download</property>
                                 <property name="visible">True</property>
@@ -234,7 +271,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
-                                <property name="position">2</property>
+                                <property name="position">4</property>
                               </packing>
                             </child>
                           </widget>

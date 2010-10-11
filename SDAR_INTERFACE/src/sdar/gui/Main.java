@@ -31,7 +31,7 @@ import org.gnome.gtk.Window;
 
 import sdar.bo.Archive;
 import sdar.bo.Person;
-import sdar.client.manager.UCManterArquivoManager;
+import sdar.client.manager.UCFacebookArchiveManager;
 import sdar.comunication.def.ComEspecification;
 import sdar.manager.rmi.RemoteServiceInterface;
 
@@ -61,6 +61,7 @@ public class Main {
 	private Button download;
 	private Button listar;
 	private FileChooserButton fileChooserUpload;
+	private FileChooserButton fileChooserDownload;
 	private TreeView listArchivesRepository;
 	private ListStore model;
 	private DataColumnString archiveName;
@@ -96,6 +97,7 @@ public class Main {
 		menuAbout = (MenuItem) gladeFile.getWidget("menu_sobre");
 		statusBar = (Statusbar) gladeFile.getWidget("barra_mensagem");
 		fileChooserUpload = (FileChooserButton) gladeFile.getWidget("fcb_upload");
+		fileChooserDownload = (FileChooserButton) gladeFile.getWidget("fcb_download");
 		labelUpload = (Label) gladeFile.getWidget("txt_upload"); 
 		labelDownload = (Label) gladeFile.getWidget("txt_download");
 		labelListar = (Label) gladeFile.getWidget("txt_listar");
@@ -117,7 +119,7 @@ public class Main {
 			public void onActivate(MenuItem arg0) {
 				try {
 					person = new Person();
-					new Login(authentication, person, statusBar, fileChooserUpload, upload, download, listar, listArchivesRepository);
+					new Login(authentication, person, statusBar, fileChooserUpload, fileChooserDownload, upload, download, listar, listArchivesRepository);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
@@ -192,7 +194,7 @@ public class Main {
 		upload.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				UCManterArquivoManager uc = new UCManterArquivoManager();
+				UCFacebookArchiveManager uc = new UCFacebookArchiveManager();
 				try {
 					uc.sendFile(filePath);
 				} catch (UnknownHostException e) {
@@ -208,8 +210,8 @@ public class Main {
 		download.connect(new Button.Clicked() {
 			@Override
 			public void onClicked(Button arg0) {
-				UCManterArquivoManager uc = new UCManterArquivoManager();
-				uc.receiveFile(labelDownload.getText());
+				UCFacebookArchiveManager uc = new UCFacebookArchiveManager();
+				uc.receiveFile(labelDownload.getText(), fileChooserDownload.getFilename());
 				labelDownload.setLabel("");
 			}
 		});
@@ -238,10 +240,10 @@ public class Main {
             public void onRowActivated(TreeView treeView, TreePath treePath, TreeViewColumn treeViewColumn) {
 				TreeIter row = model.getIter(treePath);
                 Archive archive = new Archive();
-                archive.setFilename(model.getValue(row, archiveName));
+                archive.setName(model.getValue(row, archiveName));
                 archive.setSize(Integer.valueOf(model.getValue(row, archiveSize)));
                 labelDownload.setAlignment(0, Float.valueOf("0.5"));
-                labelDownload.setLabel(archive.getFilename());
+                labelDownload.setLabel(archive.getName());
             }
 		});
 	}
@@ -278,6 +280,7 @@ public class Main {
 	 */
 	public void setSensitive(boolean sensitive) {
 		this.fileChooserUpload.setSensitive(sensitive);
+		this.fileChooserDownload.setSensitive(sensitive);
 		this.upload.setSensitive(sensitive);
 		this.download.setSensitive(sensitive);
 		this.listar.setSensitive(sensitive);
@@ -314,7 +317,7 @@ public class Main {
         model = new ListStore(new DataColumn[] {archiveName = new DataColumnString(), archiveSize = new DataColumnString()});
         for (Archive archive : listArchives) {
             row = model.appendRow();
-            model.setValue(row, archiveName, archive.getFilename());
+            model.setValue(row, archiveName, archive.getName());
             model.setValue(row, archiveSize, String.valueOf(archive.getSize()));
         }
         listArchivesRepository.setModel(model);

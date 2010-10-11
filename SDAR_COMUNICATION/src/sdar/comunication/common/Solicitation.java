@@ -1,38 +1,28 @@
-/**
- * Solicitation.java
- * cadi
- * SDAR_COMUNICATION
- * sdar.comunication.common
- */
 package sdar.comunication.common;
 
 import java.io.Serializable;
 
 /**
- * @author cadi
- *
+ * Classe que implementa o objeto Solicitation que representa uma solicitação a ser enviado
  */
 public class Solicitation implements Serializable {
-
 	
 	/**
-	 * long
+	 * 
 	 */
-	private static final long serialVersionUID = 4706811657142766361L;
+	private static final long serialVersionUID = 1L;
 
 	public static int LIST_FILE		= 1;
 	public static int DOWNLOAD		= 2;
 	
-	String archiveName;
+	private String archiveName;
 	private int code;
 	private String address;
 	private int port;
-	
-	
-	
 
 	
 	/**
+	 * Metodo que retorna o nome do arquivo a ser efetuado o download
 	 * @return the archive
 	 */
 	public String getArchiveName() {
@@ -41,6 +31,7 @@ public class Solicitation implements Serializable {
 
 
 	/**
+	 * Metodo que seta o nome do arquivo a ser efetuado o download
 	 * @param archive the archive to set
 	 */
 	public void setArchiveName(String archive) {
@@ -49,14 +40,25 @@ public class Solicitation implements Serializable {
 
 
 	/**
+	 * Metodo que retorna o endereço da solicitação
 	 * @return the address
 	 */
 	public String getAddress() {
 		return address;
 	}
+	
+	
+	/**
+	 * Metodo que seta o endereço da solicitação
+	 * @param address
+	 */
+	public void setAddress(String address) {
+		this.address = address;		
+	}
 
 
 	/**
+	 * Metodo que retorna o codigo da solicitação
 	 * @return the code
 	 */
 	public int getCode() {
@@ -65,6 +67,7 @@ public class Solicitation implements Serializable {
 
 
 	/**
+	 * Metodo que seta o codigo da solicitação
 	 * @param code the code to set
 	 */
 	public void setCode(int code) {
@@ -73,20 +76,19 @@ public class Solicitation implements Serializable {
 
 
 	/**
-	 * @param address
+	 * Metodo que retorna a porta da solicitação
+	 * @return
 	 */
-	public void setAddress(String address) {
-		this.address = address;		
-	}
-
-
 	public int getPort() {
 		return port;
 	}
 
 
+	/**
+	 * Metodo que seta a porta da solicitação
+	 * @param port
+	 */
 	public void setPort(int port) {
 		this.port = port;
 	}
-	
 }

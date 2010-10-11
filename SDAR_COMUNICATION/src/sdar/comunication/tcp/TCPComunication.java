@@ -1,25 +1,14 @@
-/**
- * TCPComunication.java
- * cadi
- * SDAR_GERENCIADOR
- * sdar.gerenciador.server
- */
 package sdar.comunication.tcp;
-
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
-import sdar.comunication.common.Package;
-import sdar.comunication.common.Solicitation;
 import sdar.comunication.def.ComEspecification;
 
 /**
- * @author cadi
- *
+ * Classe que implementa a comunicacao TCP
  */
 public class TCPComunication {
 
@@ -28,31 +17,44 @@ public class TCPComunication {
 	private Socket socket;
 	
 	
+	/**
+	 * Construtor da classe
+	 * @param socket
+	 * @throws IOException
+	 */
 	public TCPComunication(Socket socket) throws IOException {
 		this.out = new ObjectOutputStream(socket.getOutputStream());
-		this.out.flush(); // Descarrega o buffer
+		this.out.flush();
 		this.in = new ObjectInputStream(socket.getInputStream());
 		this.socket = socket;
 	}
 
 
-	
-	public void send(byte [] buf) throws IOException {
-		this.out.write(buf);
+	/**
+	 * Metodo que envia um array de bytes pelo canal de comunicacao
+	 * @param buffer
+	 * @throws IOException
+	 */
+	public void send(byte [] buffer) throws IOException {
+		this.out.write(buffer);
 		this.out.flush();
 	}
-	
 
-	
+
+	/**
+	 * Metodo que le um array de bytes pelo canal de comunicacao
+	 * @return
+	 * @throws IOException
+	 */
 	public byte[] read() throws IOException {
-		byte [] b = new byte[ComEspecification.BUFFER_SIZE];
-		this.in.read(b);
-		return b;
+		byte [] newByte = new byte[ComEspecification.BUFFER_SIZE];
+		this.in.read(newByte);
+		return newByte;
 	}
 	
 	
 	/**
-	 * 
+	 * Metodo que envia um objeto pelo canal de comunicacao
 	 * @param obj
 	 * @throws IOException
 	 */
@@ -63,7 +65,7 @@ public class TCPComunication {
 	
 
 	/**
-	 * 
+	 * Metodo que le um objeto pelo canal de comunicacao
 	 * @return
 	 * @throws IOException
 	 * @throws ClassNotFoundException
@@ -74,83 +76,13 @@ public class TCPComunication {
 	}
 	
 
-	
+	/**
+	 * Metodo que fecha todos os canais de comunicacao
+	 * @throws IOException
+	 */
 	public void close() throws IOException {
 		this.in.close();
 		this.out.close();
 		this.socket.close();
-	}
-	
-	
-	public static void main(String args[]) {
-		
-		try {
-
-			//envia obj
-			Socket sock = new Socket("localhost", ComEspecification.TCP_PORT);
-			System.out.println(sock.getLocalAddress());
-			TCPComunication c = new TCPComunication(sock);
-			Package p = new Package();
-			Solicitation s = new Solicitation();
-			p.setFileName("muitoloconeh");
-			System.out.println("enviando");
-//			c.sendObject(p);
-			c.sendObject(s);
-			System.out.println("enviado");
-			sock.close();
-			System.out.println("fechado");
-			
-			
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-	}
-	
-	
-	
-//	public String readStringToSocket() {
-//
-//		StringBuffer buf = new StringBuffer();
-//		String line = null;
-//		boolean fim = false;
-//		
-//		try {
-//			
-//			BufferedReader bufIn = new BufferedReader(new InputStreamReader(this.in));
-//			
-//			while (!fim) {
-//				Thread.sleep(20);
-//				
-//				if (!fim) {
-//					line = bufIn.readLine();
-//				}
-//				if (line != null) {
-//					buf.append(line);
-//				} else {
-//					fim = true;
-//				}
-//				if (line.equals("</locadora>")) {
-//					fim = true;
-//				}
-//			}			
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		String ret = buf.toString();
-//		
-//		System.out.println("RECEBIDO:\n" + ret);
-//		
-//		return ret;
-//		//return buf.toString();
-//	}
-	
+	}	
 }

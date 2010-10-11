@@ -6,47 +6,53 @@ import java.io.Serializable;
  * Classe que implementa o objeto File que representa um arquivo
  */
 public class Archive implements Serializable {
-
+	
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String filename;
+	private String name;
 	private long size;
-	
-	private boolean pool;
+	private boolean notLast;
 	
 	
 	/**
-	 * @return the pool
+	 * Metodo que retorna o atributo notLast do arquivo
+	 * @return
 	 */
-	public boolean isPool() {
-		return pool;
+	public boolean isNotLast() {
+		return notLast;
 	}
 
+
 	/**
-	 * @param pool the pool to set
+	 * Metodo que seta o atributo notLast do arquivo
+	 * @param last
 	 */
-	public void setPool(boolean pool) {
-		this.pool = pool;
+	public void setNotLast(boolean notLast) {
+		this.notLast = notLast;
 	}
+
 
 	/**
 	 * Metodo que retorna o nome do arquivo
 	 * @return
 	 */
-	public String getFilename() {
-		return filename;
+	public String getName() {
+		return name;
 	}
+	
 	
 	/**
 	 * Metodo que seta o nome do arquivo
-	 * @param filename
+	 * @param name
 	 */
-	public void setFilename(String filename) {
-		this.filename = filename;
+	public void setName(String name) {
+		this.name = name;
 	}
+	
 	
 	/**
 	 * Metodo que retorna o tamanho do arquivo
@@ -55,6 +61,7 @@ public class Archive implements Serializable {
 	public long getSize() {
 		return size;
 	}
+	
 	
 	/**
 	 * Metodo que seta o tamanho do arquivo

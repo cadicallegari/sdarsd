@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class Person implements Serializable {
 
+	
 	/**
 	 * 
 	 */
@@ -16,11 +17,13 @@ public class Person implements Serializable {
 	private String user;
 	private String password;
 
+	
 	/**
 	 * Metodo construtor do objeto Person
 	 */
 	public Person() {
 	}
+	
 	
 	/**
 	 * Metodo construtor do objeto Person
@@ -34,6 +37,7 @@ public class Person implements Serializable {
 		this.password = password;
 	}
 	
+	
 	/**
 	 * Metodo que retorna o Nome da Person
 	 * @return
@@ -41,6 +45,7 @@ public class Person implements Serializable {
 	public String getName() {
 		return name;
 	}
+	
 	
 	/**
 	 * Metodo que seta o Nome da Person
@@ -50,6 +55,7 @@ public class Person implements Serializable {
 		this.name = name;
 	}
 	
+	
 	/**
 	 * Metodo que retorna o Usuario da Person
 	 * @return
@@ -57,6 +63,7 @@ public class Person implements Serializable {
 	public String getUser() {
 		return user;
 	}
+	
 	
 	/**
 	 * Metodo que seta o Usuario da Person
@@ -66,6 +73,7 @@ public class Person implements Serializable {
 		this.user = user;
 	}
 	
+	
 	/**
 	 * Metodo que retorna a Senha da Person
 	 * @return
@@ -73,6 +81,7 @@ public class Person implements Serializable {
 	public String getPassword() {
 		return password;
 	}
+	
 	
 	/**
 	 * Metodo que seta a Senha da Person

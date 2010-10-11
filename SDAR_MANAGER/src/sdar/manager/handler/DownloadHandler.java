@@ -46,16 +46,21 @@ public class DownloadHandler implements Runnable {
 	 */
 	@Override
 	public void run() {
-
 		try {
 			
 			Solicitation sol = (Solicitation) this.comunication.readObject();
+			System.out.println("Atributos da Solicitação");
+			System.out.println("Address: " + sol.getAddress());
+			System.out.println("FileName: " + sol.getArchiveName());
+			System.out.println("Code: " + sol.getCode());
+			System.out.println("Porta: " + sol.getPort());
 			
 			this.connectToRepository(sol);
-			
+			System.out.println("Comecando a receber arquivo do servidor");
 			this.receiveArchive();
 			this.comRep.close();
-			
+			System.out.println("Arquivo recebido do servidor");
+			System.out.println("Enviando arquivo para client");
 			this.sendArchive();
 			this.comunication.close();
 			
@@ -82,9 +87,9 @@ public class DownloadHandler implements Runnable {
 		LinkedList<Package> list = tempFile.getPackgeList();
 		
 		for (Package pack : list) {
+			System.out.println("Enviando pacote para client: " + pack.getSequenceNumber());
 			this.comunication.sendObject(pack);
 		}
-	
 	}
 
 
@@ -99,10 +104,11 @@ public class DownloadHandler implements Runnable {
 		try {
 			do {
 
-				pack = (Package) this.comunication.readObject();
+				pack = (Package) this.comRep.readObject();
+				System.out.println("Pacote recebido: " + pack.getSequenceNumber());
 				this.buffer.add(pack);
 				
-			} while (pack.isPool());
+			} while (pack.isNotLast());
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -132,9 +138,11 @@ public class DownloadHandler implements Runnable {
 		
 		System.out.println("aguardando conexao de algum repositorio");
 		clientSockt = serverSocket.accept();
+		System.out.println("Conexao aceito do repositorio");
 		this.comRep = new TCPComunication(clientSockt);
-		
+		System.out.println("Instanciada Comunicacao TCP");
 		serverSocket.close();
+		System.out.println("Retorno metodo connectToRepository");
 	}
 
 

@@ -1,16 +1,10 @@
-/**
- * CommunicationEspecification.java
- * cadi
- * SDAR_COMUNICATION
- * sdar.comunication.def
- */
 package sdar.comunication.def;
 
 /**
- * @author cadi
- *
+ * Classe que contem as especificações estaticas utilizadas no projeto
  */
 public class ComEspecification {
+
 
 	public static int MAX_DATA_READ			= 8000;
 	public static int BUFFER_SIZE 			= 7000;
@@ -26,9 +20,4 @@ public class ComEspecification {
 	public static String GROUP				= "234.5.6.7";
 	public static String MANAGER_ADDR		= "localhost";
 	public static String SOLICITATION_NAME = "Solicitation";
-
-	
-//	public static int RMI_PORT_SERVER		= 3000;
-//	public static int RMI_PORT_CLIENT		= 3000;
-
 }

@@ -11,7 +11,7 @@ import sdar.manager.handler.UploadHandler;
 
 //aguarda conexao do cliente
 
-public class ServerUpload implements Runnable {
+public class ServerUpload extends Thread {
 
 	
 	private Socket clientSocket; // Socket do cliente
@@ -22,8 +22,8 @@ public class ServerUpload implements Runnable {
 	/**
 	 * 
 	 */
-	public ServerUpload() {
-		this.run();
+	public ServerUpload(String threadName) {
+		super(threadName);
 	}
 
 
