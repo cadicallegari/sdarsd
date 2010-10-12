@@ -4,7 +4,7 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="janela">
     <property name="width_request">400</property>
-    <property name="height_request">300</property>
+    <property name="height_request">150</property>
     <property name="border_width">3</property>
     <property name="title" translatable="yes">Erro</property>
     <property name="resizable">False</property>
@@ -16,36 +16,45 @@
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <child>
-          <widget class="GtkImage" id="img_erro">
+          <widget class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
-            <property name="pixbuf">error.png</property>
+            <child>
+              <widget class="GtkImage" id="img_erro">
+                <property name="visible">True</property>
+                <property name="pixbuf">error.png</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="txt_erro">
+                <property name="visible">True</property>
+                <property name="justify">center</property>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </widget>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
             <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkLabel" id="txt_erro">
-            <property name="visible">True</property>
-            <property name="justify">center</property>
-          </widget>
-          <packing>
-            <property name="position">1</property>
           </packing>
         </child>
         <child>
           <widget class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
             <property name="spacing">3</property>
-            <property name="layout_style">center</property>
+            <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="btn_fechar">
-                <property name="label" translatable="yes">Fechar</property>
+                <property name="label" translatable="yes">_Fechar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -57,7 +66,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </widget>
