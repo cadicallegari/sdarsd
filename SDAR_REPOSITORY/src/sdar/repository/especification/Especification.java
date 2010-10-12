@@ -1,7 +1,7 @@
 package sdar.repository.especification;
 
 /**
- * Classe que contem as especificações estaticas utilizadas no modulo de Repositorio
+ * Classe que contem as especificações estaticas utilizadas no modulo de Repositorios
  */
 public class Especification {
 

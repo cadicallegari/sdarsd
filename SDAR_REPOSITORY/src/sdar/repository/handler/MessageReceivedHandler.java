@@ -12,122 +12,125 @@ import sdar.bo.Archive;
 import sdar.comunication.common.Package;
 import sdar.comunication.common.Solicitation;
 import sdar.comunication.common.Util;
-import sdar.comunication.tcp.TCPComunication;
 import sdar.comunication.especification.Especification;
+import sdar.comunication.tcp.TCPComunication;
+import sdar.repository.server.Server;
 import sdar.util.temporaryfile.TemporaryFile;
-import sdar.util.temporaryfile.TemporaryFileList;
 
 /**
- * Classe que gerencia o repositorio
+ * Classe que gerencia os objetos recebidos no servidor do repositorio atraves de uma thread
  */
 public class MessageReceivedHandler implements Runnable {
 
-	public TemporaryFileList buffer = new TemporaryFileList();
 	private Object object;
-	
 	
 	/**
 	 * Construtor da classe
-	 * @param obj
+	 * @param object
 	 */
-	public MessageReceivedHandler(Object obj) {
-		this.object = obj;
+	public MessageReceivedHandler(Object object) {
+		this.object = object;
 	}
 
 	
 	/**
-	 * Metodo que verifica se é um pacote ou uma solicitação e faz os devidos eventos
+	 * Metodo que executa as funcoes da thread
 	 */
 	@Override
 	public void run() {
+		//Verifica se é uma solicitação ou um pacote
 		String className = object.getClass().getSimpleName();
 		
+		//Caso seja um pacote
 		if (className.equals("Package")) {
-			//Caso seja um pacote
 			try {
 				Package p = (Package) object;
 				this.packageHandler(p);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		else if (className.equals("Solicitation")) {
+		} else { 
 			//Caso seja uma solicitação
-			try {
+			if (className.equals("Solicitation")) {
 				Solicitation s = (Solicitation) object;
-				this.solicitation(s);
-			} catch (IOException e) {
-				e.printStackTrace();
+				try {
+					this.solicitation(s);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
-
+	
 	
 	/**
-	 * Metodo que gerencia uma solicitação
+	 * Metodo que executa caso seja uma solicitação, verificando qual o tipo da solicitação
 	 * @param solicitation
 	 * @throws IOException
 	 */
 	private void solicitation(Solicitation solicitation) throws IOException {
-		//Codigo da solicitação
+		
 		int code = solicitation.getCode();
-
+		
+		//Caso seja uma solicitação de listar arquivos 
 		if (code == Solicitation.LIST_FILE) {
-			//Caso esteja solicitando a lista de arquivos
 			this.sendListFile(solicitation);
 		}
-		else if (code == Solicitation.DOWNLOAD) {
-			//Caso esteja solicitando download de um arquivo
-			this.sendFile(solicitation);
+		else {
+			//Caso seja uma solicitação de download
+			if (code == Solicitation.DOWNLOAD) {
+				this.sendFile(solicitation);
+			}
 		}
 	}
-	
+
+
 	
 	/**
-	 * Metodo que envia um arquivo do modulo de repositorio para o modulo de gerenciamento
-	 * @param solicitation
+	 * Metodo que envia o arquivo ao modulo de gerenciamento
+	 * @param s
 	 */
-	private void sendFile(Solicitation solicitation) {
+	private void sendFile(Solicitation s) {
 		try {
-			//Cria canais de comunicacao
-			Socket socket = new Socket(solicitation.getAddress(), solicitation.getPort());
-			TCPComunication comunicationTCP = new TCPComunication(socket);
-
-			//Instancia arquivo a ser lido do repositorio 
-			File file = new File(solicitation.getArchiveName());
-			FileInputStream fi = new FileInputStream(file);
+			//Cria canais de comunicação
+			Socket sock = new Socket(s.getAddress(), s.getPort());
+			TCPComunication com = new TCPComunication(sock);
+			
+			//Instancia arquivo do repositorio
+			File file = new File(s.getArchiveName());
+			FileInputStream fileIn = new FileInputStream(file);
 			Package newPackage;
 			int read;
 			int packageNumber = 1;
-			byte [] buffer = new byte[Especification.BUFFER_SIZE];
+			byte [] buf = new byte[Especification.BUFFER_SIZE];
 			
-			//Lê arquivo do repositorio e envia para o modulo de gerenciamento
 			System.out.println("[Modulo Repository] - Enviando arquivo ao modulo de Gerenciamento");
 			do {
-				read = fi.read(buffer);
+				read = fileIn.read(buf);
 
 				newPackage = new Package();			
 				newPackage.setFileName(file.getName());
 				newPackage.setSequenceNumber(packageNumber++);
 				newPackage.setNext(packageNumber);
-				newPackage.setPayLoad(buffer);
+				newPackage.setPayLoad(buf);
 
 				if (read == Especification.BUFFER_SIZE) {
 					newPackage.setNotLast(true);
 				}
 				else {
 					newPackage.setNotLast(false);
-					newPackage.setPayLoad(Util.copyBytes(buffer, read));
+					newPackage.setPayLoad(Util.copyBytes(buf, read));
 				}
 				
-				System.out.println("[Modulo Repository] - Enviando pacote ao modulo de Gerenciamento. Nº pacote: " + newPackage.getSequenceNumber());
-				comunicationTCP.sendObject(newPackage);
+				System.out.println("[Modulo Repository] - Nº pacote: " + newPackage.getSequenceNumber());
+				com.sendObject(newPackage);
 				
 			} while (read == Especification.BUFFER_SIZE);
-			
+			System.out.println("[Modulo Repository] - Arquivo enviado ao modulo de Gerenciamento");
+
 			//Fecha canais de comunicação
-			comunicationTCP.close();
-			socket.close();
+			com.close();
+			sock.close();
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -139,49 +142,49 @@ public class MessageReceivedHandler implements Runnable {
 
 
 	/**
-	 * Metodo que envia todos os arquivos do modulo de repositorio para o modulo de gerenciamento
+	 * Metodo que envia lista de arquivos ao modulo de gerenciamento
 	 * @param solicitation
 	 * @throws IOException
 	 */
 	private void sendListFile(Solicitation solicitation) throws IOException {
 		//Cria canais de comunicação
-		Socket socket = new Socket(solicitation.getAddress(), solicitation.getPort());
-		TCPComunication comunicationTCP = new TCPComunication(socket);
-
-		//Metodo que efetua a leitura do diretorio, retornando todos os arquivos que existe
-		File [] fileList = this.getFileList();
+		Socket sock = new Socket(solicitation.getAddress(), solicitation.getPort());
+		TCPComunication com = new TCPComunication(sock);
 		
-		//Loop que envia todos os arquivos do repositorio, exceto o ultimo
+		//Envia todos os arquivos que estão no repositorio
 		Archive archive;
-		File file;
+		File [] fileList = this.getFileList();
+		System.out.println("[Modulo Repository] - Enviando lista de arquivos ao modulo de Gerenciamento");
 		for (int i = 0; i < fileList.length - 1; i++) {
-			file = fileList[i];
+			File f = fileList[i];
 			
 			archive = new Archive();
-			archive.setName(file.getName());
-			archive.setSize(file.length());
+			archive.setName(f.getName());
+			archive.setSize(f.length());
 			archive.setNotLast(true);
 			
-			comunicationTCP.sendObject(archive);
+			com.sendObject(archive);
+			System.out.println("[Modulo Repository] - Nome arquivo: " + archive.getName());
 		}
 		
-		//Envia o ultimo arquivo do repositorio
-		file = fileList[fileList.length-1];
+		File f = fileList[fileList.length-1];
 		archive = new Archive();
-		archive.setName(file.getName());
-		archive.setSize(file.length());
+		archive.setName(f.getName());
+		archive.setSize(f.length());
 		archive.setNotLast(false);
 		
-		comunicationTCP.sendObject(archive);
+		com.sendObject(archive);
+		System.out.println("[Modulo Repository] - Nome arquivo: " + archive.getName());
+		System.out.println("[Modulo Repository] - Lista de arquivos enviado ao modulo de Gerenciamento");
 		
-		//Fecha os canais de comunicação
-		comunicationTCP.close();
-		socket.close();
+		//Fecha canais de comunicação
+		com.close();
+		sock.close();
 	}
 
 
 	/**
-	 * Metood que efetua a leitura do diretorio, retornando todos os arquivos que existem no diretorio
+	 * Metodo que retorna uma lista de arquivos que estão no diretorio do repositorio
 	 * @return
 	 */
 	private File[] getFileList() {
@@ -195,63 +198,57 @@ public class MessageReceivedHandler implements Runnable {
 
 
 	/**
-	 * Metodo que gerencia os pacotes que chegam ao repositorio
+	 * Metodo que gerencia o recebimento de pacotes
 	 * @param newPackage
 	 * @throws IOException
 	 */
 	private void packageHandler(Package newPackage) throws IOException {
 		
-		//Caso não seja o ultimo pacote do arquivo
-		System.out.println("[Modulo Repository] - Recebendo arquivo do modulo de Gerenciamento");
-		System.out.println("[Modulo Repository] - Recebendo arquivo do modulo de Gerenciamento. Nº pacote: " + newPackage.getSequenceNumber());
+		//Caso não seja o ultimo pacote
 		if (newPackage.isNotLast()) {
-			this.buffer.add(newPackage);
+			Server.tmpFileList.add(newPackage);
 		} else {
-			int pos = this.buffer.hasTmpFile(newPackage);
+			int pos = Server.tmpFileList.hasTmpFile(newPackage);
 			
-			//Se arquivos temporarios não contem o arquivo do pacote, cria novo arquivo
+			//Se arquivos temporarios nao contem o arquivo do pacote, entao cria arquivo pequeno
 			if (pos == -1) {
 				this.saveFile(newPackage);
 			} else {
-				TemporaryFile temp = this.buffer.remove(pos);
-				//Adiciona ultimo pacote
-				temp.add(newPackage);
-				this.saveFile(temp);
+				TemporaryFile tmp = Server.tmpFileList.remove(pos);
+				tmp.add(newPackage);
+				this.saveFile(tmp);
 			}
 		}
 	}
 
 
 	/**
-	 * Metodo que salva o arquivo
+	 * Metodo que salva arquivo no repositorio
 	 * @param temp
 	 * @throws IOException
 	 */
 	private void saveFile(TemporaryFile temp) throws IOException {
-		//Cria novo arquivo no diretorio do repositorio 
+		//Instancia novo arquivo
 		File file = new File(temp.getFileName());
 		FileOutputStream fileOut = new FileOutputStream(file);
 		LinkedList<Package> list = temp.getPackgeList();
 		
-		//Escreve no arquivo tudo que esta armazenado no buffer
-		byte [] buffer;
-		for (Package p : list) {
-			buffer = p.getPayLoad();
-			fileOut.write(buffer);
+		byte [] buf;
+		//Escreve arquivo
+		for (Package newPackage : list) {
+			buf = newPackage.getPayLoad();
+			fileOut.write(buf);
 		}
-
-		//Fecha o arquivo
 		fileOut.close();
 	}
 
 
 	/**
-	 * Metodo que salva o arquivo
+	 * Metodo que salva arquivo no repositorio
 	 * @param newPackage
 	 * @throws IOException
 	 */
 	private void saveFile(Package newPackage) throws IOException {
-		//Cria novo arquivo no diretorio do repositorio
 		File file = new File(newPackage.getFileName());
 		FileOutputStream fileOut = new FileOutputStream(file);
 		fileOut.write(newPackage.getPayLoad());

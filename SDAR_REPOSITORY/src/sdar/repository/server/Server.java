@@ -5,23 +5,19 @@ import java.io.IOException;
 import sdar.comunication.especification.Especification;
 import sdar.comunication.udp.UDPComunication;
 import sdar.repository.handler.MessageReceivedHandler;
+import sdar.util.temporaryfile.TemporaryFileList;
 
 /**
- * Classe que implementa o servidor do repositorio
+ * Classe que gerencia a thread de servidor do repositorio
  */
 public class Server implements Runnable {
 	
+	public static TemporaryFileList tmpFileList = new TemporaryFileList();
 	private boolean finish = false;
+
 	
 	/**
-	 * Construtor da classe
-	 */
-	public Server() {
-	}
-
-
-	/**
-	 * Metodo que fica ouvindo o grupo UDP
+	 * 	Metodo que executa as funcoes da thread
 	 */
 	public void run() {
 		//Cria canal de comunicação
@@ -30,16 +26,19 @@ public class Server implements Runnable {
 		
 		while (!finish) {
 			try {
-				//Lê um objeto do grupo
+				//Fica ouvindo o grupo
 				object = comunicationUDP.readGroupObject(Especification.GROUP, Especification.UDP_PORT);
-				//Instancia uma nova thread
-				new Thread(new MessageReceivedHandler(object), "repository_server").start();
+				
+				//Cria uma nova thread assim que chega um objeto no grupo
+				new Thread(new MessageReceivedHandler(object), "RECEPTORREP").start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
+		
 		}
+
 	}
 	
 	
@@ -49,14 +48,14 @@ public class Server implements Runnable {
 	public void finish() {
 		this.finish = true;
 	}
-
+	
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		Server server = new Server();
-		System.out.println("Iniciando modulo de Repositorio (REPOSITORY)");
+		System.out.println("Iniciando modulo de Repositorios (REPOSITORY)          [OK]");
 		server.run();
 	}	
 }
