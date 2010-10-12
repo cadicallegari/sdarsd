@@ -97,7 +97,7 @@ public class DownloadHandler implements Runnable {
 	 * @throws IOException
 	 */
 	private void sendSolicitation(Solicitation sol) throws IOException {
-		System.out.println("[Modulo Manager] - Enviando solicitação de downlo ao modulo de Repositorio");
+		System.out.println("[Modulo Manager] - Enviando solicitação de download ao modulo de Repositorio");
 		UDPComunication uDPComunication = new UDPComunication();
 		uDPComunication.sendObject(Especification.GROUP, Especification.UDP_PORT, sol);
 	}
@@ -115,9 +115,11 @@ public class DownloadHandler implements Runnable {
 		//Envia pacotes para o modulo do cliente
 		System.out.println("[Modulo Manager] - Enviando arquivo ao modulo do Cliente");
 		for (Package newPackage : list) {
-			System.out.println("[Modulo Manager] - Enviando pacote ao modulo do Cliente. Nº pacote: " + newPackage.getSequenceNumber());
+			System.out.println("[Modulo Manager] - Nº pacote: " + newPackage.getSequenceNumber());
 			this.comunicationClient.sendObject(newPackage);
 		}
+		System.out.println("[Modulo Manager] - Arquivo enviado ao modulo do Cliente");
+		System.out.println();
 	}
 
 
@@ -132,9 +134,11 @@ public class DownloadHandler implements Runnable {
 			System.out.println("[Modulo Manager] - Recebendo arquivo do modulo de Repositorio");
 			do {
 				newPackage = (Package) this.comunicationRepository.readObject();
-				System.out.println("[Modulo Manager] - Recebendo pacote do modulo de Repositorio. Nº pacote: " + newPackage.getSequenceNumber());
+				System.out.println("[Modulo Manager] - Nº pacote: " + newPackage.getSequenceNumber());
 				this.buffer.add(newPackage);
 			} while (newPackage.isNotLast());
+			System.out.println("[Modulo Manager] - Arquivo recebido do modulo de Repositorio");
+			System.out.println();
 			
 		} catch (IOException e) {
 			e.printStackTrace();

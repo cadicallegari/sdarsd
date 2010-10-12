@@ -52,6 +52,7 @@ public class FileReceiver implements Runnable {
 			//Salva o arquivo de download
 			this.saveFile();
 			System.out.println("[Modulo Client] - Completado download e arquivo salvo");
+			System.out.println();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -41,20 +41,22 @@ public class MessageReceivedHandler implements Runnable {
 		//Verifica se é uma solicitação ou um pacote
 		String className = object.getClass().getSimpleName();
 		
+		
 		//Caso seja um pacote
 		if (className.equals("Package")) {
 			try {
-				Package p = (Package) object;
-				this.packageHandler(p);
+				Package newPackage = (Package) object;
+				System.out.println("[Modulo Repository] - Recebido pacote nº: " + newPackage.getSequenceNumber());
+				this.packageHandler(newPackage);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else { 
 			//Caso seja uma solicitação
 			if (className.equals("Solicitation")) {
-				Solicitation s = (Solicitation) object;
+				Solicitation solicitation = (Solicitation) object;
 				try {
-					this.solicitation(s);
+					this.solicitation(solicitation);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -74,11 +76,13 @@ public class MessageReceivedHandler implements Runnable {
 		
 		//Caso seja uma solicitação de listar arquivos 
 		if (code == Solicitation.LIST_FILE) {
+			System.out.println("[Modulo Repository] - Recebido solicitação do tipo: Listar Arquivos");
 			this.sendListFile(solicitation);
 		}
 		else {
 			//Caso seja uma solicitação de download
 			if (code == Solicitation.DOWNLOAD) {
+				System.out.println("[Modulo Repository] - Recebido solicitação do tipo: Download");
 				this.sendFile(solicitation);
 			}
 		}
@@ -127,6 +131,7 @@ public class MessageReceivedHandler implements Runnable {
 				
 			} while (read == Especification.BUFFER_SIZE);
 			System.out.println("[Modulo Repository] - Arquivo enviado ao modulo de Gerenciamento");
+			System.out.println();
 
 			//Fecha canais de comunicação
 			com.close();
@@ -176,6 +181,7 @@ public class MessageReceivedHandler implements Runnable {
 		com.sendObject(archive);
 		System.out.println("[Modulo Repository] - Nome arquivo: " + archive.getName());
 		System.out.println("[Modulo Repository] - Lista de arquivos enviado ao modulo de Gerenciamento");
+		System.out.println();
 		
 		//Fecha canais de comunicação
 		com.close();
@@ -209,6 +215,8 @@ public class MessageReceivedHandler implements Runnable {
 			Server.tmpFileList.add(newPackage);
 		} else {
 			int pos = Server.tmpFileList.hasTmpFile(newPackage);
+			System.out.println("[Modulo Repository] - Arquivo salvo no modulo de Repositorio");
+			System.out.println();
 			
 			//Se arquivos temporarios nao contem o arquivo do pacote, entao cria arquivo pequeno
 			if (pos == -1) {

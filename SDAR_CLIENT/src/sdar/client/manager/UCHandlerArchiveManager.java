@@ -25,8 +25,6 @@ public class UCHandlerArchiveManager {
 	 * @throws IOException
 	 */
 	public void sendFile(String filePath) throws UnknownHostException, IOException {
-		System.out.println("[Modulo Client] - Enviando arquivo ao modulo de Gerenciamento");
-		
 		//Cria Socket de comunicação com o modulo Manager
 		Socket socket = new Socket(Especification.MANAGER_ADDR, Especification.TCP_PORT);
 		
@@ -44,6 +42,7 @@ public class UCHandlerArchiveManager {
 		Package pack;
 		
 		//Efetua toda a leitura do arquivo e envia todos os pacotes
+		System.out.println("[Modulo Client] - Enviando arquivo ao modulo de Gerenciamento");
 		do {
 			read = fileInputStream.read(buffer);
 		
@@ -61,15 +60,16 @@ public class UCHandlerArchiveManager {
 				pack.setPayLoad(Util.copyBytes(buffer, read));
 			}
 			
-			System.out.println("[Modulo Client] - Enviando pacote ao modulo de gerenciamento. Nº pacote: " + pack.getSequenceNumber());
+			System.out.println("[Modulo Client] - Nº pacote: " + pack.getSequenceNumber());
 			comunicationTCP.sendObject(pack);
 
 		} while (read == Especification.BUFFER_SIZE);
+		System.out.println("[Modulo Client] - Arquivo enviado ao modulo de Gerenciamento");
+		System.out.println();
 		
 		//Fecha os canais de comunicação
 		comunicationTCP.close();
 		socket.close();
-		System.out.println("[Modulo Client] - Arquivo enviado ao modulo de Gerenciamento");
 	}
 	
 	

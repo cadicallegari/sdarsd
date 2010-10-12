@@ -32,7 +32,7 @@ public class Manager {
 	 */
 	public static void main(String[] args) {
 		try {
-			System.out.println("Iniciando modulo de Gerenciamento (MANAGER)");
+			System.out.println("Iniciando modulo de Gerenciamento (MANAGER)          [OK]");
 			new Manager();
 		} catch (IOException e) {
 			e.printStackTrace();

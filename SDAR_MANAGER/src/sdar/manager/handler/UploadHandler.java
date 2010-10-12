@@ -64,9 +64,11 @@ public class UploadHandler implements Runnable {
 			System.out.println("[Modulo Manager] - Recebendo arquivo do modulo do Cliente");
 			do {
 				newPackage = (Package) this.comunicationTCP.readObject();
-				System.out.println("[Modulo Manager] - Recebendo pacote do modulo do Cliente. Nº pacote: " + newPackage.getSequenceNumber());
+				System.out.println("[Modulo Manager] - Nº pacote: " + newPackage.getSequenceNumber());
 				this.buffer.add(newPackage);
 			} while (newPackage.isNotLast());
+			System.out.println("[Modulo Manager] - Arquivo recebido do modulo do Cliente");
+			System.out.println();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -95,9 +97,11 @@ public class UploadHandler implements Runnable {
 		//Envia pacotes para o modulo do repositorio
 		System.out.println("[Modulo Manager] - Enviando arquivo ao modulo de Repositorio");
 		for(Package newPackage : list) {
-			System.out.println("[Modulo Manager] - Enviando pacote ao modulo de Repositorio. Nº pacote: " + newPackage.getSequenceNumber());
+			System.out.println("[Modulo Manager] - Nº pacote: " + newPackage.getSequenceNumber());
 			com.sendObject(Especification.GROUP, Especification.UDP_PORT, newPackage);
 			Thread.sleep(Especification.DELAY);
 		}
+		System.out.println("[Modulo Manager] - Arquivo enviado ao modulo de Repositorio");
+		System.out.println();
 	}
 }
