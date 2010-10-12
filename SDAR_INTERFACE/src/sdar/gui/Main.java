@@ -177,6 +177,11 @@ public class Main {
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
+				/*try {
+					new Error("Problemas de conexão com o Banco de Dados");
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}*/
 			}
 		});
 		
