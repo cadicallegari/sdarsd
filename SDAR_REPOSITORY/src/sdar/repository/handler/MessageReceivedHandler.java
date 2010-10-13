@@ -144,7 +144,7 @@ public class MessageReceivedHandler implements Runnable {
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("[Modulo Repository] - Modulo de Gerenciamento já atendido por outro repositorio");
 		}
 		

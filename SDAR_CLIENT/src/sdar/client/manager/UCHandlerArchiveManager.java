@@ -88,7 +88,11 @@ public class UCHandlerArchiveManager {
 	}
 	
 	
-	
+	/**
+	 * Metodo que localiza o modulo de Gerenciamento na rede
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public static void locateManager() throws IOException, ClassNotFoundException {
 		
 		UDPComunication com = new UDPComunication();
@@ -103,8 +107,5 @@ public class UCHandlerArchiveManager {
 		Solicitation reply = (Solicitation) com.readObject(Especification.DISCOVERY_REPLY_PORT);
 		
 		Especification.MANAGER_ADDR = reply.getAddress();
-		
-		System.out.println(Especification.MANAGER_ADDR);
-	}
-	
+	}	
 }

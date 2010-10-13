@@ -76,7 +76,7 @@ public class FileReceiver implements Runnable {
 	
 	
 	/**
-	 * Metodo que envia a solicitacao de download para o modulo de gerenciamento
+	 * Metodo que envia a solicitacao de download para o modulo de Gerenciamento
 	 * @param fileName
 	 * @throws IOException
 	 */
@@ -99,9 +99,10 @@ public class FileReceiver implements Runnable {
 		Package pack;
 		
 		//Recebe todos os pacotes e armazena no buffer
+		System.out.println("[Modulo Client] - Recebendo arquivo do modulo de Gerenciamento");
 		do {
 			pack = (Package) this.comunicationTCP.readObject();
-			System.out.println("[Modulo Client] - Recebendo pacote do modulo de gerenciamento. Nº pacote: " + pack.getSequenceNumber());
+			System.out.println("[Modulo Client] - Nº pacote: " + pack.getSequenceNumber());
 			this.tempFile.add(pack);
 		} while (pack.isNotLast());
 	}
