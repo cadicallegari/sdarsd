@@ -15,8 +15,10 @@ public class Especification {
 	public static int UPLOAD_PORT			= 9500;
 	public static int DOWNLOAD_PORT			= 9505;
 	public static int DOWNLOAD_RECEIVE_PORT	= 9510;
+	public static int DISCOVERY_PORT		= 9999;
+	public static int DISCOVERY_REPLY_PORT	= 9988;
 	public static String RMI_NAME			= "SDARService";
 	public static String GROUP				= "234.5.6.7";
-	public static String MANAGER_ADDR		= "localhost";
 	public static String SOLICITATION_NAME = "Solicitation";
+	public static String MANAGER_ADDR		= "localhost";
 }

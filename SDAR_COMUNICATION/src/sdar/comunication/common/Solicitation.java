@@ -15,6 +15,9 @@ public class Solicitation implements Serializable {
 	public static int LIST_FILE		= 1;
 	public static int DOWNLOAD		= 2;
 	
+	public static int DISCOVER			= 93;
+	public static int DISCOVER_REPLY	= 94;
+	
 	private String archiveName;
 	private int code;
 	private String address;

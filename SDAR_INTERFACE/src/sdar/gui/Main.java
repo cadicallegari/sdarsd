@@ -1,6 +1,7 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
@@ -66,15 +67,18 @@ public class Main {
 	
 	/**
 	 * Construtor da Classe
-	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException 
+	 * @throws IOException 
 	 */
-	public Main() throws FileNotFoundException {
+	public Main() throws IOException, ClassNotFoundException {
 		gladeFile = Glade.parse("src/sdar/xml/main.glade", "janela");
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
 		this.manageControls();
 		this.manageEvents();
 		this.setAuthentication(false);
+		
+		UCHandlerArchiveManager.locateManager();
 		
 		mainWindow.showAll();
 		Gtk.main();
@@ -301,7 +305,7 @@ public class Main {
 		
 		//Conexao RMI onde invoca metodo remoto para retornar todos os objetos Archives
 		try {
-			Registry reg = LocateRegistry.getRegistry("localhost", Especification.RMI_PORT);
+			Registry reg = LocateRegistry.getRegistry(Especification.MANAGER_ADDR, Especification.RMI_PORT);
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 			listArchives = stub.retrieveAllArchive();
 		} catch (Exception e) {
@@ -358,6 +362,10 @@ public class Main {
 			new Main();
 			Gtk.main();
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}

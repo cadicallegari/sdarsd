@@ -3,13 +3,16 @@ package sdar.client.manager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 import sdar.comunication.common.Package;
+import sdar.comunication.common.Solicitation;
 import sdar.comunication.common.Util;
 import sdar.comunication.especification.Especification;
 import sdar.comunication.tcp.TCPComunication;
+import sdar.comunication.udp.UDPComunication;
 
 /**
  * Classe que gerencia o Arquivo no modulo do Cliente (Client)
@@ -83,4 +86,27 @@ public class UCHandlerArchiveManager {
 		System.out.println("[Modulo Client] - Solicitando arquivo ao modulo de Gerenciamento");
 		new Thread(new FileReceiver(fileName, path), "file_receiver").start();
 	}
+	
+	
+	
+	public static void locateManager() throws IOException, ClassNotFoundException {
+		
+		UDPComunication com = new UDPComunication();
+		Solicitation solicitation = new Solicitation();
+		
+		solicitation.setAddress(InetAddress.getLocalHost().getHostAddress());
+		solicitation.setPort(Especification.DISCOVERY_REPLY_PORT);
+		solicitation.setCode(Solicitation.DISCOVER);
+		
+		com.sendObject(Especification.GROUP, Especification.DISCOVERY_PORT, solicitation);
+		
+		//TODO timeout
+		
+		Solicitation reply = (Solicitation) com.readObject(Especification.DISCOVERY_REPLY_PORT);
+		
+		Especification.MANAGER_ADDR = reply.getAddress();
+		
+		System.out.println(Especification.MANAGER_ADDR);
+	}
+	
 }

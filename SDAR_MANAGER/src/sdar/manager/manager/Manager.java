@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 
 import sdar.manager.rmi.RemoteService;
+import sdar.manager.server.ServerDiscovery;
 import sdar.manager.server.ServerDownload;
 import sdar.manager.server.ServerUpload;
 
@@ -24,6 +25,8 @@ public class Manager {
 		new ServerUpload("upload_server").start();
 		//Inicia Serviço de Download
 		new ServerDownload("download_server").start();
+		//Inicia Serviço de Descobrimento dinamico de modulo Manager
+		new ServerDiscovery("discovery_server").start();
 	}
 	
 	
