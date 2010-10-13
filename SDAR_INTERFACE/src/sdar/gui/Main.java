@@ -1,10 +1,6 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
@@ -120,7 +116,13 @@ public class Main {
 				try {
 					person = new Person();
 					new Login(authentication, person, statusBar, fileChooserUpload, fileChooserDownload, upload, download, listar, listArchivesRepository);
-				} catch (FileNotFoundException e) {
+				} catch (Exception e) {
+					try {
+						new Error(e.getMessage());
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					e.printStackTrace();
 				}
 			}
@@ -177,11 +179,6 @@ public class Main {
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
-				/*try {
-					new Error("Problemas de conexão com o Banco de Dados");
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}*/
 			}
 		});
 		
@@ -202,9 +199,13 @@ public class Main {
 				UCHandlerArchiveManager uc = new UCHandlerArchiveManager();
 				try {
 					uc.sendFile(filePath);
-				} catch (UnknownHostException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
+				} catch (Exception e) {
+					try {
+						new Error(e.getMessage());
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					e.printStackTrace();
 				}
 				labelUpload.setLabel("");
@@ -312,9 +313,13 @@ public class Main {
 			Registry reg = LocateRegistry.getRegistry("localhost", Especification.RMI_PORT);
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 			listArchives = stub.retrieveAllArchive();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (NotBoundException e) {
+		} catch (Exception e) {
+			try {
+				new Error(e.getMessage());
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 		}
 
