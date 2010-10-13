@@ -9,6 +9,7 @@ import java.util.List;
 
 import sdar.bo.Archive;
 import sdar.bo.Person;
+import sdar.comunication.encryption.Encryption;
 import sdar.comunication.especification.Especification;
 import sdar.manager.autentication.UCHandlerAuthenticationManager;
 import sdar.manager.solicitation.UCHandlerSolicitationManager;
@@ -57,7 +58,10 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	@Override
 	public boolean checkAutentication(Person person) throws RemoteException {
 		UCHandlerAuthenticationManager uCManterAutenticationManager = new UCHandlerAuthenticationManager();
-		return uCManterAutenticationManager.checkAutentication(person);
+		
+		//Descriptografa o objeto
+		Encryption encryption = new Encryption();
+		return uCManterAutenticationManager.checkAutentication(encryption.decrypt(person));
 	}
 	
 	
@@ -67,7 +71,10 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	@Override
 	public void insertPerson(Person person) throws RemoteException {
 		UCHandlerAuthenticationManager uCManterAutenticationManager = new UCHandlerAuthenticationManager();
-		uCManterAutenticationManager.insert(person);
+		
+		//Descriptografa o objeto
+		Encryption encryption = new Encryption();
+		uCManterAutenticationManager.insert(encryption.decrypt(person));
 	}
 	
 	
@@ -77,7 +84,10 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	@Override
 	public void deletePerson(Person person) throws RemoteException {
 		UCHandlerAuthenticationManager uCManterAutenticationManager = new UCHandlerAuthenticationManager();
-		uCManterAutenticationManager.delete(person);
+		
+		//Descriptografa o objeto
+		Encryption encryption = new Encryption();
+		uCManterAutenticationManager.delete(encryption.decrypt(person));
 	}
 	
 	
@@ -87,7 +97,17 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	@Override
 	public List<Person> retrieveAllPerson(Person person) throws RemoteException {
 		UCHandlerAuthenticationManager uCManterAutenticationManager = new UCHandlerAuthenticationManager();
-		return uCManterAutenticationManager.retrieve(person);
+		
+		List<Person> listPersons = uCManterAutenticationManager.retrieve(person);
+		if (listPersons != null) {
+			//Descriptografa o objeto
+			Encryption encryption = new Encryption();
+			for (int i = 0; i < listPersons.size(); i++) {
+				listPersons.set(i, encryption.encrypt(listPersons.get(i)));
+			}
+		}
+		
+		return listPersons;
 	}
 	
 	
@@ -97,7 +117,17 @@ public class RemoteService extends UnicastRemoteObject implements RemoteServiceI
 	@Override
 	public List<Person> retrieveAllPerson() throws RemoteException {
 		UCHandlerAuthenticationManager uCManterAutenticationManager = new UCHandlerAuthenticationManager();
-		return uCManterAutenticationManager.retrieveAll();
+		
+		List<Person> listPersons = uCManterAutenticationManager.retrieveAll();
+		if (listPersons != null) {
+			//Descriptografa o objeto
+			Encryption encryption = new Encryption();
+			for (int i = 0; i < listPersons.size(); i++) {
+				listPersons.set(i, encryption.encrypt(listPersons.get(i)));
+			}
+		}
+		
+		return listPersons;
 	}
 
 	
