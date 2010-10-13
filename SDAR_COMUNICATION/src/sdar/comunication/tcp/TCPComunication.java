@@ -27,6 +27,7 @@ public class TCPComunication {
 		this.out.flush();
 		this.in = new ObjectInputStream(socket.getInputStream());
 		this.socket = socket;
+		this.socket.setSoTimeout(Especification.TIMEOUT);
 	}
 
 

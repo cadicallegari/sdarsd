@@ -26,11 +26,12 @@ public class Server implements Runnable {
 		
 		while (!finish) {
 			try {
+
 				//Fica ouvindo o grupo
 				object = comunicationUDP.readGroupObject(Especification.GROUP, Especification.UDP_PORT);
-				
 				//Cria uma nova thread assim que chega um objeto no grupo
 				new Thread(new MessageReceivedHandler(object), "RECEPTORREP").start();
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {

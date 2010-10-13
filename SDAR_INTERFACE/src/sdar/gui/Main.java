@@ -77,7 +77,7 @@ public class Main {
 		this.manageControls();
 		this.manageEvents();
 		this.setAuthentication(false);
-		
+
 		UCHandlerArchiveManager.locateManager();
 		
 		mainWindow.showAll();
@@ -143,8 +143,8 @@ public class Main {
 				try {
 					new UserAdd(false);
 				} catch (Exception e) {
-					new Error(e.getMessage());
 					e.printStackTrace();
+					new Error(e.getMessage());
 				}
 			}
 		});
@@ -157,6 +157,7 @@ public class Main {
 					new UserConsult();
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
+					new Error(e.getMessage());
 				}
 			}
 		});
@@ -178,6 +179,7 @@ public class Main {
 					new About();
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
+					new Error(e.getMessage());
 				}
 			}
 		});
@@ -200,8 +202,8 @@ public class Main {
 				try {
 					uc.sendFile(filePath);
 				} catch (Exception e) {
-					new Error(e.getMessage());
 					e.printStackTrace();
+					new Error(e.getMessage());
 				}
 				labelUpload.setLabel("");
 			}

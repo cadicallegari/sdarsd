@@ -97,6 +97,7 @@ public class UDPComunication {
 		byte[] receiveData = new byte[Especification.BUFFER_SIZE];
 		
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+        serverSocket.setSoTimeout(Especification.TIMEOUT);
         serverSocket.receive(receivePacket);
         receiveData = receivePacket.getData();
 

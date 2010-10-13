@@ -100,8 +100,6 @@ public class UCHandlerArchiveManager {
 		
 		com.sendObject(Especification.GROUP, Especification.DISCOVERY_PORT, solicitation);
 		
-		//TODO timeout
-		
 		Solicitation reply = (Solicitation) com.readObject(Especification.DISCOVERY_REPLY_PORT);
 		
 		Especification.MANAGER_ADDR = reply.getAddress();

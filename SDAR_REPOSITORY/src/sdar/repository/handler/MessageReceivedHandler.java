@@ -231,11 +231,74 @@ public class MessageReceivedHandler implements Runnable {
 			if (pos == -1) {
 				this.saveFile(newPackage);
 			} else {
+				
 				TemporaryFile tmp = Server.tmpFileList.remove(pos);
 				tmp.add(newPackage);
+				tmp.sort();  //ordena pacotes conforme o numero de sequencia
+				this.checkBuffer(tmp);
 				this.saveFile(tmp);
 			}
 		}
+	}
+
+
+	
+	/**
+	 * Verifica pacotes armazenados no buffer, se o buffer possui uma quantidade
+	 * alta de pacotes faltantes e as iteraçoes nao conseguiram recuperar
+	 * entao retorna false
+	 * @param tmp
+	 * @return true se pacotes com erro nao ultrapassam o limite estabelecido
+	 */
+	private void checkBuffer(TemporaryFile tmp) {
+		
+		this.checkDuplicate(tmp);
+		this.checkFault(tmp);
+		
+	}
+
+
+	
+	/**
+	 * @return
+	 */
+	private void checkFault(TemporaryFile tmp) {
+
+		LinkedList<Package> list = tmp.getPackgeList();
+		int count = 1;
+		
+		for (Package pack : list) {
+			
+			if (pack.getSequenceNumber() != count) {
+				//TODO solicitar para modulo manager pacote com o numero de sequencia count
+				//ao receber adiciona-lo na pociçao correta da lista, e entao continuar
+			}
+			count++;
+		}
+	}
+
+
+	/** 
+	 * Verifica existencia de pacotes duplicados no buffer, na ocorrencia de algum
+	 * remove-o do buffer
+	 * @param tmp
+	 * @return lista de pacotes sem duplicaçoes
+	 */
+	private void checkDuplicate(TemporaryFile tmp) {
+		
+		LinkedList<Package> list = tmp.getPackgeList();
+		int [] count = new int[list.size() + 1];
+		
+		for(Package pack : list) {
+			
+			if (count[pack.getSequenceNumber()] == 0) {
+				count[pack.getSequenceNumber()]++;
+			} 
+			else {
+				list.remove(pack);
+			}
+		}
+		
 	}
 
 

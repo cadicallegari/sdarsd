@@ -1,5 +1,7 @@
 package sdar.util.temporaryfile;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 import sdar.comunication.common.Package;
@@ -47,4 +49,21 @@ public class TemporaryFile {
 	public LinkedList<Package> getPackgeList() {
 		return this.packageList;
 	}
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void sort() {
+		LinkedList<Package> list = this.getPackgeList();
+
+		Collections.sort (list, new Comparator() {
+			@Override
+			public int compare(Object o1, Object o2) {
+				Package p1 = (Package) o1;
+				Package p2 = (Package) o2;
+				return p1.getSequenceNumber() < p2.getSequenceNumber() ? -1 : p1.getSequenceNumber() < p2.getSequenceNumber() ? 1 : 0;
+			}
+        });
+		
+	}
+	
 }

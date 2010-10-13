@@ -6,5 +6,5 @@ package sdar.repository.especification;
 public class Especification {
 
 	public static String REP_DIRECTORY  	= ".";
-	
+	public static int MAX_FAULT				=  15;
 }
