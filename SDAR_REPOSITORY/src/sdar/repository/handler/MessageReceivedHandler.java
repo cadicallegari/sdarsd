@@ -98,7 +98,12 @@ public class MessageReceivedHandler implements Runnable {
 		try {
 			//Cria canais de comunicação
 			Socket sock = new Socket(s.getAddress(), s.getPort());
-			TCPComunication com = new TCPComunication(sock);
+			TCPComunication com = null;
+			try {
+				 com = new TCPComunication(sock);
+			} catch (Exception e) {
+				System.out.println("[Modulo Repository] - Modulo de Gerenciamento já atendido por outro repositorio");
+			}
 			
 			//Instancia arquivo do repositorio
 			File file = new File(s.getArchiveName());
@@ -140,7 +145,7 @@ public class MessageReceivedHandler implements Runnable {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("[Modulo Repository] - Modulo de Gerenciamento já atendido por outro repositorio");
 		}
 		
 	}
@@ -152,40 +157,44 @@ public class MessageReceivedHandler implements Runnable {
 	 * @throws IOException
 	 */
 	private void sendListFile(Solicitation solicitation) throws IOException {
-		//Cria canais de comunicação
-		Socket sock = new Socket(solicitation.getAddress(), solicitation.getPort());
-		TCPComunication com = new TCPComunication(sock);
-		
-		//Envia todos os arquivos que estão no repositorio
-		Archive archive;
-		File [] fileList = this.getFileList();
-		System.out.println("[Modulo Repository] - Enviando lista de arquivos ao modulo de Gerenciamento");
-		for (int i = 0; i < fileList.length - 1; i++) {
-			File f = fileList[i];
+		try {
+			//Cria canais de comunicação
+			Socket sock = new Socket(solicitation.getAddress(), solicitation.getPort());
+			TCPComunication com = new TCPComunication(sock);
 			
+			//Envia todos os arquivos que estão no repositorio
+			Archive archive;
+			File [] fileList = this.getFileList();
+			System.out.println("[Modulo Repository] - Enviando lista de arquivos ao modulo de Gerenciamento");
+			for (int i = 0; i < fileList.length - 1; i++) {
+				File f = fileList[i];
+				
+				archive = new Archive();
+				archive.setName(f.getName());
+				archive.setSize(f.length());
+				archive.setNotLast(true);
+				
+				com.sendObject(archive);
+				System.out.println("[Modulo Repository] - Nome arquivo: " + archive.getName());
+			}
+			
+			File f = fileList[fileList.length-1];
 			archive = new Archive();
 			archive.setName(f.getName());
 			archive.setSize(f.length());
-			archive.setNotLast(true);
+			archive.setNotLast(false);
 			
 			com.sendObject(archive);
 			System.out.println("[Modulo Repository] - Nome arquivo: " + archive.getName());
+			System.out.println("[Modulo Repository] - Lista de arquivos enviado ao modulo de Gerenciamento");
+			System.out.println();
+			
+			//Fecha canais de comunicação
+			com.close();
+			sock.close();
+		} catch (IOException e) {
+			System.out.println("[Modulo Repository] - Modulo de Gerenciamento já atendido por outro repositorio");
 		}
-		
-		File f = fileList[fileList.length-1];
-		archive = new Archive();
-		archive.setName(f.getName());
-		archive.setSize(f.length());
-		archive.setNotLast(false);
-		
-		com.sendObject(archive);
-		System.out.println("[Modulo Repository] - Nome arquivo: " + archive.getName());
-		System.out.println("[Modulo Repository] - Lista de arquivos enviado ao modulo de Gerenciamento");
-		System.out.println();
-		
-		//Fecha canais de comunicação
-		com.close();
-		sock.close();
 	}
 
 
