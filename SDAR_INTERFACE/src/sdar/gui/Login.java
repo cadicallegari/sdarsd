@@ -16,6 +16,7 @@ import org.gnome.gtk.TreeView;
 import org.gnome.gtk.Window;
 
 import sdar.bo.Person;
+import sdar.comunication.encryption.Encryption;
 import sdar.comunication.especification.Especification;
 import sdar.manager.rmi.RemoteServiceInterface;
 
@@ -101,14 +102,17 @@ public class Login {
 			public void onClicked(Button arg0) {
 				person.setUser(user.getText());
 				person.setPassword(password.getText());
+				//Encriptografa o objeto 
+				Encryption encryption = new Encryption();
+				Person personSend = encryption.encrypt(person);
 				
 				try {
 					Registry reg = LocateRegistry.getRegistry(Especification.MANAGER_ADDR, Especification.RMI_PORT);
 					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
-					setAuthentication(stub.checkAutentication(person));
+					setAuthentication(stub.checkAutentication(personSend));
 				} catch (Exception e) {
-					new Error(e.getMessage());
 					e.printStackTrace();
+					new Error(e.getMessage());
 				}
 			}
 		});

@@ -20,6 +20,7 @@ import org.gnome.gtk.TreeViewColumn;
 import org.gnome.gtk.Window;
 
 import sdar.bo.Person;
+import sdar.comunication.encryption.Encryption;
 import sdar.comunication.especification.Especification;
 import sdar.manager.rmi.RemoteServiceInterface;
 
@@ -84,8 +85,8 @@ public class UserConsult {
 					mainWindow.hide();
 					new UserAdd(true);
 				} catch (Exception e) {
-					new Error(e.getMessage());
 					e.printStackTrace();
+					new Error(e.getMessage());
 				}
 			}
 		});
@@ -95,14 +96,18 @@ public class UserConsult {
 			@Override
 			public void onClicked(Button arg0) {
 				if (person != null && !person.getName().trim().equals("")) {
+					//Encriptografa o objeto 
+					Encryption encryption = new Encryption();
+					Person personSend = encryption.encrypt(person);
+					
 					try {
 						Registry reg = LocateRegistry.getRegistry(Especification.MANAGER_ADDR, Especification.RMI_PORT);
 						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
-						stub.deletePerson(person);
+						stub.deletePerson(personSend);
 						person = null;
 					} catch (Exception e) {
-						new Error(e.getMessage());
 						e.printStackTrace();
+						new Error(e.getMessage());
 					}
 					updateListUsers();
 				}
@@ -146,16 +151,18 @@ public class UserConsult {
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 			listPersons = stub.retrieveAllPerson();
 		} catch (Exception e) {
-			new Error(e.getMessage());
 			e.printStackTrace();
+			new Error(e.getMessage());
 		}
 		
 		//Transforma de Lista para Vector de Person
 		Person[] persons = new Person[0];
 		if (listPersons != null) {
+			//Descriptografa o objeto
+			Encryption encryption = new Encryption();
 			persons = new Person[listPersons.size()];
 			for (int i = 0; i < listPersons.size(); i++) {
-				persons[i] = listPersons.get(i);
+				persons[i] = encryption.decrypt(listPersons.get(i));
 			}
 		}
 		
@@ -196,16 +203,18 @@ public class UserConsult {
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 			listPersons = stub.retrieveAllPerson();
 		} catch (Exception e) {
-			new Error(e.getMessage());
 			e.printStackTrace();
+			new Error(e.getMessage());
 		}
 		
 		//Transforma de Lista para Vector de Person
 		Person[] persons = new Person[0];
 		if (listPersons != null) {
+			//Descriptografa o objeto
+			Encryption encryption = new Encryption();
 			persons = new Person[listPersons.size()];
 			for (int i = 0; i < listPersons.size(); i++) {
-				persons[i] = listPersons.get(i);
+				persons[i] = encryption.decrypt(listPersons.get(i));
 			}
 		}
 		

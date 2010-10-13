@@ -121,8 +121,8 @@ public class Main {
 					person = new Person();
 					new Login(authentication, person, statusBar, fileChooserUpload, fileChooserDownload, upload, download, listar, listArchivesRepository);
 				} catch (Exception e) {
-					new Error(e.getMessage());
 					e.printStackTrace();
+					new Error(e.getMessage());
 				}
 			}
 		});
@@ -309,8 +309,8 @@ public class Main {
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 			listArchives = stub.retrieveAllArchive();
 		} catch (Exception e) {
-			new Error(e.getMessage());
 			e.printStackTrace();
+			new Error(e.getMessage());
 		}
 
 		//Preenche a lista de arquivos com os dados

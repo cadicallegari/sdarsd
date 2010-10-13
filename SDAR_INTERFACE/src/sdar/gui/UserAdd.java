@@ -12,6 +12,7 @@ import org.gnome.gtk.Gtk;
 import org.gnome.gtk.Window;
 
 import sdar.bo.Person;
+import sdar.comunication.encryption.Encryption;
 import sdar.comunication.especification.Especification;
 import sdar.manager.rmi.RemoteServiceInterface;
 
@@ -79,18 +80,22 @@ public class UserAdd {
 				if (!person.getName().trim().equals("") &&
 						!person.getUser().trim().equals("") &&
 						!person.getPassword().trim().equals("")) {
+					//Encriptografa o objeto 
+					Encryption encryption = new Encryption();
+					Person personSend = encryption.encrypt(person);
+					
 					try {
 						Registry reg = LocateRegistry.getRegistry(Especification.MANAGER_ADDR, Especification.RMI_PORT);
 						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
-						stub.insertPerson(person);
+						stub.insertPerson(personSend);
 						
 						mainWindow.hide();
 						if (previousConsult) {
 							new UserConsult();
 						}
 					} catch (Exception e) {
-						new Error(e.getMessage());
 						e.printStackTrace();
+						new Error(e.getMessage());
 					}
 					mainWindow.hide();
 				}

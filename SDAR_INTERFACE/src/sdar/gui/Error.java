@@ -36,7 +36,10 @@ public class Error {
 		this.manageControls();
 		this.manageEvents();
 		
-		this.message.setLabel(messageError);
+		if ((messageError != null) &&
+			 !messageError.equals("")) {
+			this.message.setLabel(messageError);
+		}
 		
 		mainWindow.showAll();
 		Gtk.main();
