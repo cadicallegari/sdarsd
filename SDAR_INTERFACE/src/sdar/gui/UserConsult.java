@@ -1,8 +1,6 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
@@ -85,7 +83,8 @@ public class UserConsult {
 				try {
 					mainWindow.hide();
 					new UserAdd(true);
-				} catch (FileNotFoundException e) {
+				} catch (Exception e) {
+					new Error(e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -101,9 +100,8 @@ public class UserConsult {
 						RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 						stub.deletePerson(person);
 						person = null;
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					} catch (NotBoundException e) {
+					} catch (Exception e) {
+						new Error(e.getMessage());
 						e.printStackTrace();
 					}
 					updateListUsers();
@@ -147,9 +145,8 @@ public class UserConsult {
 			Registry reg = LocateRegistry.getRegistry("localhost", Especification.RMI_PORT);
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 			listPersons = stub.retrieveAllPerson();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (NotBoundException e) {
+		} catch (Exception e) {
+			new Error(e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -198,9 +195,8 @@ public class UserConsult {
 			Registry reg = LocateRegistry.getRegistry("localhost", Especification.RMI_PORT);
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 			listPersons = stub.retrieveAllPerson();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (NotBoundException e) {
+		} catch (Exception e) {
+			new Error(e.getMessage());
 			e.printStackTrace();
 		}
 		

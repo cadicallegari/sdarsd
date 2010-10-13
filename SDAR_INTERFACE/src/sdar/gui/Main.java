@@ -117,12 +117,7 @@ public class Main {
 					person = new Person();
 					new Login(authentication, person, statusBar, fileChooserUpload, fileChooserDownload, upload, download, listar, listArchivesRepository);
 				} catch (Exception e) {
-					try {
-						new Error(e.getMessage());
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					new Error(e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -143,7 +138,8 @@ public class Main {
 			public void onActivate(MenuItem arg0) {
 				try {
 					new UserAdd(false);
-				} catch (FileNotFoundException e) {
+				} catch (Exception e) {
+					new Error(e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -200,12 +196,7 @@ public class Main {
 				try {
 					uc.sendFile(filePath);
 				} catch (Exception e) {
-					try {
-						new Error(e.getMessage());
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					new Error(e.getMessage());
 					e.printStackTrace();
 				}
 				labelUpload.setLabel("");
@@ -314,12 +305,7 @@ public class Main {
 			RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 			listArchives = stub.retrieveAllArchive();
 		} catch (Exception e) {
-			try {
-				new Error(e.getMessage());
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			new Error(e.getMessage());
 			e.printStackTrace();
 		}
 

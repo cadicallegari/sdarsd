@@ -25,8 +25,12 @@ public class Error {
 	 * Construtor da Classe
 	 * @throws FileNotFoundException
 	 */
-	public Error(String messageError) throws FileNotFoundException {
-		gladeFile = Glade.parse("src/sdar/xml/error.glade", "janela");
+	public Error(String messageError) {
+		try {
+			gladeFile = Glade.parse("src/sdar/xml/error.glade", "janela");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		mainWindow = (Window) gladeFile.getWidget("janela");
 		
 		this.manageControls();

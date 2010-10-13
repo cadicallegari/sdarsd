@@ -1,8 +1,6 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -90,11 +88,8 @@ public class UserAdd {
 						if (previousConsult) {
 							new UserConsult();
 						}
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					} catch (NotBoundException e) {
-						e.printStackTrace();
-					} catch (FileNotFoundException e) {
+					} catch (Exception e) {
+						new Error(e.getMessage());
 						e.printStackTrace();
 					}
 					mainWindow.hide();

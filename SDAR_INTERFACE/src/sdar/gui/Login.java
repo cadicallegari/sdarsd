@@ -1,8 +1,6 @@
 package sdar.gui;
 
 import java.io.FileNotFoundException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -108,9 +106,8 @@ public class Login {
 					Registry reg = LocateRegistry.getRegistry("localhost", Especification.RMI_PORT);
 					RemoteServiceInterface stub = (RemoteServiceInterface) reg.lookup(Especification.RMI_NAME);
 					setAuthentication(stub.checkAutentication(person));
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				} catch (NotBoundException e) {
+				} catch (Exception e) {
+					new Error(e.getMessage());
 					e.printStackTrace();
 				}
 			}
